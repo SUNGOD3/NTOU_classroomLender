@@ -1,0 +1,32 @@
+version: '3.7'
+
+services:
+  db:
+  command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8 --collation-server=utf8_general_ci
+    image: mysql:5.7.16
+    container_name: mysqldb
+    restart: always
+    volumes:
+      - ./mysql:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: dbpasswd
+      MYSQL_DATABASE: java_final
+      MYSQL_USER: dbuser
+      MYSQL_PASSWORD: dbpasswd
+    ports:
+      - "3306:3306"
+    networks:
+      - java-final-network
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:5.0.1
+    restart: always
+    environment:
+      PMA_HOST: db
+      PMA_USER: root
+      PMA_PASSWORD: dbpasswd
+    ports:
+      - "5000:80"
+    networks:
+      - java-final-network
+networks:
+  java-final-network:
