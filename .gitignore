@@ -1,6 +1,6 @@
+#database
+docker-compose.yml
+backend/database/mysql/
 
-# .v4p backup files
-*~.xml
-
-# Dynamic plugins .dll
-bin/
+#webAPI
+backend/api/config.yml
