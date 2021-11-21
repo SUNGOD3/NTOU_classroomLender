@@ -10,7 +10,7 @@ backend/database/docker-compose.yml
 
 ## API
 先用pyenv把python版本切換到3.8
-
+pipenv --python 3.8
 
 前置作業
 ```
@@ -40,4 +40,4 @@ python app.py
 ## Port
  - 13588 : API
  - 3306 &nbsp; : MySQL
- - 5000 &nbsp; : PhpMyAdmin
+ - 5001 &nbsp; : PhpMyAdmin

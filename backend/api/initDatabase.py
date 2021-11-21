@@ -1,73 +1,69 @@
-# admin.py
-import pymysql
+
 import yaml
+import mysql.connector as mariadb
+import pymysql
 
 
 with open('config.yml', 'r') as f:
     cfg = yaml.safe_load(f)
 
-connection = pymysql.connect(host=cfg['db']['host'],user=cfg['db']['user'],password=cfg['db']['password'],db=cfg['db']['database'],charset='utf8')
+connection = mariadb.connect(host=cfg['db']['host'],user=cfg['db']['user'],password=cfg['db']['password'],db=cfg['db']['database'],charset='utf8')
 
 cursor = connection.cursor()
 cursor.execute("DROP TABLE IF EXISTS Users;")
 connection.commit()
 
-cursor.execute("DROP TABLE IF EXISTS Posts;")
+cursor.execute("DROP TABLE IF EXISTS Classrooms;")
 connection.commit()
 
-cursor.execute("DROP TABLE IF EXISTS Notifications;")
+cursor.execute("DROP TABLE IF EXISTS Scheduler;")
 connection.commit()
 
-cursor.execute("DROP TABLE IF EXISTS Comments;")
+cursor.execute("DROP TABLE IF EXISTS ApplicationForms;")
 connection.commit()
 
 cursor.execute("CREATE TABLE IF NOT EXISTS Users( \
-    _ID int  NOT NULL AUTO_INCREMENT,\
-    userID varchar(40) NOT NULL,\
-    name varchar(60) NOT NULL,\
-    email varchar(50) NOT NULL,\
-    password varchar(40) NOT NULL, \
-    accessKey varchar(100),\
-    lastAccessTime varchar(100),\
-    isAdmin bool NOT NULL,\
-    joinPost1 varchar(60),\
-    joinPost2 varchar(60),\
-    joinPost3 varchar(60),\
-    createPost1 varchar(60),\
-    createPost2 varchar(60),\
-    createPost3 varchar(60),\
+    userName varchar(30) NOT NULL,\
+    schoolName varchar(10) NOT NULL,\
+    password varchar(50) NOT NULL,\
+    Email varchar(40) NOT NULL, \
+    isAdmin int NOT NULL,\
     identityCode varchar(6),\
-    lastReadComment int,\
-    lastSendIdentifyCodeTime varchar(100),\
-    tryIdentifyCodeCount int,\
-    PRIMARY KEY (_ID) );")
+    accessKey varchar(100),\
+    status int NOT NULL,\
+    PRIMARY KEY (schoolName) );")
 connection.commit()
 
-cursor.execute("CREATE TABLE IF NOT EXISTS Posts( \
-    _ID int  NOT NULL AUTO_INCREMENT,\
-    creator varchar(40) NOT NULL,\
-    category varchar(60) NOT NULL,\
-    price varchar(50) NOT NULL,\
-    postID varchar(60) NOT NULL,\
-    joinPeopleCount int NOT NULL,\
-    PRIMARY KEY (_ID) );")
+cursor.execute("CREATE TABLE IF NOT EXISTS Classrooms( \
+    classroomID  varchar(10) NOT NULL,\
+    department varchar(15) NOT NULL,\
+    status int NOT NULL,\
+    equipment1 varchar(15) NOT NULL,\
+    equipment2 varchar(15) NOT NULL,\
+    equipment3 varchar(15) NOT NULL,\
+    equipment4 varchar(15) NOT NULL,\
+    equipment5 varchar(15) NOT NULL,\
+    PRIMARY KEY (classroomID) );")
 connection.commit()
 
-cursor.execute("CREATE TABLE IF NOT EXISTS Notifications( \
-    _ID int  NOT NULL AUTO_INCREMENT,\
-    owner varchar(40) NOT NULL,\
-    message varchar(250) NOT NULL,\
-    isSent bool NOT NULL,\
-    timestamp varchar(15)  NOT NULL,\
-    PRIMARY KEY (_ID) );")
+cursor.execute("CREATE TABLE IF NOT EXISTS Scheduler( \
+    classroomID  varchar(10) NOT NULL,\
+    department varchar(15) NOT NULL,\
+    courseName varchar(20) NOT NULL,\
+    time int NOT NULL,\
+    weekDay int NOT NULL,\
+    PRIMARY KEY (classroomID) );")
 connection.commit()
 
-
-cursor.execute("CREATE TABLE IF NOT EXISTS Comments( \
-    _ID int  NOT NULL AUTO_INCREMENT,\
-    sender varchar(40) NOT NULL,\
-    receiver varchar(40) NOT NULL,\
-    message varchar(250) NOT NULL,\
-    timestamp varchar(15)  NOT NULL,\
-    PRIMARY KEY (_ID) );")
+cursor.execute("CREATE TABLE IF NOT EXISTS ApplicationForms( \
+    classroomID  varchar(10) NOT NULL,\
+    department varchar(15) NOT NULL,\
+    courseName varchar(20) NOT NULL,\
+    userName varchar(30) NOT NULL,\
+    schoolName varchar(10) NOT NULL,\
+    Email varchar(40) NOT NULL, \
+    time int NOT NULL,\
+    weekDay int NOT NULL,\
+    reason varchar(250) NOT NULL,\
+    PRIMARY KEY (classroomID) );")
 connection.commit()

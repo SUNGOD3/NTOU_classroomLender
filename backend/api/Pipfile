@@ -4,10 +4,12 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-flask = "*"
+requests2 = "*"
 pymysql = "*"
+mariadb = "*"
 pyyaml = "*"
-request2 = "*"
+flask = "*"
+mysql-connector-python = "*"
 
 [dev-packages]
 

@@ -3,16 +3,16 @@ version: '3.7'
 services:
   db:
   command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8 --collation-server=utf8_general_ci
-    image: mariadb:10.6
+    image: mariadb:10.8
     container_name:mariadb
     restart: always
     volumes:
       - ./mysql:/var/lib/mysql
     environment:
-      MYSQL_ROOT_PASSWORD: dbpasswd
+      MYSQL_ROOT_PASSWORD: YOUR_ROOT_PASSWORD
       MYSQL_DATABASE: NTOU_classLender
-      MYSQL_USER: dbuser
-      MYSQL_PASSWORD: dbpasswd
+      MYSQL_USER: root
+      MYSQL_PASSWORD: YOUR_PASSWORD
     ports:
       - "3306:3306"
     networks:
@@ -23,9 +23,9 @@ services:
     environment:
       PMA_HOST: db
       PMA_USER: root
-      PMA_PASSWORD: dbpasswd
+      PMA_PASSWORD: YOUR_PASSWORD
     ports:
-      - "5000:80"
+      - "5001:80"
     networks:
       - NTOU-classLender-network
 networks:
