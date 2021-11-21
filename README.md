@@ -9,9 +9,10 @@ backend/database/docker-compose.yml
 ```
 
 ## API
+```
 先用pyenv把python版本切換到3.8
 pipenv --python 3.8
-
+```
 前置作業
 ```
 download the wsl and upgrade it to wsl2
