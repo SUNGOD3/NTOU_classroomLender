@@ -21,6 +21,12 @@ class CheckForm():
         if re.match("^[A-Za-z0-9]*$", str):
             return True
         return False 
+    
+    def NumberOnly(self,str):
+        if re.match("^[0-9]*$", str):
+            return True
+        return False 
+
 
     def schoolName(self,str):
         if not self.letterNumberOnly(str):
@@ -29,7 +35,7 @@ class CheckForm():
             self.__Errors.append('schoolName length error')
         
     def phonenumber(self,str):
-        if not re.match("^[0-9]", str):
+        if not self.NumberOnly(str):
             self.__Errors.append('phonenumber has illegal characters')
         if len(str)>10 or len(str)<7:
             self.__Errors.append('phonenumber length error')
@@ -47,7 +53,7 @@ class CheckForm():
             self.__Errors.append('password diffrent from passwordConfirm')
 
     def Email(self,str):
-        if not re.search(r"^[A-Za-z0-9]+@ntou.edu.tw$",str):
+        if not re.search(r"^[A-Za-z0-9]+@+[A-Za-z0-9]+[.-]+[A-Za-z0-9.]+[A-Za-z0-9]$",str):
             self.__Errors.append('Email format error')
 
     def getErrors(self):
@@ -89,29 +95,29 @@ class CheckRepeat():
 def checkRegisterRequest(data):
     checkForm = CheckForm()
     checkForm.schoolName(data['schoolName'])
-    checkForm.password(data['passwd'])
-    checkForm.phonenumber(data['phonenumber'])
-    checkForm.passwdConfirm(data['passwd'],data['passwdConfirm'])
+    checkForm.password(data['password'])
+    checkForm.phonenumber(data['phoneNumber'])
+    checkForm.passwdConfirm(data['password'],data['passwdConfirm'])
     checkForm.Email(data['Email'])
     Errors = checkForm.getErrors()
     checkRepeat = CheckRepeat()
     if 'Email has illegal characters' not in Errors and 'Email format error' not in Errors:
-        checkRepeat.email(data['email'])
+        checkRepeat.Email(data['Email'])
     if 'schoolName has illegal characters' not in Errors and 'schoolName length error' not in Errors:
         checkRepeat.schoolName(data['schoolName'])
     if 'phonenumber has illegal characters' not in Errors and 'phonenumber length error' not in Errors:
-        checkRepeat.phonenumber(data['phonenumber'])
+        checkRepeat.phonenumber(data['phoneNumber'])
     for error in checkRepeat.getErrors():
         Errors.append(error)
 
     return Errors
 users=Blueprint("users",__name__)
 
-@user.route('/')
+@users.route('/')
 def index():
     return "Users route"
 
-@user.route('/register',methods=['POST'])
+@users.route('/register',methods=['POST'])
 def register():
     connection = pymysql.connect(host=cfg['db']['host'],user=cfg['db']['user'],password=cfg['db']['password'],db=cfg['db']['database'])
     info = dict()
@@ -121,7 +127,7 @@ def register():
     info['phoneNumber'] = request.values.get('phoneNumber')
     info['password'] = request.values.get('password')
     info['passwdConfirm'] = request.values.get('passwdConfirm')
-    info['email'] = request.values.get('email')
+    info['Email'] = request.values.get('Email')
     errors = checkRegisterRequest(info)
 
     info['errors'] = errors
@@ -138,11 +144,11 @@ def register():
             connection.rollback()
             info['errors'] = 'register fail'
 
-    del info['passwd']
+    del info['password']
     del info['passwdConfirm']
 
     return jsonify(info)
-@app.before_request
-def make_session_permanent():
-    session.permanent = True
-    app.permanent_session_lifetime = timedelta(minutes=5)
+#@app.before_request
+#def make_session_permanent():
+#   session.permanent = True
+#  app.permanent_session_lifetime = timedelta(minutes=5)
