@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset = "utf-8">
+        <title>教室借用歷史</title>
+        <!--class head 為標題-->
+        <style type="text/css">
+            .head   {   font-size : 40px;
+
+            }
+            table   {   font-size : 20px;
+                        width : 70%;
+                        overflow : scroll;
+            }
+            caption {   font-size : 40px;
+
+            }
+        </style>
+    </head>
+    <body>
+        <form method="GET" action="">
+            <!--cellspacing属性:设置各个单元格之间的间距;cellpadding属性:设置单元格的内边距-->
+            <p class = "head" align = "center">借用紀錄</p>
+            <p>
+                <table style="border:3px #cccccc solid;" border="1" cellspacing="0" cellpadding="25" align = "center" >
+                    <!--<caption>借用紀錄</caption>-->
+                    <tr>
+                        <th>教室</th>
+                        <th>借用人</th>
+                        <th>使用時間</th>
+                        <th>是否歸還</th>
+                    </tr>
+                    <!--從資料庫拿資料-->
+                    <tr>
+                        <td> {{classroomID}}   </td>
+                        <td> {{userName}}   </td>
+                        <td> {{lendTime}}~{{returnTime}} </td>
+                        <td> {{}}   </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+
+                </table>
+            </p>
+        </form>
+        
+    </body>
+
+</html>
