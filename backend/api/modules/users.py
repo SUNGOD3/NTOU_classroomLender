@@ -55,10 +55,10 @@ class CheckForm():
             self.__Errors.append('passwdConfirm has illegal characters')
         if ori!=cof:
             self.__Errors.append('password diffrent from passwordConfirm')
-    # Email = (letter or number) + "@email.ntou.edu.tw"
-    # ex. sun1223god@email.ntou.edu.tw
+    # Email = (letter or number) + "@mail.ntou.edu.tw"
+    # ex. sun1223god@mail.ntou.edu.tw
     def Email(self,str):
-        if not re.search(r"^[A-Za-z0-9]+@email.ntou.edu.tw$",str):
+        if not re.search(r"^[A-Za-z0-9]+@mail.ntou.edu.tw$",str):
             self.__Errors.append('Email format error')
     # return the errors after checked all
     def getErrors(self):
