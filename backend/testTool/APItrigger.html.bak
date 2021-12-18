@@ -1,5 +1,5 @@
 testRegister
-<form action="http://localhost:13588/users/register" method="post">
+<form action="http://localhost:5000/users/register" method="post">
     userName:<input type="text" name="userName"><br>
     schoolName:<input type="text" name="schoolName"><br>
     phoneNumber:<input type="text" name="phoneNumber"><br>

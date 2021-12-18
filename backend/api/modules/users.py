@@ -1,4 +1,4 @@
-from flask import Blueprint,request,jsonify
+from flask import Blueprint,request,jsonify,url_for,redirect,render_template
 import pymysql
 import yaml
 import re
@@ -162,8 +162,8 @@ def register():
     #delete password and password Confirm for security
     del info['password']
     del info['passwdConfirm']
-
-    return jsonify(info)
+    return render_template('register.html')
+    #return jsonify(info)
 #@app.before_request
 #def make_session_permanent():
 #   session.permanent = True
@@ -171,3 +171,5 @@ def register():
 
 #   email confirm undo
 #   if a user input an error email (but legal), his student's ID fucked up. 
+
+#   html should alert if sign up failed when reload
