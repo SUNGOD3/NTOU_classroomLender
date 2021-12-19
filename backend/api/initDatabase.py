@@ -33,6 +33,7 @@ cursor.execute("CREATE TABLE IF NOT EXISTS Users( \
     accessKey varchar(100),\
     status int NOT NULL,\
     runTime datetime,\
+    apply int,\
     PRIMARY KEY (schoolName) );")
 connection.commit()
 

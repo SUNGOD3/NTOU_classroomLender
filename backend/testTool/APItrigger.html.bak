@@ -1,0 +1,10 @@
+testRegister
+<form action="http://localhost:5000/users/register" method="post">
+    userName:<input type="text" name="userName"><br>
+    schoolName:<input type="text" name="schoolName"><br>
+    phoneNumber:<input type="text" name="phoneNumber"><br>
+    password:<input name="password"></input><br>
+    passwdConfirm:<input name="passwdConfirm"></input><br>
+    Email:<input type="text" name="Email"><br>
+　  <input type="submit" value="送出表單">
+</form>
