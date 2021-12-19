@@ -40,7 +40,7 @@
                 
                 var schoolName = [];
 
-
+                //去後端get借教室申請人的學號(schoolName)和姓名(userName)
                 $(document).ready(function(){
                     $.getJSON("http://localhost:5000/lend_classroom", function(data){
                         /*alert("data: " + data.userName);*/
@@ -58,13 +58,14 @@
                 });
                 });
 
+                //確認借出申請
                 function confirm(i){
 
                 var data = {
                     "schoolName" : schoolName[i]
                 }
                 //alert(schoolName[i]);
-                //送到後端資料庫
+                //將申請人學號(schoolName)post到後端資料庫
                 $.ajax({
                     type: 'POST',
                     url: "http://localhost:5002/check_lend_classroom",
@@ -86,6 +87,7 @@
                 })
             }
 
+            //取消申請
             function reject(i){
                 
 
@@ -93,6 +95,7 @@
                     "schoolName" : schoolName[i]
                 }
 
+                //將申請人學號(schoolName)post到後端資料庫
                 $.ajax({
                     type: 'POST',
                     url: "http://localhost:5002/check_lend_classroom",
@@ -160,6 +163,7 @@
 
         <p class = "head" align = "center">借出申請</p>
         <p align = "center">
+            <!--借教室申請放入table-->
             <table id = "lend_classroom_table" style="border:3px #cccccc solid;" border="1" cellspacing="0" cellpadding="25" align = "center">
 
             </table>

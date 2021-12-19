@@ -33,10 +33,12 @@
         <!--去資料庫拿資料-->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script>
+
+           //去後端get教室借用歷史的，教室號碼(classroomID)、借用人姓名(userName)、借用時間(lendTime)、歸還時間(returnTime)、是否歸還(status)
            $(document).ready(function(){
                 
                 $.getJSON("http://localhost:5000/see_classroom_history", function(data){
-                    /*alert("classroomID: " + data.classroomID + "\nuserName: " + data.userName + "\nTime: " + data.lendTime + "~" + data.returnTime + "\nstatus: " + data.status);*/
+                    
                     let content =  "<tr><th>教室</th><th>借用人</th><th>使用時間</th><th>是否歸還</th></tr>";
                     //alert(data.length);
                     for (let i=0;i<data.length; i++){
@@ -97,6 +99,7 @@
             <!--cellspacing属性:设置各个单元格之间的间距;cellpadding属性:设置单元格的内边距-->
             <p class = "head" align = "center">借用紀錄</p>
             <p>
+                <!--將借用歷史顯示在table-->
                 <table id = "history_table" style="border:3px #cccccc solid;" border="1" cellspacing="0" cellpadding="25" align = "center" >
                     <!--<caption>借用紀錄</caption>-->
                     <!--

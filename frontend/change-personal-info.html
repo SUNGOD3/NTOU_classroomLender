@@ -25,6 +25,8 @@
         </style>
 
         <script>
+
+            //將修改的資訊-使用者名稱(userName)、密碼(password)、手機(phoneNumber)post到後端  
             function check(form){
                 if(form.password.value!=form.password_again.value){
                     alert("兩次密碼輸入不一致!!!");
@@ -34,7 +36,8 @@
                 form.submit();
                 
                 alert("資訊修改成功");
-                //window.history.go(-2);
+                //頁面跳轉
+                window.location.href = "new_manager-func.html";
                 //location.reload();
             }
             
