@@ -34,15 +34,15 @@ class CheckForm():
         if len(str)>10 or len(str)<5:
             self.__Errors.append('schoolName length error')
         
-    def phonenumber(self,str):
+    def phoneNumber(self,str):
         if not self.NumberOnly(str):
-            self.__Errors.append('phonenumber has illegal characters')
+            self.__Errors.append('phoneNumber has illegal characters')
         if len(str)>10 or len(str)<7:
-            self.__Errors.append('phonenumber length error')
+            self.__Errors.append('phoneNumber length error')
     
     def password(self,str):
         if not self.letterNumberOnly(str):
-            self.__Errors.append('passwd has illegal characters')
+            self.__Errors.append('password has illegal characters')
         if len(str)>20 or len(str)<5:
             self.__Errors.append('password length error')
 
@@ -81,14 +81,14 @@ class CheckRepeat():
         if len(rows):
             self.__Errors.append('Email has been registered')
     
-    def phonenumber(self,str):
+    def phoneNumber(self,str):
     
         connection = pymysql.connect(host=cfg['db']['host'],user=cfg['db']['user'],password=cfg['db']['password'],db=cfg['db']['database'])
         self.__cursor = connection.cursor()
-        self.__cursor.execute("SELECT * from Users WHERE phonenumber = %(phonenumber)s",{'phonenumber':str})
+        self.__cursor.execute("SELECT * from Users WHERE phoneNumber = %(phoneNumber)s",{'phoneNumber':str})
         rows = self.__cursor.fetchall()
         if len(rows):
-            self.__Errors.append('phonenumber has been registered')
+            self.__Errors.append('phoneNumber has been registered')
     def getErrors(self):
         return self.__Errors
 
@@ -96,7 +96,7 @@ def checkRegisterRequest(data):
     checkForm = CheckForm()
     checkForm.schoolName(data['schoolName'])
     checkForm.password(data['password'])
-    checkForm.phonenumber(data['phoneNumber'])
+    checkForm.phoneNumber(data['phoneNumber'])
     checkForm.passwdConfirm(data['password'],data['passwdConfirm'])
     checkForm.Email(data['Email'])
     Errors = checkForm.getErrors()
@@ -105,8 +105,8 @@ def checkRegisterRequest(data):
         checkRepeat.Email(data['Email'])
     if 'schoolName has illegal characters' not in Errors and 'schoolName length error' not in Errors:
         checkRepeat.schoolName(data['schoolName'])
-    if 'phonenumber has illegal characters' not in Errors and 'phonenumber length error' not in Errors:
-        checkRepeat.phonenumber(data['phoneNumber'])
+    if 'phoneNumber has illegal characters' not in Errors and 'phoneNumber length error' not in Errors:
+        checkRepeat.phoneNumber(data['phoneNumber'])
     for error in checkRepeat.getErrors():
         Errors.append(error)
 
