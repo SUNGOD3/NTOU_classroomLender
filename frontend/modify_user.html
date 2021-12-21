@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>修改借用人狀態</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <style type="text/css">
+        body {
+            background-color: #f4f5fe;
+            font-family: 微軟正黑體, Arial, Helvetica, sans-serif;
+            overflow: hidden;
+            overflow-y: scroll;
+        }
+
+        header {
+            background-color: #c3c8ec;
+            color: navy;
+            font-weight: bold;
+        }
+
+        .main {
+            background-color: #f4f5fe;
+            position: absolute;
+            left: 20px;
+            width:75%;
+        }
+
+        button {
+            background-color: #c3c8ec;
+        }
+
+        p {
+            font-size: 20px;
+        }
+
+        table, th, tr, td {
+            text-align: center;
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+
+        .subtitle {
+            font-size: 30px;
+            font-weight: bold;
+        }
+
+
+    </style>
+</head>
+
+<body>
+    <header class="py-3 mb-3 border-bottom">
+        <div class="container-fluid d-grid gap-3 align-items-center" style="grid-template-columns: 1fr 2fr;">
+            <div class="dropdown">
+                <a href="#" class="d-flex align-items-center col-lg-4 mb-2 mb-lg-0 link-dark text-decoration-none dropdown-toggle" id="dropdownNavLink" data-bs-toggle="dropdown" aria-expanded="false">
+                    功能選單
+                </a>
+                <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownNavLink">
+                    <li><a class="dropdown-item" href="#"><span>確認借出教室</span></a></li>
+                    <li><a class="dropdown-item" href="#"><span>確認歸還教室</span></a></li>
+                    <li><a class="dropdown-item" href="add_classroom.html"><span>新增教室</span></a></li>
+                    <li><a class="dropdown-item" href="delete_classroom.html"><span>刪除教室</span></a></li>
+                    <li><a class="dropdown-item" href="class_state.html"><span>檢視教室狀態</span></a></li>
+                    <li><a class="dropdown-item" href="modify_classroom.html"><span>修改教室狀態</span></a></li>
+                    <!-- <li><a class="dropdown-item" href="#"><span>修改借用人狀態</span></a></li> -->
+                    <li><a class="dropdown-item" href="check_all_user.html"><span>檢視借用人資訊</span></a></li>
+                    <li><a class="dropdown-item" href="history.html"><span>檢視歷史</span></a></li>
+                    <li><a class="dropdown-item" href="#"><span>確認管理員申請</span></a></li>
+                    <li><a class="dropdown-item" href="#">修改一般管理員權限</a></li>
+                </ul>
+            </div>
+
+            <div style="width: 40%; display:inline-block; font-size: 30px;">
+                <div style="text-align: center;">NTOU教室借用平台</div>
+            </div>
+
+            <div class="flex-shrink-0 dropdown" style="position: absolute; right:15px; align-items: center;">
+                <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">
+                    <img src="ntou_logo.png" width="32" height="32" class="rounded-circle">
+                </a>
+                <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
+                    <li><a class="dropdown-item" href="#">查看個人資料</a></li>
+                    <li><a class="dropdown-item" href="modify_info.html" target="ibody">更改個人資料</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="#">登出</a></li>
+                </ul>
+            </div>
+
+        </div>
+    </header>
+
+    <div class="main">
+        <p class="subtitle">
+            修改借用人狀態
+        </p>
+
+            <br>
+            <div class="content" id="userName_div">
+
+            </div>
+            <br>
+            <div class="content" id="schoolName_div">
+                
+            </div>
+
+            <br>
+            <div class="content" id="password_div">
+
+            </div>
+            <br>
+            <div class="content" id="Email_div">
+
+            </div>
+            <br>
+            <div class="content" id="status_div">
+
+            </div>
+            <br>
+
+        <a href="check_all_user.html">完成</a>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script>
+        var schoolName = "";
+        var userName = "";
+        var password = "";
+        var Email = "";
+        var status = "";
+        $(document).ready(function () {
+
+            $.get("http://localhost:5000/get_user_infro", function (data) {
+                //let userName_content = "";
+                //let password_content = "";
+                //let schoolName_content = "";
+                //let Email_content = "";
+                //let status_content = "";           
+
+                userName_content = "姓名: " + data.userName + "  <button id = 'userName_button' type = 'button'> 修改</button>";
+                password_content = "密碼: " + data.password + "  <button id = 'password_button' type = 'button'> 修改</button>";
+                Email_content = "信箱: " + data.Email + "  <button id = 'Email_button' type = 'button'> 修改</button>";
+                status_content = "狀態: " + data.status + "  <button id = 'status_button' type = 'button'> 修改</button>";
+                schoolName_content = "帳號(學號): " + data.schoolName;
+
+                schoolName = data.schoolName;
+                userName = data.userName;
+                password = data.password;
+                Email = data.Email;
+                status = data.status;
+
+                document.getElementById("userName_div").innerHTML = userName_content;
+                document.getElementById("schoolName_div").innerHTML = schoolName_content;
+                document.getElementById("password_div").innerHTML = password_content;
+                document.getElementById("Email_div").innerHTML = Email_content;
+                document.getElementById("status_div").innerHTML = status_content;
+
+                var userNameButton = document.getElementById("userName_button");
+                var passwordButton = document.getElementById("password_button");
+                var EmailButton = document.getElementById("Email_button");
+                var statusButton = document.getElementById("status_button");
+
+                userNameButton.addEventListener("click", modify_userName, false);
+                passwordButton.addEventListener("click", modify_password, false);
+                EmailButton.addEventListener("click", modify_Email, false);
+                statusButton.addEventListener("click", modify_status, false);
+            });
+
+        });
+
+        function postFunc() {
+            var data = {
+                "userName": userName,
+                "schoolName": schoolName,
+                "password": password,                
+                "Email": Email,                
+                "status": status
+            }
+
+            $.ajax({
+                type: 'POST',
+                url: "http://localhost:5001/modify_user_infro",
+                data: JSON.stringify(data),
+                contentType: 'application/json; charset=UTF-8',
+                dataType: 'json',
+                //success: function (data) {
+                //    alert(data)
+                //},
+                error: function (xhr, type) {
+                    alert(xhr + type);
+                }
+            });
+            location.reload();
+        };
+
+        function modify_userName() {
+            var content = "<input type='text' class='form-control' placeholder='姓名' id='userName' name='userName' size='20'>" + "<button type='button' onclick='javascript: get_userName()'>確認</button>";
+            document.getElementById("userName_div").innerHTML = content;
+        }
+
+        function modify_password() {
+            var content = "<input type='password' class='form-control' placeholder='密碼' id='password' name='password' size='20'>" + "<button type='button' onclick='javascript: get_password()'>確認</button>";
+            document.getElementById("password_div").innerHTML = content;
+        }
+
+        function modify_Email() {
+            var content = "<input type='email' class='form-control' placeholder='信箱' id='Email' name='Email' size='20'>" + "<button type='button' onclick='javascript: get_Email()'>確認</button>";
+            document.getElementById("Email_div").innerHTML = content;
+        }
+
+        function modify_status() {
+            var content = "<input type='text' class='form-control' placeholder='狀態' id='status' name='status' size='20'>" + "<button type='button' onclick='javascript: get_status()'>確認</button>";
+            document.getElementById("status_div").innerHTML = content;
+        }
+
+        function get_userName() {
+            userName = document.getElementById("userName").value;
+            postFunc();
+        }
+
+        function get_password() {
+            password = document.getElementById("password").value;
+            postFunc();
+        }
+
+        function get_Email() {
+            Email = document.getElementById("Email").value;
+            postFunc();
+        }        
+
+        function get_status() {
+            status = document.getElementById("status").value;
+            postFunc();
+        }
+    </script>
+</body>
+
+</html>
