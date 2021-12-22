@@ -1,4 +1,4 @@
-from flask import Blueprint,request,jsonify,url_for,redirect,render_template
+from flask import Blueprint,request,jsonify,url_for,redirect,render_template,session
 import pymysql
 import yaml
 import re
@@ -37,7 +37,7 @@ class CheckForm():
             self.__Errors.append('schoolName has illegal characters')
         if len(str)>10 or len(str)<5:
             self.__Errors.append('schoolName length error')
-    
+  
     def phoneNumber(self,str):
         if not self.NumberOnly(str):
             self.__Errors.append('phoneNumber has illegal characters')
@@ -46,7 +46,7 @@ class CheckForm():
     
     def password(self,str):
         if not self.letterNumberOnly(str):
-            self.__Errors.append('passwd has illegal characters')
+            self.__Errors.append('password has illegal characters')
         if len(str)>20 or len(str)<5:
             self.__Errors.append('password length error')
     # password confirm (input password again)
@@ -85,6 +85,7 @@ class CheckRepeat():
         rows = self.__cursor.fetchall()
         if len(rows):
             self.__Errors.append('Email has been registered')
+
     #phoneNumber shouldn't appear twice
     def phoneNumber(self,str):
         connection = pymysql.connect(host=cfg['db']['host'],user=cfg['db']['user'],password=cfg['db']['password'],db=cfg['db']['database'])
@@ -93,6 +94,21 @@ class CheckRepeat():
         rows = self.__cursor.fetchall()
         if len(rows):
             self.__Errors.append('phoneNumber has been registered')
+    def getErrors(self):
+        return self.__Errors
+
+class CheckEmail():
+    def __init__(self):
+        self.__Errors=[]
+
+    def schoolName(self,str):
+        connection = pymysql.connect(host=cfg['db']['host'],user=cfg['db']['user'],password=cfg['db']['password'],db=cfg['db']['database'])
+        cursor = connection.cursor()
+        cursor.execute("SELECT * from Users WHERE schoolName = %(schoolName)s",{'schoolName':str})
+        rows = cursor.fetchall()
+        if not len(rows):
+            self.__Errors.append('schoolName has not found')
+
     def getErrors(self):
         return self.__Errors
 
@@ -115,6 +131,7 @@ def checkRegisterRequest(data):
     #if schoolName is legal -> check schoolName again
     if 'schoolName has illegal characters' not in Errors and 'schoolName length error' not in Errors:
         checkRepeat.schoolName(data['schoolName'])
+
     #if phoneNumber is legal -> check phoneNumber again
     if 'phoneNumber has illegal characters' not in Errors and 'phoneNumber length error' not in Errors:
         checkRepeat.phoneNumber(data['phoneNumber'])
@@ -162,13 +179,127 @@ def register():
     #delete password and password Confirm for security
     del info['password']
     del info['passwdConfirm']
-    return render_template('register.html')
-    #return jsonify(info)
-#@app.before_request
-#def make_session_permanent():
-#   session.permanent = True
-#   app.permanent_session_lifetime = timedelta(minutes=5)
+    #return render_template('register.html')
+    return jsonify(info)
 
+@users.route('/login',methods=['POST'])
+def login():
+    connection = pymysql.connect(host=cfg['db']['host'],user=cfg['db']['user'],password=cfg['db']['password'],db=cfg['db']['database'])
+    info = dict()
+    schoolName = request.values.get('schoolName')
+    password = request.values.get('password')
+    cursor = connection.cursor()
+    cursor.execute("SELECT * from Users WHERE schoolName = %(schoolName)s",{'schoolName':schoolName})
+    rows = cursor.fetchall()
+    connection.commit()
+    Errors = []
+    if not len(rows):
+        Errors.append('schoolName doesn\'t exist')
+    else:
+        cursor.execute("SELECT * from Users WHERE schoolName = %(schoolName)s",{'schoolName':schoolName})
+        rows = cursor.fetchall()
+        connection.commit()
+        row = rows[0]
+        md5 = hashlib.md5()
+        md5.update(password.encode("utf8"))
+        # ! password current index is 2
+        if md5.hexdigest() == row[2]:
+            session.permanent = True
+            #add a schoolName into session use session to timeout
+            session['schoolName']=row[1]
+        else:
+            Errors.append('password error')
+        info['isAdmin'] = row[5]
+
+    info['errors'] = Errors
+    return jsonify(info)
+
+@users.route('/setIdentityCode',methods=['POST'])
+def setIdentityCode():
+    connection = pymysql.connect(host=cfg['db']['host'],user=cfg['db']['user'],password=cfg['db']['password'],db=cfg['db']['database'])
+    info = dict()
+    cursor = connection.cursor()
+    schoolName = request.values.get('schoolName')
+    cursor.execute("SELECT * from Users WHERE schoolName = %(schoolName)s",{'schoolName':schoolName})
+    checkEmail=CheckEmail()
+    checkEmail.schoolName(schoolName)
+    info['errors'] = checkEmail.getErrors()
+    connection.commit()
+    if len(info['errors'])==0:
+        info['schoolName'] = schoolName
+        try:
+            identityCode = ""
+            for i in range(6):
+                tmp=random.randint(0,2)
+                if tmp==0:
+                    tmp=random.randint(0,9)
+                    identityCode += str(tmp)
+                elif tmp==1:
+                    tmp=random.randint(65,90)
+                    identityCode += chr(tmp)
+                else :
+                    tmp=random.randint(97,122)
+                    identityCode += chr(tmp)
+            cursor.execute("UPDATE Users SET identityCode = %(identityCode)s WHERE schoolName = %(schoolName)s",{'identityCode':identityCode,'schoolName':schoolName})
+            connection.commit()
+        except Exception:
+            traceback.print_exc()
+            connection.rollback()
+            info['errors'] = 'setIdentityCode fail'
+    return jsonify(info)
+
+@users.route('/checkIdentityCode',methods=['POST'])
+def checkIdentityCode():
+    connection = pymysql.connect(host=cfg['db']['host'],user=cfg['db']['user'],password=cfg['db']['password'],db=cfg['db']['database'])
+    info = dict()
+    errors=[]
+    cursor = connection.cursor()
+    schoolName = request.values.get('schoolName')
+    identityCode=request.values.get('identityCode')
+    cursor.execute("SELECT identityCode from Users WHERE schoolName = %(schoolName)s",{'schoolName':schoolName})
+    rows = cursor.fetchall()
+    connection.commit()
+    if rows[0][0]!=identityCode:
+        errors.append('identityCode error')
+    else:
+        session.permanent = True
+        #add a schoolName into session use session to timeout
+        session['schoolName']=request.values.get('schoolName')
+    info['errors']=errors
+    return jsonify(info)
+
+def checkPassWord(data):
+    checkForm = CheckForm()
+    checkForm.password(data['password'])
+    checkForm.passwdConfirm(data['password'],data['passwdConfirm'])
+    Errors = checkForm.getErrors()
+    return Errors
+
+@users.route('/resetPassword',methods=['POST'])
+def resetPassword():
+    connection = pymysql.connect(host=cfg['db']['host'],user=cfg['db']['user'],password=cfg['db']['password'],db=cfg['db']['database'])
+    info = dict()
+    errors=[]
+    cursor=connection.cursor()
+    info['password'] = request.values.get('password')
+    info['passwdConfirm'] = request.values.get('passwdConfirm')
+    errors = checkPassWord(info)
+    if session.get('schoolName')==None:
+        errors.append('not pass identityCode yet!')
+    info['errors'] = errors
+    if len(info['errors'])==0:
+        try:
+            md5 = hashlib.md5()
+            md5.update((request.values.get('password')).encode("utf8"))
+            cursor.execute("UPDATE Users SET password = %(password)s WHERE schoolName = %(schoolName)s", {'password':md5.hexdigest(),'schoolName':session.get('schoolName')})
+            connection.commit()
+        except Exception:
+            traceback.print_exc()
+            connection.rollback()
+            info['errors'] = 'register fail'
+    del info['password']
+    del info['passwdConfirm']
+    return jsonify(info)
 #   email confirm undo
 #   if a user input an error email (but legal), his student's ID fucked up. 
 

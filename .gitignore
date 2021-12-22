@@ -4,3 +4,4 @@ backend/database/mysql/
 
 #webAPI
 backend/api/config.yml
+backend/api/GMailConfig.yml
