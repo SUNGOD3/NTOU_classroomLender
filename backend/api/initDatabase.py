@@ -22,6 +22,9 @@ connection.commit()
 cursor.execute("DROP TABLE IF EXISTS ApplicationForms;")
 connection.commit()
 
+cursor.execute("DROP TABLE IF EXISTS Historys;")
+connection.commit()
+
 cursor.execute("CREATE TABLE IF NOT EXISTS Users( \
     userName varchar(30) NOT NULL,\
     schoolName varchar(10) NOT NULL,\
@@ -71,7 +74,7 @@ cursor.execute("CREATE TABLE IF NOT EXISTS ApplicationForms( \
     PRIMARY KEY (classroomID,department,lendTime,weekday) );")
 connection.commit()
 
-cursor.execute("CREATE TABLE IF NOT EXISTS History( \
+cursor.execute("CREATE TABLE IF NOT EXISTS Historys( \
     classroomID  varchar(10) NOT NULL,\
     department varchar(15) NOT NULL,\
     courseName varchar(20) NOT NULL,\
