@@ -1,52 +1,116 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <!--bootstrap-->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
         <meta charset = "utf-8">
         <style type = "text/css">
-            p   {
-                    font-size : 20px;
-                }
+            body 	{
+				background-color:#f4f5fe;
+				font-family: 微軟正黑體, Arial, Helvetica, sans-serif;
+				overflow: hidden;
+				overflow-y: scroll;
+		    }
+		    header	{
+				background-color:#c3c8ec;
+				color:navy;
+				font-weight: bold;
+		    }
+            p       {
+                        font-size : 18px;
+                    }
            #Body    {
                         margin:0 auto;
                     }
         </style>
 
         <script>
+
+            //將修改的資訊-使用者名稱(userName)、密碼(password)、手機(phoneNumber)post到後端  
             function check(form){
                 if(form.password.value!=form.password_again.value){
                     alert("兩次密碼輸入不一致!!!");
                     return;
                 }
+                event.preventDefault();
                 form.submit();
+                
+                alert("資訊修改成功");
+                //頁面跳轉
+                window.location.href = "new_manager-func.html";
+                //location.reload();
             }
+            
         </script>  
 
     </head>
 
     <body>
-        <form method = "POST" action = "http://localhost:5000/info" onsubmit="check(this);return false;">
+
+        <header class="py-3 mb-3 border-bottom">
+            <div class="container-fluid d-grid gap-3 align-items-center" style="grid-template-columns: 1fr 2fr;">
+                <div class="dropdown">
+                    <a href="#" class="d-flex align-items-center col-lg-4 mb-2 mb-lg-0 link-dark text-decoration-none dropdown-toggle" id="dropdownNavLink" data-bs-toggle="dropdown" aria-expanded="false">
+                        功能選單
+                    </a>
+                    <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownNavLink">
+                        <li><a class="dropdown-item" href="check_lend_classroom.html"><span>確認借出教室</span></a></li>
+                        <li><a class="dropdown-item" href="check_return_classroom.html"><span>確認歸還教室</span></a></li>
+                        <li><a class="dropdown-item" href="add_classroom.html"><span>新增教室</span></a></li>
+                        <li><a class="dropdown-item" href="delete_classroom.html"><span>刪除教室</span></a></li>
+                        <li><a class="dropdown-item" href="class_state.html"><span>檢視教室狀態</span></a></li>
+                        <li><a class="dropdown-item" href="modify_classroom.html"><span>修改教室狀態</span></a></li>
+                        <!-- <li><a class="dropdown-item" href="#"><span>修改借用人狀態</span></a></li> -->
+                        <li><a class="dropdown-item" href="check_all_user.html"><span>檢視借用人資訊</span></a></li>
+                        <li><a class="dropdown-item" href="history.html" ><span>檢視歷史</span></a></li>
+                        <li><a class="dropdown-item" href="confirm_administrator_application.html"><span>確認管理員申請</span></a></li>
+                        <li><a class="dropdown-item" href="#" >修改一般管理員權限</a></li>
+                    </ul>
+                </div>
+    
+                <div style="width: 40%; display:inline-block; font-size: 30px;">
+                    <div style="text-align: center;">NTOU教室借用平台</div>
+                </div>
+    
+                <div class="flex-shrink-0 dropdown" style="position: absolute; right:15px; align-items: center;">
+                    <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="ntou_logo.png" width="32" height="32" class="rounded-circle">
+                    </a>
+                    <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
+                        <!--<li><a class="dropdown-item" href="#" target = "ibody">查看個人資料</a></li>-->
+                        <li><a class="dropdown-item" href="change-personal-info.html">更改個人資料</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="index.html" >登出</a></li>
+                    </ul>
+                </div>
+    
+            </div>
+        </header>
+
+        <form method = "POST" action = "http://localhost:5002/info" onsubmit="check(this);return false();">
             <!--送到後端資料庫-->
             <center>
                 <div style = "text-align:left ; WIDTH:150px">
                     <p>
+                        <!--只能輸入中文或英文-->
                         <label>使用者名稱 : </label>
-                        <input type = "text" id = "userName" name = "userName">
+                        <input type = "text" id = "userName" name = "userName" pattern = "^[\u4e00-\u9fa5]+$|^[a-zA-Z\s]+$"required>
                     </p>
         
         
                     <p>
                         <label>密碼 : </label>
-                        <input type = "password" id = "password" name = "password">
+                        <input type = "password" id = "password" name = "password" pattern = "[a-zA-Z0-9_]{2,20}" required>
                     </p>
         
                     <p>
                         <label>再次輸入密碼 : </label>
-                        <input type = "password" id = "password_again" name = "password_again">
+                        <input type = "password" id = "password_again" name = "password_again" pattern = "[a-zA-Z0-9_]{2,20}" required>
                     </p>
                    
                     <p>
                         <label>手機 : </label>
-                        <input type = "text" id = "phoneNumber" name = "phoneNumber">
+                        <input type = "text" id = "phoneNumber" name = "phoneNumber" pattern = "[0-9]{10}" required>
                     </p>
             
         
@@ -59,6 +123,8 @@
             
 
         </form>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
     </body>
 
 </html>
