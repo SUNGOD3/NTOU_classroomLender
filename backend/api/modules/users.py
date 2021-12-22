@@ -167,10 +167,10 @@ def register():
     #if there's no error occured in info -> insert the new data to database
     if len(info['errors'])==0:
         try:
-            insertString = 'INSERT INTO Users(userName,schoolName,password,phoneNumber,Email,isAdmin,status)values(%(userName)s,%(schoolName)s,%(password)s,%(phoneNumber)s,%(Email)s,%(isAdmin)s,%(status)s)'
+            insertString = 'INSERT INTO Users(userName,schoolName,password,phoneNumber,Email,isAdmin,status,apply)values(%(userName)s,%(schoolName)s,%(password)s,%(phoneNumber)s,%(Email)s,%(isAdmin)s,%(status)s,%(apply)s)'
             md5 = hashlib.md5() #hash the password for security
             md5.update((request.values.get('password')).encode("utf8")) # for BIG5 and utf8 problem
-            cursor.execute(insertString, {'userName':info['userName'], 'schoolName':info['schoolName'],'password': md5.hexdigest(),'phoneNumber':info['phoneNumber'],'Email':info['Email'],'isAdmin':False,'status':0})
+            cursor.execute(insertString, {'userName':info['userName'], 'schoolName':info['schoolName'],'password': md5.hexdigest(),'phoneNumber':info['phoneNumber'],'Email':info['Email'],'isAdmin':False,'status':0,'apply':0})
             connection.commit() #submit the data to database 
         except Exception: #get exception if there's still occured something wrong
             traceback.print_exc()
@@ -296,9 +296,83 @@ def resetPassword():
         except Exception:
             traceback.print_exc()
             connection.rollback()
-            info['errors'] = 'register fail'
+            info['errors'] = 'reset fail'
     del info['password']
     del info['passwdConfirm']
+    return jsonify(info)
+
+@users.route('/applyForManager',methods=['POST'])
+def applyForManager():
+    connection = pymysql.connect(host=cfg['db']['host'],user=cfg['db']['user'],password=cfg['db']['password'],db=cfg['db']['database'])
+    info = dict()
+    errors=[]
+    cursor=connection.cursor()
+    if session.get('schoolName')==None:
+        info['errors'] = 'timeout!'
+    else:
+        try:
+            cursor.execute("UPDATE Users SET apply = %(apply)s WHERE schoolName = %(schoolName)s", {'apply':1,'schoolName':session.get('schoolName')})
+            connection.commit()
+        except Exception:
+            traceback.print_exc()
+            connection.rollback()
+            info['errors'] = 'apply fail'
+    return jsonify(info)
+
+@users.route('/checkAllUser',methods=['GET'])
+def checkAllUser():
+    info = dict()
+    errors = []
+    connection = pymysql.connect(host=cfg['db']['host'],user=cfg['db']['user'],password=cfg['db']['password'],db=cfg['db']['database'])
+    cursor=connection.cursor()
+    cursor.execute("SELECT schoolName,userName,status,Email from Users ")
+    rows = cursor.fetchall()
+    connection.commit()
+    if len(rows) == 0:
+        errors.append("No user exist!")
+    else:
+        info['users'] = []
+        for row in rows:
+            info['users'].append(""+row[0]+","+row[1]+","+str(row[2])+","+row[3])
+    info['errors'] = errors
+    return jsonify(info)
+
+@users.route('/confirmApply',methods=['GET'])
+def confirmApply():
+    info = dict()
+    errors = []
+    connection = pymysql.connect(host=cfg['db']['host'],user=cfg['db']['user'],password=cfg['db']['password'],db=cfg['db']['database'])
+    cursor=connection.cursor()
+    cursor.execute("SELECT schoolName,userName from Users WHERE apply=1")
+    rows = cursor.fetchall()
+    connection.commit()
+    if len(rows) == 0:
+        errors.append("No one apply!")
+    else:
+        info['users'] = []
+        for row in rows:
+            info['users'].append(""+row[0]+","+row[1])
+    info['errors'] = errors
+    return jsonify(info)
+
+@users.route('/postConfirm',methods=['POST'])
+def postConfirm():
+    info = dict()
+    info['schoolName'] = request.values.get('schoolName')
+    connection = pymysql.connect(host=cfg['db']['host'],user=cfg['db']['user'],password=cfg['db']['password'],db=cfg['db']['database'])
+    cursor=connection.cursor()
+    cursor.execute("UPDATE Users SET isAdmin =%(isAdmin)s , apply =%(apply)s WHERE schoolName=%(schoolName)s",{'isAdmin': 1,'apply': 0,'schoolName':info['schoolName']})
+    connection.commit()
+    return jsonify(info)
+
+@users.route('/postReject',methods=['POST'])
+def postReject():
+    info = dict()
+    info['schoolName'] = request.values.get('schoolName')
+    connection = pymysql.connect(host=cfg['db']['host'],user=cfg['db']['user'],password=cfg['db']['password'],db=cfg['db']['database'])
+    cursor=connection.cursor()
+    cursor.execute("UPDATE Users SET apply =%(apply)s WHERE schoolName=%(schoolName)s",{'apply': 0,'schoolName':info['schoolName']})
+    connection.commit()
     return jsonify(info)
 #   email confirm undo
 #   if a user input an error email (but legal), his student's ID fucked up. 

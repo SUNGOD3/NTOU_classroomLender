@@ -64,3 +64,48 @@ testDeleteClassroom
     <input type="submit" value="送出表單">
     <hr>
 </form>
+
+testChangeClassroom
+<form action="http://localhost:13588/Classrooms/changeClassroom" method="post">
+    classroomID:<input name="classroomID"></input><br>
+    department:<input name="department"></input><br>
+    equipment1:<input name="equipment1"></input><br>
+    equipment2:<input name="equipment2"></input><br>
+    equipment3:<input name="equipment3"></input><br>
+    equipment4:<input name="equipment4"></input><br>
+    equipment5:<input name="equipment5"></input><br>
+    <input type="submit" value="送出表單">
+    <hr>
+</form>
+
+testApplyForManager
+<form action="http://localhost:13588/users/applyForManager" method="post">
+    <input type="submit" value="送出表單">
+    <hr>
+</form>
+
+testCheckAllUser
+<form action="http://localhost:13588/users/checkAllUser" method="get">
+    <input type="submit" value="送出表單">
+    <hr>
+</form>
+
+testConfirmApply
+<form action="http://localhost:13588/users/confirmApply" method="get">
+    <input type="submit" value="送出表單">
+    <hr>
+</form>
+
+testPostConfirm
+<form action="http://localhost:13588/users/postConfirm" method="post">
+    schoolName:<input type="text" name="schoolName"><br>
+    <input type="submit" value="送出表單">
+    <hr>
+</form>
+
+testPostReject
+<form action="http://localhost:13588/users/postReject" method="post">
+    schoolName:<input type="text" name="schoolName"><br>
+    <input type="submit" value="送出表單">
+    <hr>
+</form>

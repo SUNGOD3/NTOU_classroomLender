@@ -30,9 +30,7 @@ cursor.execute("CREATE TABLE IF NOT EXISTS Users( \
     Email varchar(40) NOT NULL, \
     isAdmin int NOT NULL,\
     identityCode varchar(6),\
-    accessKey varchar(100),\
     status int NOT NULL,\
-    runTime datetime,\
     apply int,\
     PRIMARY KEY (schoolName) );")
 connection.commit()
@@ -56,7 +54,7 @@ cursor.execute("CREATE TABLE IF NOT EXISTS Scheduler( \
     lendTime int NOT NULL,\
     returnTime int NOT NULL,\
     weekDay int NOT NULL,\
-    PRIMARY KEY (classroomID,department) );")
+    PRIMARY KEY (classroomID,department,lendTime,weekday) );")
 connection.commit()
 
 cursor.execute("CREATE TABLE IF NOT EXISTS ApplicationForms( \
@@ -70,5 +68,17 @@ cursor.execute("CREATE TABLE IF NOT EXISTS ApplicationForms( \
     returnTime int NOT NULL,\
     weekDay int NOT NULL,\
     reason varchar(250) NOT NULL,\
-    PRIMARY KEY (classroomID,department) );")
+    PRIMARY KEY (classroomID,department,lendTime,weekday) );")
+connection.commit()
+
+cursor.execute("CREATE TABLE IF NOT EXISTS History( \
+    classroomID  varchar(10) NOT NULL,\
+    department varchar(15) NOT NULL,\
+    courseName varchar(20) NOT NULL,\
+    userName varchar(30) NOT NULL,\
+    schoolName varchar(10) NOT NULL,\
+    lendTime datetime NOT NULL,\
+    returnTime datetime NOT NULL,\
+    reason varchar(250) NOT NULL,\
+    PRIMARY KEY (classroomID,department,lendTime) );")
 connection.commit()

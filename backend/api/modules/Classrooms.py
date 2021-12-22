@@ -58,3 +58,27 @@ def deleteClassroom():
         connection.rollback()
         info['errors'] = 'deleteClassroom fail'
     return jsonify(info)
+
+@Classrooms.route('/changeClassroom',methods=['POST'])
+def changeClassroom():
+    #get data in form by name from HTML
+    connection = pymysql.connect(host=cfg['db']['host'],user=cfg['db']['user'],password=cfg['db']['password'],db=cfg['db']['database'])
+    #build dictionary
+    info = dict()
+    cursor = connection.cursor()
+    info['classroomID'] = request.values.get('classroomID')
+    info['department'] = request.values.get('department')
+    info['equipment1'] = request.values.get('equipment1')
+    info['equipment2'] = request.values.get('equipment2')
+    info['equipment3'] = request.values.get('equipment3')
+    info['equipment4'] = request.values.get('equipment4')
+    info['equipment5'] = request.values.get('equipment5')
+    try:
+        cursor.execute('UPDATE Classrooms SET equipment1 = %(equipment1)s, equipment2 = %(equipment2)s, equipment3 = %(equipment3)s, equipment4 = %(equipment4)s, equipment5 = %(equipment5)s WHERE classroomID = %(classroomID)s and department = %(department)s',
+                       {'equipment1':info['equipment1'],'equipment2':info['equipment2'],'equipment3':info['equipment3'],'equipment4':info['equipment4'],'equipment5':info['equipment5'],'classroomID':info['classroomID'],'department':info['department']})
+        connection.commit() #submit the data to database
+    except Exception: #get exception if there's still occured something wrong
+        traceback.print_exc()
+        connection.rollback()
+        info['errors'] = 'changeClassroom fail'
+    return jsonify(info)
