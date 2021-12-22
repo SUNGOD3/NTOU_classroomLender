@@ -105,7 +105,6 @@
                     <tr>
                         <th scope="col">學號</th>
                         <th scope="col">姓名</th>
-                        <th scope="col">密碼</th>
                         <th scope="col">信箱</th>
                         <th scope="col">狀態</th>
                         <th scope="col">修改</th>
@@ -129,7 +128,7 @@
             $.get("http://localhost:5000/check_all_user", function (data) {                
                 let content = "";
                 for (let i = 0; i < data.length; i++) {
-                    content += "<tr>" + "<td id='schoolName" + i + "'>" + data[i].schoolName + "</td> " + "<td>" + data[i].userName + "</td> " + " <td> " + data[i].password + "</td> " + "<td>" + data[i].email + "</td>" + "<td>" + data[i].status + "</td>" + "<td><a href='modify_user.html' target='_blank' onclick='javascript: postFunc(" + i + ")'>修改</a></td>" + "</tr>";
+                    content += "<tr>" + "<td id='schoolName" + i + "'>" + data[i].schoolName + "</td> " + "<td>" + data[i].userName + "</td> " + "<td>" + data[i].Email + "</td>" + "<td>" + data[i].status + "</td>" + "<td><a href='modify_user.html' target='_blank' onclick='javascript: postFunc(" + i + ")'>修改</a></td>" + "</tr>";
                 }
                 document.getElementById("data_table").innerHTML = content;
             });

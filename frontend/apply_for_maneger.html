@@ -92,12 +92,18 @@
         <br>
 
         <div class="form-floating">
-            <input type="text" class="form-control" id="password" placeholder="密碼" name="password" size="32">
+            <input type="text" class="form-control" id="schoolName" placeholder="帳號" name="password" size="32">
+            <label for="floatingInput">帳號</label>
+        </div>
+
+        <br>
+        <div class="form-floating">
+            <input type="password" class="form-control" id="password" placeholder="密碼" name="password" size="32">
             <label for="floatingInput">密碼</label>
         </div>
         <br>
         <div class="form-floating">
-            <input type="text" class="form-control" id="passwordConfirm" placeholder="密碼" name="passwdConfirm" size="32">
+            <input type="password" class="form-control" id="passwordConfirm" placeholder="密碼" name="passwdConfirm" size="32">
             <label for="floatingInput">確認密碼</label>
         </div>
         <br>
@@ -112,15 +118,16 @@
         var password = "";
         var passwordConfirm = "";
         
-        $(document).ready(function () {
+        //$(document).ready(function () {
 
-            $.get("http://localhost:5000/get_schoolName", function (data) {
-                schoolName = data.schoolName;
-            });
+        //    $.get("http://localhost:5000/get_schoolName", function (data) {
+        //        schoolName = data.schoolName;
+        //    });
 
-        });
+        //});
 
         function confirm_again() {
+            schoolName = document.getElementById("schoolName").value;
             password = document.getElementById("password").value;
             passwordConfirm = document.getElementById("passwordConfirm").value;
             if (password == passwordConfirm) {
@@ -137,7 +144,6 @@
 
             var data = {
                 "schoolName": schoolName,
-
             }
 
 
