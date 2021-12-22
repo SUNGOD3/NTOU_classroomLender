@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>新增教室</title>
+	<meta charset="utf-8" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+	<style>
+    	body 	{
+				background-color:#f4f5fe;
+				font-family: 微軟正黑體, Arial, Helvetica, sans-serif;
+				overflow: hidden;
+				overflow-y: scroll;
+		}
+		header	{
+				background-color:#c3c8ec;
+				color:navy;
+				font-weight: bold;
+		}
+		main	{
+				background-color:#f4f5fe;
+				position: absolute;
+				left: 20px;
+		}
+		button{
+				background-color:#c3c8ec;
+		}
+		p		{
+				font-size: 20px;
+		}
+		table, th, tr, td {
+				text-align: center;
+				border:1px solid black;
+				border-collapse: collapse;
+		}
+		.classroom:hover {
+				background-color:lightblue;
+				color: white;
+				font-weight: bold;
+		}
+	</style>
+</head>
+<body>
+	<header class="py-3 mb-3 border-bottom">
+        <div class="container-fluid d-grid gap-3 align-items-center" style="grid-template-columns: 1fr 2fr;">
+            <div class="dropdown">
+                <a href="#" class="d-flex align-items-center col-lg-4 mb-2 mb-lg-0 link-dark text-decoration-none dropdown-toggle" id="dropdownNavLink" data-bs-toggle="dropdown" aria-expanded="false">
+                    功能選單
+                </a>
+                <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownNavLink">
+                    <li><a class="dropdown-item" href="#"><span>確認借出教室</span></a></li>
+                    <li><a class="dropdown-item" href="#"><span>確認歸還教室</span></a></li>
+                    <li><a class="dropdown-item" href="add_classroom.html"><span>新增教室</span></a></li>
+                    <li><a class="dropdown-item" href="delete_classroom.html"><span>刪除教室</span></a></li>
+                    <li><a class="dropdown-item" href="class_state.html"><span>檢視教室狀態</span></a></li>
+                    <li><a class="dropdown-item" href="modify_classroom.html"><span>修改教室狀態</span></a></li>
+                    <!-- <li><a class="dropdown-item" href="#"><span>修改借用人狀態</span></a></li> -->
+                    <li><a class="dropdown-item" href="check_all_user.html"><span>檢視借用人資訊</span></a></li>
+                    <li><a class="dropdown-item" href="history.html"><span>檢視歷史</span></a></li>
+                    <li><a class="dropdown-item" href="#"><span>確認管理員申請</span></a></li>
+					<li><a class="dropdown-item" href="#">修改一般管理員權限</a></li>
+                </ul>
+            </div>
+
+			<div style="width: 40%; display:inline-block; font-size: 30px;">
+				<div style="text-align: center;">NTOU教室借用平台</div>
+			</div>
+
+            <div class="flex-shrink-0 dropdown" style="position: absolute; right:15px; align-items: center;">
+                <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">
+                    <img src="ntou_logo.png" width="32" height="32" class="rounded-circle">
+                </a>
+				<ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
+					<li><a class="dropdown-item" href="modify_info.html" target="ibody">更改個人資料</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="#">登出</a></li>
+                </ul>
+            </div>
+
+        </div>
+    </header>
+	<main>
+		
+		<div class="row align-items-start">
+
+			<p style = "font-size: 30px; font-weight: bold;">新增教室</p>
+
+			<!--左側-->
+			<!--設備篩選 & 關鍵字搜尋 & 選擇教室-->
+			<div class="col-4">
+				
+				<!--選擇教室-->
+				<div class="row d-flex align-items-center" style="position: relative; top: 60px; left: 20px;">
+					<h4>選擇教室</h4>
+					<div class="col-10 d-flex align-items-center table-responsive" style="text-align: center;">
+						<table class="table table-striped table-sm" style="border-collapse: collapse;">
+							<tr>
+								<th scope="col" class="floor">樓層</th>
+								<th scope="col" colspan="10">教室編號</th><!--假設每層樓教室最多10間-->
+							</tr>
+							<tr>
+								<th class="floor">6</th>
+								<td class="classroom" name="red">606</td>
+								<td class="classroom" name="green">666</td>
+								<td class="classroom">
+                                    <button type="button" class="btn btn-secondary btn-sm">新增</button>
+                                </td>
+							</tr>
+							<tr>
+								<th class="floor">5</th>
+								<td class="classroom" name="red">505</td>
+								<td class="classroom" name="red">555</td>
+								<td class="classroom">
+                                    <button type="button" class="btn btn-secondary btn-sm">新增</button>
+                                </td>
+							</tr>
+							<tr>
+								<th class="floor">4</th>
+								<td class="classroom">407</td>
+								<td class="classroom">409</td>
+								<td class="classroom">
+                                    <button type="button" class="btn btn-secondary btn-sm">新增</button>
+                                </td>
+							</tr>
+							<tr>
+								<th class="floor">3</th>
+								<td class="classroom">301</td>
+								<td class="classroom">303</td>
+								<td class="classroom">
+                                    <button type="button" class="btn btn-secondary btn-sm">新增</button>
+                                </td>
+							</tr>
+							<tr>
+								<th class="floor">2</th>
+								<td class="classroom">201</td>
+								<td class="classroom">203</td>
+								<td class="classroom">205</td>
+								<td class="classroom">212</td>
+								<td class="classroom">
+                                    <button type="button" class="btn btn-secondary btn-sm">新增</button>
+                                </td>
+							</tr>
+							<tr>
+								<th class="floor">1</th>
+								<td class="classroom">101</td>
+								<td class="classroom">105</td>
+								<td class="classroom">
+                                    <button type="button" class="btn btn-secondary btn-sm">新增</button>
+                                </td>
+							</tr>
+							<tr>
+								<th class="floor">B1</th>
+								<td class="classroom">B01</td>
+								<td class="classroom">B03</td>
+								<td class="classroom">B10</td>
+								<td class="classroom">B12</td>
+								<td class="classroom">
+                                    <button type="button" class="btn btn-secondary btn-sm">新增</button>
+                                </td>
+							</tr>
+						</table>
+					</div>
+				</div>
+
+			</div>
+			
+			<!--右邊-->
+			<!--教室資訊 & 一週教室狀態(表格)-->
+			<div class="col-6">
+
+				<!--1.教室資訊-->
+				<div class="row justify-content-start" style="position: relative; top: 20px; left: 20px;">
+					<h5> 
+						【教室使用現況】<br>
+						管理系所: 資訊工程學系<br>
+						教室位置及代碼: 資工系館 INS101教室
+					</h5>
+				</div>
+
+				<!--2.一週教室狀態(表格)-->
+				<div class="row d-flex align-items-center table-responsive" style="position: relative; top: 40px; left: 20px; text-align: center;">
+					<table class= "table table-striped table-sm" style="width: 95%">
+						<tr>
+							<th scope="col" name="weekDay">節次</th>
+							<th scope="col" name="weekDay">星期一</th>
+							<th scope="col" name="weekDay">星期二</th>
+							<th scope="col" name="weekDay">星期三</th>
+							<th scope="col" name="weekDay">星期四</th>
+							<th scope="col" name="weekDay">星期五</th>
+							<th scope="col" name="weekDay">星期六</th>
+							<th scope="col" name="weekDay">星期日</th>
+						</tr>
+						<tr>
+							<th class="time">第0節<br>06:20~08:10</th>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+						</tr>
+						<tr>
+							<th class="time">第1節<br>08:20~09:10</th>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+						</tr>
+						<tr>
+							<th class="time">第2節<br>09:20~10:10</th>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+						</tr>
+						<tr>
+							<th class="time">第3節<br>10:20~11:10</th>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+						</tr>
+						<tr>
+							<th class="time">第4節<br>11:15~12:05</th>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+						</tr>
+						<tr>
+							<th class="time">第5節<br>12:10~13:00</th>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+						</tr>
+						<tr>
+							<th class="time">第6節<br>13:10~14:00</th>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+						</tr>
+						<tr>
+							<th class="time">第7節<br>14:10~15:00</th>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+						</tr>
+						<tr>
+							<th class="time">第8節<br>15:10~16:00</th>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+						</tr>
+						<tr>
+							<th class="time">第9節<br>16:05~16:55</th>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+						</tr>
+						<tr>
+							<th class="time">第10節<br>17:30~18:20</th>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+						</tr>
+						<tr>
+							<th class="time">第11節<br>18:30~19:20</th>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+						</tr>
+						<tr>
+							<th class="time">第12節<br>19:25~20:15</th>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+						</tr>
+						<tr>
+							<th class="time">第13節<br>20:20~21:10</th>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+						</tr>
+						<tr>
+							<th class="time">第14節<br>21:15~22:05</th>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+							<td class="classroom"></td>
+						</tr>	
+					</table>
+				</div>
+
+			</div>
+
+		</div>
+	</main>
+
+	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
+</body>
+</html>
+
