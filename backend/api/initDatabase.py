@@ -41,6 +41,10 @@ connection.commit()
 cursor.execute("CREATE TABLE IF NOT EXISTS Classrooms( \
     classroomID  varchar(10) NOT NULL,\
     status int NOT NULL,\
+    computer boolean NOT NULL,\
+    projector boolean NOT NULL,\
+    blackboard boolean NOT NULL,\
+    whiteboard boolean NOT NULL,\
     equipment1 varchar(15) NULL,\
     equipment2 varchar(15) NULL,\
     equipment3 varchar(15) NULL,\
@@ -71,7 +75,7 @@ cursor.execute("CREATE TABLE IF NOT EXISTS ApplicationForms( \
     PRIMARY KEY (classroomID,lendTime,weekday) );")
 connection.commit()
 
-cursor.execute("CREATE TABLE IF NOT EXISTS Historys( \
+cursor.execute("CREATE TABLE IF NOT EXISTS History( \
     classroomID  varchar(10) NOT NULL,\
     courseName varchar(20) NOT NULL,\
     userName varchar(30) NOT NULL,\

@@ -25,14 +25,18 @@ def addClassroom():
     info = dict()
     cursor = connection.cursor()
     info['classroomID'] = request.values.get('classroomID')
+    info['computer'] = request.values.get('computer')
+    info['projector'] = request.values.get('projector')
+    info['blackboard'] = request.values.get('blackboard')
+    info['whiteboard'] = request.values.get('whiteboard')
     info['equipment1'] = request.values.get('equipment1')
     info['equipment2'] = request.values.get('equipment2')
     info['equipment3'] = request.values.get('equipment3')
     info['equipment4'] = request.values.get('equipment4')
     info['equipment5'] = request.values.get('equipment5')
     try:
-        insertString = 'INSERT INTO Classrooms(classroomID,status,equipment1,equipment2,equipment3,equipment4,equipment5)values(%(classroomID)s,%(status)s,%(equipment1)s,%(equipment2)s,%(equipment3)s,%(equipment4)s,%(equipment5)s)'
-        cursor.execute(insertString, {'classroomID':info['classroomID'], 'status':0,'equipment1': info['equipment1'],'equipment2':info['equipment2'],'equipment3':info['equipment3'],'equipment4':info['equipment4'],'equipment5':info['equipment5']})
+        insertString = 'INSERT INTO Classrooms(classroomID,status,computer,projector,blackboard,whiteboard,equipment1,equipment2,equipment3,equipment4,equipment5)values(%(classroomID)s,%(status)s,%(computer)s,%(projector)s,%(blackboard)s,%(whiteboard)s,%(equipment1)s,%(equipment2)s,%(equipment3)s,%(equipment4)s,%(equipment5)s)'
+        cursor.execute(insertString, {'classroomID':info['classroomID'], 'status':0,'computer':info['computer'],'projector':info['projector'],'blackboard':info['blackboard'],'whiteboard':info['whiteboard'],'equipment1': info['equipment1'],'equipment2':info['equipment2'],'equipment3':info['equipment3'],'equipment4':info['equipment4'],'equipment5':info['equipment5']})
         connection.commit() #submit the data to database 
     except Exception: #get exception if there's still occured something wrong
         traceback.print_exc()
@@ -65,14 +69,18 @@ def changeClassroom():
     info = dict()
     cursor = connection.cursor()
     info['classroomID'] = request.values.get('classroomID')
+    info['computer'] = request.values.get('computer')
+    info['projector'] = request.values.get('projector')
+    info['blackboard'] = request.values.get('blackboard')
+    info['whiteboard'] = request.values.get('whiteboard')
     info['equipment1'] = request.values.get('equipment1')
     info['equipment2'] = request.values.get('equipment2')
     info['equipment3'] = request.values.get('equipment3')
     info['equipment4'] = request.values.get('equipment4')
     info['equipment5'] = request.values.get('equipment5')
     try:
-        cursor.execute('UPDATE Classrooms SET equipment1 = %(equipment1)s, equipment2 = %(equipment2)s, equipment3 = %(equipment3)s, equipment4 = %(equipment4)s, equipment5 = %(equipment5)s WHERE classroomID = %(classroomID)s' ,
-                       {'equipment1':info['equipment1'],'equipment2':info['equipment2'],'equipment3':info['equipment3'],'equipment4':info['equipment4'],'equipment5':info['equipment5'],'classroomID':info['classroomID']})
+        cursor.execute('UPDATE Classrooms SET computer=%(computer)s,projector=%(projector)s,blackboard=%(blackboard)s,whiteboard=%(whiteboard)s,equipment1 = %(equipment1)s, equipment2 = %(equipment2)s, equipment3 = %(equipment3)s, equipment4 = %(equipment4)s, equipment5 = %(equipment5)s WHERE classroomID = %(classroomID)s' ,
+                       {'computer':info['computer'],'projector':info['projector'],'blackboard':info['blackboard'],'whiteboard':info['whiteboard'],'equipment1':info['equipment1'],'equipment2':info['equipment2'],'equipment3':info['equipment3'],'equipment4':info['equipment4'],'equipment5':info['equipment5'],'classroomID':info['classroomID']})
         connection.commit() #submit the data to database
     except Exception: #get exception if there's still occured something wrong
         traceback.print_exc()
