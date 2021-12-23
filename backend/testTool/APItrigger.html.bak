@@ -47,7 +47,6 @@ testSendEmail
 testAddClassroom
 <form action="http://localhost:13588/Classrooms/addClassroom" method="post">
     classroomID:<input name="classroomID"></input><br>
-    department:<input name="department"></input><br>
     equipment1:<input name="equipment1"></input><br>
     equipment2:<input name="equipment2"></input><br>
     equipment3:<input name="equipment3"></input><br>
@@ -60,7 +59,6 @@ testAddClassroom
 testDeleteClassroom
 <form action="http://localhost:13588/Classrooms/deleteClassroom" method="post">
     classroomID:<input name="classroomID"></input><br>
-    department:<input name="department"></input><br>
     <input type="submit" value="送出表單">
     <hr>
 </form>
@@ -68,7 +66,6 @@ testDeleteClassroom
 testChangeClassroom
 <form action="http://localhost:13588/Classrooms/changeClassroom" method="post">
     classroomID:<input name="classroomID"></input><br>
-    department:<input name="department"></input><br>
     equipment1:<input name="equipment1"></input><br>
     equipment2:<input name="equipment2"></input><br>
     equipment3:<input name="equipment3"></input><br>
@@ -106,6 +103,22 @@ testPostConfirm
 testPostReject
 <form action="http://localhost:13588/users/postReject" method="post">
     schoolName:<input type="text" name="schoolName"><br>
+    <input type="submit" value="送出表單">
+    <hr>
+</form>
+
+checkLendClassroom
+<form action="http://localhost:13588/users/checkLendClassroom" method="post">
+    schoolName:<input name="schoolName"></input><br>
+	classroomID:<input name="classroomID"></input><br>
+	lendTime:<input name="lendTime"></input><br>
+    weekDay:<input name="weekDay"></input><br>
+    <input type="submit" value="送出表單">
+    <hr>
+</form>
+
+testGetApplicationForms
+<form action="http://localhost:13588/ApplicationForms/getApplicationForms" method="get">
     <input type="submit" value="送出表單">
     <hr>
 </form>

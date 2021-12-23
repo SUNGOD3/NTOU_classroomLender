@@ -4,14 +4,15 @@ from modules.users import users
 import os
 from modules.Classrooms import Classrooms
 from modules.Email import Email
-
 from modules.Scheduler import Scheduler
 from modules.ApplicationForms import ApplicationForms
+from modules.history import history
 import datetime
 
 app=Flask(__name__)
 app.config['SECRET_KEY'] = os.urandom(24)
-app.config['PERMANENT_SESSION_LIFETIME'] =datetime.timedelta(minutes=5)
+app.config['PERMANENT_SESSION_LIFETIME'] =datetime.timedelta(minutes=10)
+# 5mins is too short !
 
 @app.route('/')
 def index():
@@ -23,6 +24,7 @@ app.register_blueprint(Classrooms,url_prefix='/Classrooms')
 app.register_blueprint(Email,url_prefix='/Email')
 app.register_blueprint(Scheduler,url_prefix='/Scheduler')
 app.register_blueprint(ApplicationForms,url_prefix='/ApplicationForms')
+app.register_blueprint(history,url_prefix='/history')
 
 @app.before_request 
 def timeout():
