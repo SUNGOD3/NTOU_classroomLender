@@ -1,4 +1,6 @@
+from ctypes import sizeof
 from flask import Blueprint,request,jsonify,url_for,redirect,render_template,session
+import datetime
 import pymysql
 import yaml
 import re
@@ -149,7 +151,7 @@ def index():
 
 @users.route('/register',methods=['POST'])
 def register():
-    #get data in form by name from HTML
+    #connect to mysql
     connection = pymysql.connect(host=cfg['db']['host'],user=cfg['db']['user'],password=cfg['db']['password'],db=cfg['db']['database'])
     #build dictionary
     info = dict()
@@ -374,6 +376,44 @@ def postReject():
     cursor.execute("UPDATE Users SET apply =%(apply)s WHERE schoolName=%(schoolName)s",{'apply': 0,'schoolName':info['schoolName']})
     connection.commit()
     return jsonify(info)
+
+
+@users.route('/checkLendClassroom',methods=['POST'])
+def checkLendClassroom():
+    connection = pymysql.connect(host=cfg['db']['host'],user=cfg['db']['user'],password=cfg['db']['password'],db=cfg['db']['database'])
+    info = dict()
+    cursor = connection.cursor()
+    #ApplicationForms's PK = classroomID department lendTime weekDay
+    info['schoolName'] = request.values.get('schoolName')
+    info['classroomID'] = request.values.get('classroomID')
+    info['department'] = request.values.get('department')
+    info['lendTime'] = request.values.get('lendTime')
+    info['weekDay'] = request.values.get('weekDay')
+    try:
+        #update user state first
+        insertString = 'UPDATE Users SET status = 2 WHERE schoolName=(%(schoolName)s);'
+        cursor.execute(insertString, {'schoolName':info['schoolName']})
+        connection.commit() #submit the data to database 
+        #search the reason from ApplicationForms
+        insertString = 'SELECT courseName,userName,reason from ApplicationForms WHERE classroomID=(%(classroomID)s) AND department=(%(department)s) AND lendTime=(%(lendTime)s) AND weekDay=(%(weekDay)s);'
+        cursor.execute(insertString,{'classroomID':info['classroomID'],'department':info['department'],'lendTime':info['lendTime'],'weekDay':info['weekDay']})
+        rows = cursor.fetchall()
+        connection.commit()
+        info['lendTime'] = datetime.date.today()
+        info['courseName'] = rows[0][0]
+        info['userName'] = rows[0][1]
+        info['reason'] = rows[0][2]
+        #print(rows)
+        #insert new data to history
+        insertString = 'INSERT INTO History(classroomID,department,courseName,userName,schoolName,lendTime,returnTime,reason)values(%(classroomID)s,%(department)s,%(courseName)s,%(userName)s,%(schoolName)s,%(lendTime)s,NULL,%(reason)s);'
+        cursor.execute(insertString,{'classroomID':info['classroomID'],'department':info['department'],'courseName':info['courseName'],'userName':info['userName'],'schoolName':info['schoolName'],'lendTime':info['lendTime'],'reason':info['reason']})
+        connection.commit()
+    except Exception: #get exception if there's still occured something wrong
+            traceback.print_exc()
+            connection.rollback()
+            info['errors'] = 'checkLendClassroom fail'
+    return jsonify(info)
+
 #   email confirm undo
 #   if a user input an error email (but legal), his student's ID fucked up. 
 
