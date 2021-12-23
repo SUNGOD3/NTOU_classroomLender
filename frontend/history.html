@@ -42,7 +42,12 @@
                     let content =  "<tr><th>教室</th><th>借用人</th><th>使用時間</th><th>是否歸還</th></tr>";
                     //alert(data.length);
                     for (let i=0;i<data.length; i++){
-                        content += "<tr>" + "<td>" + data[i].classroomID + "</td>" + "<td>" + data[i].userName + "</td>" + "<td>" + data[i].lendTime + "~" + data[i].returnTime + "</td>" + "<td>" + data[i].status + "</td>" + "</tr>"
+                        content += "<tr>" + "<td>" + data[i].classroomID + "</td>" + "<td>" + data[i].userName + "</td>" + "<td>" + data[i].lendTime + "~" + data[i].returnTime + "</td>" + "</tr>";
+                        if(returnTime==""){
+                            content += "<td>" + "No" + "</td>";
+                        }else{
+                            content += "<td>" + "Yes" + "</td>";
+                        }
                     }
                     console.log(content);
                     document.getElementById("history_table").innerHTML = content;
@@ -72,7 +77,7 @@
                         <li><a class="dropdown-item" href="check_all_user.html"><span>檢視借用人資訊</span></a></li>
                         <li><a class="dropdown-item" href="history.html" ><span>檢視歷史</span></a></li>
                         <li><a class="dropdown-item" href="confirm_administrator_application.html"><span>確認管理員申請</span></a></li>
-                        <li><a class="dropdown-item" href="#" >修改一般管理員權限</a></li>
+                        <li><a class="dropdown-item" href="modify_user.html" >修改一般管理員權限</a></li>
                     </ul>
                 </div>
     

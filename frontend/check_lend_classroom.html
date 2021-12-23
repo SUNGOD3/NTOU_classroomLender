@@ -39,17 +39,27 @@
             <script>
                 
                 var schoolName = [];
+                var classroomID = [];
+                var lendTime = [];
+                var returnTime = [];
+                var weekDay = [];
 
-                //去後端get借教室申請人的學號(schoolName)和姓名(userName)
+                //去後端get借教室申請人的學號(schoolName)和姓名(userName)和教室編號(classroomID)借用時間(lendTime)~(returnTime)和借用星期(weekDay)
                 $(document).ready(function(){
                     $.getJSON("http://localhost:5000/lend_classroom", function(data){
-                        /*alert("data: " + data.userName);*/
+                        //get_Applicationforms
                     
                         let content = "";
 
+                        content = "<tr><th>姓名</th><th>教室編號</th><th>使用時間</th><th>使用星期</th></tr>";
+
                         for(let i=0;i<data.length;i++){
-                            content += "<tr>" + "<td>"+data[i].userName+"</td>"+"<td>"+"<input class='b' type='button' onclick= 'confirm("+ i +")' value='確認'>"+"</td>"+"<td>"+"<input class='b' type='button' onclick= 'reject("+ i +")' value='拒絕'>"+"</td>"+ "</tr>";
+                            content += "<tr>" + "<td>"+data[i].userName+"</td>"+"<td>"+data[i].classroomID+"</td>"+"<td>"+data[i].lendTime+"~"+data[i].returnTime+"</td>"+"<td>"+data[i].weekDay+"</td>"+"<td>"+"<input class='b' type='button' onclick= 'confirm("+ i +")' value='確認'>"+"</td>"+"<td>"+"<input class='b' type='button' onclick= 'reject("+ i +")' value='拒絕'>"+"</td>"+ "</tr>";
                             schoolName[i] = data[i].schoolName;
+                            classroomID[i] = data[i].classroomID;
+                            lendTime[i] = data[i].lendTime;
+                            returnTime[i] = data[i].returnTime;
+                            weekDay[i] = data[i].weekDay;
                         }
 
                         console.log(content);
@@ -62,10 +72,14 @@
                 function confirm(i){
 
                 var data = {
-                    "schoolName" : schoolName[i]
+                    "schoolName" : schoolName[i],
+                    "classroomID" : classroomID[i],
+                    "lendTime" : lendTime[i],
+                    "weekDay"  : weekDay[i]
                 }
                 //alert(schoolName[i]);
-                //將申請人學號(schoolName)post到後端資料庫
+                //將申請人學號(schoolName)和教室編號(classroomID)借用時間(lendTime)~(returnTime)和借用星期(weekDay)post到後端資料庫
+                //Users Classrooms
                 $.ajax({
                     type: 'POST',
                     url: "http://localhost:5002/check_lend_classroom",
@@ -92,10 +106,13 @@
                 
 
                 var data = {
-                    "schoolName" : schoolName[i]
+                    "schoolName" : schoolName[i],
+                    "classroomID" : classroomID[i],
+                    "lendTime" : lendTime[i],
+                    "weekDay"  : weekDay[i]
                 }
 
-                //將申請人學號(schoolName)post到後端資料庫
+                //將申請人學號(schoolName)和教室編號(classroomID)借用星期(lendTime)和借用星期(weekDay)post到後端資料庫
                 $.ajax({
                     type: 'POST',
                     url: "http://localhost:5002/check_lend_classroom",
@@ -138,7 +155,7 @@
                         <li><a class="dropdown-item" href="check_all_user.html"><span>檢視借用人資訊</span></a></li>
                         <li><a class="dropdown-item" href="history.html" ><span>檢視歷史</span></a></li>
                         <li><a class="dropdown-item" href="confirm_administrator_application.html"><span>確認管理員申請</span></a></li>
-                        <li><a class="dropdown-item" href="#" >修改一般管理員權限</a></li>
+                        <li><a class="dropdown-item" href="modify_user.html" >修改一般管理員權限</a></li>
                     </ul>
                 </div>
     
