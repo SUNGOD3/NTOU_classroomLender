@@ -22,7 +22,7 @@ connection.commit()
 cursor.execute("DROP TABLE IF EXISTS ApplicationForms;")
 connection.commit()
 
-cursor.execute("DROP TABLE IF EXISTS Historys;")
+cursor.execute("DROP TABLE IF EXISTS History;")
 connection.commit()
 
 cursor.execute("CREATE TABLE IF NOT EXISTS Users( \
