@@ -9,6 +9,7 @@ import hashlib
 import random
 import string
 import datetime
+from flask_cors import CORS
 
 #for user register
 
@@ -144,6 +145,7 @@ def checkRegisterRequest(data):
     return Errors
 
 users=Blueprint("users",__name__) 
+CORS(users)
 #for cut path
 @users.route('/')
 def index():

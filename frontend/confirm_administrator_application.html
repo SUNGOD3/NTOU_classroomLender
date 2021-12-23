@@ -42,16 +42,21 @@
 
             //去後端get提出成為管理員申請人的學號(schoolName)和姓名(userName)
             $(document).ready(function(){
-                $.getJSON("http://localhost:5000/see_classroom_history", function(data){
+                //http://localhost:5000/see_classroom_history http://localhost:13588/users/confirmApply
+                $.getJSON("http://localhost:13588/users/confirmApply", function(data){
                     /*alert("data: " + data.userName);*/
                 
                     let content = "";
-
-                    for(let i=0;i<data.length;i++){
-                        content += "<tr>" + "<td>"+data[i].userName+"</td>"+"<td>"+"<input class='b' type='button' onclick= 'confirm("+ i +")' value='確認'>"+"</td>"+"<td>"+"<input class='b' type='button' onclick= 'reject("+ i +")' value='拒絕'>"+"</td>"+ "</tr>";
-                        schoolName[i] = data[i].schoolName;
+                    
+                    console.log(data);
+                    for(let i=0;i<Object.keys(data).length;i++){
+                        //0-userName 1-schoolName
+                        var str = data.users[i].split(",");
+                        console.log(str);
+                        content += "<tr>"+"<td>"+str[1]+"</td>"+"<td>"+"<input class='b' type='button' onclick= 'confirm("+ i +")' value='確認'>"+"</td>"+"<td>"+"<input class='b' type='button' onclick= 'reject("+ i +")' value='拒絕'>"+"</td>"+ "</tr>";
+                        schoolName[i] = str[0];
                     }
-
+                    
                     console.log(content);
                     document.getElementById("confirm_table").innerHTML = (content);
                     
