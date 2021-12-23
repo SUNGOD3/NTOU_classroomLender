@@ -40,29 +40,26 @@ connection.commit()
 
 cursor.execute("CREATE TABLE IF NOT EXISTS Classrooms( \
     classroomID  varchar(10) NOT NULL,\
-    department varchar(15) NOT NULL,\
     status int NOT NULL,\
     equipment1 varchar(15) NULL,\
     equipment2 varchar(15) NULL,\
     equipment3 varchar(15) NULL,\
     equipment4 varchar(15) NULL,\
     equipment5 varchar(15) NULL,\
-    PRIMARY KEY (classroomID,department) );")
+    PRIMARY KEY (classroomID) );")
 connection.commit()
 
 cursor.execute("CREATE TABLE IF NOT EXISTS Scheduler( \
     classroomID  varchar(10) NOT NULL,\
-    department varchar(15) NOT NULL,\
     courseName varchar(20) NOT NULL,\
     lendTime int NOT NULL,\
     returnTime int NOT NULL,\
     weekDay int NOT NULL,\
-    PRIMARY KEY (classroomID,department,lendTime,weekday) );")
+    PRIMARY KEY (classroomID,lendTime,weekday) );")
 connection.commit()
 
 cursor.execute("CREATE TABLE IF NOT EXISTS ApplicationForms( \
     classroomID  varchar(10) NOT NULL,\
-    department varchar(15) NOT NULL,\
     courseName varchar(20) NOT NULL,\
     userName varchar(30) NOT NULL,\
     schoolName varchar(10) NOT NULL,\
@@ -71,17 +68,16 @@ cursor.execute("CREATE TABLE IF NOT EXISTS ApplicationForms( \
     returnTime int NOT NULL,\
     weekDay int NOT NULL,\
     reason varchar(250) NOT NULL,\
-    PRIMARY KEY (classroomID,department,lendTime,weekday) );")
+    PRIMARY KEY (classroomID,lendTime,weekday) );")
 connection.commit()
 
 cursor.execute("CREATE TABLE IF NOT EXISTS Historys( \
     classroomID  varchar(10) NOT NULL,\
-    department varchar(15) NOT NULL,\
     courseName varchar(20) NOT NULL,\
     userName varchar(30) NOT NULL,\
     schoolName varchar(10) NOT NULL,\
     lendTime datetime NOT NULL,\
     returnTime datetime NOT NULL,\
     reason varchar(250) NOT NULL,\
-    PRIMARY KEY (classroomID,department,lendTime) );")
+    PRIMARY KEY (classroomID,lendTime) );")
 connection.commit()
