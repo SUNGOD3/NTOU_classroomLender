@@ -108,7 +108,7 @@ testPostReject
 </form>
 
 checkLendClassroom
-<form action="http://localhost:13588/users/checkLendClassroom" method="post">
+<form action="http://localhost:13588/history/checkLendClassroom" method="post">
     schoolName:<input name="schoolName"></input><br>
 	classroomID:<input name="classroomID"></input><br>
 	lendTime:<input name="lendTime"></input><br>
@@ -117,8 +117,21 @@ checkLendClassroom
     <hr>
 </form>
 
+seeClassroomHistory
+<form action="http://localhost:13588/history/seeClassroomHistory" method="get">
+    <input type="submit" value="送出表單">
+    <hr>
+</form>
+
 testGetApplicationForms
 <form action="http://localhost:13588/ApplicationForms/getApplicationForms" method="get">
+    <input type="submit" value="送出表單">
+    <hr>
+</form>
+
+selectClassroom
+<form action="http://localhost:13588/Classrooms/seeClassroomHistory" method="post">
+	classroomID:<input name="classroomID"></input><br>
     <input type="submit" value="送出表單">
     <hr>
 </form>
