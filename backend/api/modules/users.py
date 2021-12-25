@@ -415,6 +415,67 @@ def checkLendClassroom():
             info['errors'] = 'checkLendClassroom fail'
     return jsonify(info)
 
+@users.route('/info',methods=['POST'])
+def info():
+    connection = pymysql.connect(host=cfg['db']['host'],user=cfg['db']['user'],password=cfg['db']['password'],db=cfg['db']['database'])
+    info = dict()
+    errors=[]
+    cursor=connection.cursor()
+    info['userName'] = request.values.get('userName')
+    info['phoneNumber'] = request.values.get('phoneNumber')
+    info['password'] = request.values.get('password')
+    try:
+        if len(info['userName'])>0:
+            cursor.execute("UPDATE Users SET userName=%(userName)s  WHERE schoolName = %(schoolName)s",{'userName':info['userName'],'schoolName':session.get('schoolName')})
+            connection.commit()
+        if len(info['phoneNumber'])>0:
+            cursor.execute("UPDATE Users SET phoneNumber=%(phoneNumber)s  WHERE schoolName = %(schoolName)s",{'phoneNumber':info['phoneNumber'],'schoolName':session.get('schoolName')})
+            connection.commit()
+        if len(info['password'])>0:
+            md5 = hashlib.md5()
+            md5.update((request.values.get('password')).encode("utf8"))
+            checkForm = CheckForm()
+            checkForm.password(info['password'])
+            errors = checkForm.getErrors()
+            info['errors'] = errors
+            if len(info['errors'])==0:
+                cursor.execute("UPDATE Users SET password=%(password)s  WHERE schoolName = %(schoolName)s",{'password':md5.hexdigest(),'schoolName':session.get('schoolName')})
+                connection.commit()
+    except Exception:
+            traceback.print_exc()
+            connection.rollback()
+            info['errors'] = 'modify fail'
+    del info['password']
+    return jsonify(info)
+    
+@users.route('/checkAllManager',methods=['GET'])
+def checkAllManager():
+    info = dict()
+    errors = []
+    connection = pymysql.connect(host=cfg['db']['host'],user=cfg['db']['user'],password=cfg['db']['password'],db=cfg['db']['database'])
+    cursor=connection.cursor()
+    cursor.execute("SELECT schoolName,userName from Users WHERE isAdmin>0")
+    rows = cursor.fetchall()
+    connection.commit()
+    if len(rows) == 0:
+        errors.append("No manager!")
+    else:
+        info['users'] = []
+        for row in rows:
+            info['users'].append(""+row[0]+","+row[1])
+    info['errors'] = errors
+    return jsonify(info)
+
+@users.route('/downGrade',methods=['POST'])
+def downGrade():
+    info = dict()
+    info['schoolName'] = request.values.get('schoolName')
+    connection = pymysql.connect(host=cfg['db']['host'],user=cfg['db']['user'],password=cfg['db']['password'],db=cfg['db']['database'])
+    cursor=connection.cursor()
+    cursor.execute("UPDATE Users SET isAdmin =%(isAdmin)s WHERE schoolName=%(schoolName)s AND isAdmin=1",{'isAdmin': 0,'schoolName':info['schoolName']})
+    connection.commit()
+    return jsonify(info)
+
 #   email confirm undo
 #   if a user input an error email (but legal), his student's ID fucked up. 
 
