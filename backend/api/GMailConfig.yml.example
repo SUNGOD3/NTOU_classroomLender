@@ -1,0 +1,4 @@
+GmailAccount:
+    host : localhost
+    Account : input_user_name
+    password : input_user_password

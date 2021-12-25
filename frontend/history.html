@@ -1,10 +1,23 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <!--bootstrap-->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
         <meta charset = "utf-8">
         <title>教室借用歷史</title>
         <!--class head 為標題-->
         <style type="text/css">
+            body 	{
+				background-color:#f4f5fe;
+				font-family: 微軟正黑體, Arial, Helvetica, sans-serif;
+				overflow: hidden;
+				overflow-y: scroll;
+		    }
+		    header	{
+				background-color:#c3c8ec;
+				color:navy;
+				font-weight: bold;
+		    }
             .head   {   font-size : 40px;
 
             }
@@ -16,56 +29,103 @@
 
             }
         </style>
+
+        <!--去資料庫拿資料-->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script>
+
+           //去後端get教室借用歷史的，教室號碼(classroomID)、借用人姓名(userName)、借用時間(lendTime)、歸還時間(returnTime)、是否歸還(status)
+           $(document).ready(function(){
+                
+                $.getJSON("http://localhost:5000/see_classroom_history", function(data){
+                    
+                    let content =  "<tr><th>教室</th><th>借用人</th><th>使用時間</th><th>是否歸還</th></tr>";
+                    //alert(data.length);
+                    for (let i=0;i<data.length; i++){
+                        content += "<tr>" + "<td>" + data[i].classroomID + "</td>" + "<td>" + data[i].userName + "</td>" + "<td>" + data[i].lendTime + "~" + data[i].returnTime + "</td>" + "<td>" + data[i].status + "</td>" + "</tr>"
+                    }
+                    console.log(content);
+                    document.getElementById("history_table").innerHTML = content;
+                });
+          
+            });
+
+        </script>
+
     </head>
     <body>
-        <form method="GET" action="">
+
+        <header class="py-3 mb-3 border-bottom">
+            <div class="container-fluid d-grid gap-3 align-items-center" style="grid-template-columns: 1fr 2fr;">
+                <div class="dropdown">
+                    <a href="#" class="d-flex align-items-center col-lg-4 mb-2 mb-lg-0 link-dark text-decoration-none dropdown-toggle" id="dropdownNavLink" data-bs-toggle="dropdown" aria-expanded="false">
+                        功能選單
+                    </a>
+                    <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownNavLink">
+                        <li><a class="dropdown-item" href="check_lend_classroom.html"><span>確認借出教室</span></a></li>
+                        <li><a class="dropdown-item" href="check_return_classroom.html"><span>確認歸還教室</span></a></li>
+                        <li><a class="dropdown-item" href="add_classroom.html"><span>新增教室</span></a></li>
+                        <li><a class="dropdown-item" href="delete_classroom.html"><span>刪除教室</span></a></li>
+                        <li><a class="dropdown-item" href="class_state.html"><span>檢視教室狀態</span></a></li>
+                        <li><a class="dropdown-item" href="modify_classroom.html"><span>修改教室狀態</span></a></li>
+                        <!-- <li><a class="dropdown-item" href="#"><span>修改借用人狀態</span></a></li> -->
+                        <li><a class="dropdown-item" href="check_all_user.html"><span>檢視借用人資訊</span></a></li>
+                        <li><a class="dropdown-item" href="history.html" ><span>檢視歷史</span></a></li>
+                        <li><a class="dropdown-item" href="confirm_administrator_application.html"><span>確認管理員申請</span></a></li>
+                        <li><a class="dropdown-item" href="#" >修改一般管理員權限</a></li>
+                    </ul>
+                </div>
+    
+                <div style="width: 40%; display:inline-block; font-size: 30px;">
+                    <div style="text-align: center;">NTOU教室借用平台</div>
+                </div>
+    
+                <div class="flex-shrink-0 dropdown" style="position: absolute; right:15px; align-items: center;">
+                    <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="ntou_logo.png" width="32" height="32" class="rounded-circle">
+                    </a>
+                    <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
+                        <!--<li><a class="dropdown-item" href="#" target = "ibody">查看個人資料</a></li>-->
+                        <li><a class="dropdown-item" href="change-personal-info.html">更改個人資料</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="index.html" >登出</a></li>
+                    </ul>
+                </div>
+    
+            </div>
+        </header>
+
+        <form method="GET" action="http://localhost:5000/info">
             <!--cellspacing属性:设置各个单元格之间的间距;cellpadding属性:设置单元格的内边距-->
             <p class = "head" align = "center">借用紀錄</p>
             <p>
-                <table style="border:3px #cccccc solid;" border="1" cellspacing="0" cellpadding="25" align = "center" >
+                <!--將借用歷史顯示在table-->
+                <table id = "history_table" style="border:3px #cccccc solid;" border="1" cellspacing="0" cellpadding="25" align = "center" >
                     <!--<caption>借用紀錄</caption>-->
+                    <!--
                     <tr>
                         <th>教室</th>
                         <th>借用人</th>
                         <th>使用時間</th>
                         <th>是否歸還</th>
                     </tr>
+                    -->
                     <!--從資料庫拿資料-->
+                    <!--
                     <tr>
                         <td> {{classroomID}}   </td>
                         <td> {{userName}}   </td>
                         <td> {{lendTime}}~{{returnTime}} </td>
-                        <td> {{}}   </td>
+                        <td> {{status}}   </td>
                     </tr>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
+                    -->
 
                 </table>
             </p>
-        </form>
+       </form>
         
+       <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
     </body>
 
 </html>

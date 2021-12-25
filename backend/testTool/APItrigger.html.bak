@@ -1,0 +1,137 @@
+testRegister
+<form action="http://localhost:13588/users/register" method="post">
+    userName:<input type="text" name="userName"><br>
+    schoolName:<input type="text" name="schoolName"><br>
+    phoneNumber:<input type="text" name="phoneNumber"><br>
+    password:<input name="password"></input><br>
+    passwdConfirm:<input name="passwdConfirm"></input><br>
+    Email:<input type="text" name="Email"><br>
+　  <input type="submit" value="送出表單">
+</form>
+
+testLogin
+<form action="http://localhost:13588/users/login" method="post">
+    schoolName:<input type="text" name="schoolName"><br>
+    password:<input name="password"></input><br>
+　  <input type="submit" value="送出表單">
+</form>
+
+testSetIdentityCode
+<form action="http://localhost:13588/users/setIdentityCode" method="post">
+    schoolName:<input type="text" name="schoolName"><br>
+　  <input type="submit" value="送出表單">
+</form>
+
+testCheckIdentityCode
+<form action="http://localhost:13588/users/checkIdentityCode" method="post">
+    schoolName:<input type="text" name="schoolName"><br>
+    identityCode:<input type="text" name="identityCode"><br>
+　  <input type="submit" value="送出表單">
+</form>
+
+testResetPassWord
+<form action="http://localhost:13588/users/resetPassword" method="post">
+    password:<input name="password"></input><br>
+    passwdConfirm:<input name="passwdConfirm"></input><br>
+    <input type="submit" value="送出表單">
+    <hr>
+</form>
+
+testSendEmail
+<form action="http://localhost:13588/Email/sendEmail" method="post">
+    Email:<input name="Email"></input><br>
+    <input type="submit" value="送出表單">
+    <hr>
+</form>
+
+testAddClassroom
+<form action="http://localhost:13588/Classrooms/addClassroom" method="post">
+    classroomID:<input name="classroomID"></input><br>
+    equipment1:<input name="equipment1"></input><br>
+    equipment2:<input name="equipment2"></input><br>
+    equipment3:<input name="equipment3"></input><br>
+    equipment4:<input name="equipment4"></input><br>
+    equipment5:<input name="equipment5"></input><br>
+    <input type="submit" value="送出表單">
+    <hr>
+</form>
+
+testDeleteClassroom
+<form action="http://localhost:13588/Classrooms/deleteClassroom" method="post">
+    classroomID:<input name="classroomID"></input><br>
+    <input type="submit" value="送出表單">
+    <hr>
+</form>
+
+testChangeClassroom
+<form action="http://localhost:13588/Classrooms/changeClassroom" method="post">
+    classroomID:<input name="classroomID"></input><br>
+    equipment1:<input name="equipment1"></input><br>
+    equipment2:<input name="equipment2"></input><br>
+    equipment3:<input name="equipment3"></input><br>
+    equipment4:<input name="equipment4"></input><br>
+    equipment5:<input name="equipment5"></input><br>
+    <input type="submit" value="送出表單">
+    <hr>
+</form>
+
+testApplyForManager
+<form action="http://localhost:13588/users/applyForManager" method="post">
+    <input type="submit" value="送出表單">
+    <hr>
+</form>
+
+testCheckAllUser
+<form action="http://localhost:13588/users/checkAllUser" method="get">
+    <input type="submit" value="送出表單">
+    <hr>
+</form>
+
+testConfirmApply
+<form action="http://localhost:13588/users/confirmApply" method="get">
+    <input type="submit" value="送出表單">
+    <hr>
+</form>
+
+testPostConfirm
+<form action="http://localhost:13588/users/postConfirm" method="post">
+    schoolName:<input type="text" name="schoolName"><br>
+    <input type="submit" value="送出表單">
+    <hr>
+</form>
+
+testPostReject
+<form action="http://localhost:13588/users/postReject" method="post">
+    schoolName:<input type="text" name="schoolName"><br>
+    <input type="submit" value="送出表單">
+    <hr>
+</form>
+
+checkLendClassroom
+<form action="http://localhost:13588/history/checkLendClassroom" method="post">
+    schoolName:<input name="schoolName"></input><br>
+	classroomID:<input name="classroomID"></input><br>
+	lendTime:<input name="lendTime"></input><br>
+    weekDay:<input name="weekDay"></input><br>
+    <input type="submit" value="送出表單">
+    <hr>
+</form>
+
+seeClassroomHistory
+<form action="http://localhost:13588/history/seeClassroomHistory" method="get">
+    <input type="submit" value="送出表單">
+    <hr>
+</form>
+
+testGetApplicationForms
+<form action="http://localhost:13588/ApplicationForms/getApplicationForms" method="get">
+    <input type="submit" value="送出表單">
+    <hr>
+</form>
+
+selectClassroom
+<form action="http://localhost:13588/Classrooms/seeClassroomHistory" method="post">
+	classroomID:<input name="classroomID"></input><br>
+    <input type="submit" value="送出表單">
+    <hr>
+</form>
