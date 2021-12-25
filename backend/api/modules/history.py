@@ -1,5 +1,6 @@
 from ctypes import sizeof
 from flask import Blueprint,request,jsonify,url_for,redirect,render_template,session
+from datetime import date
 import datetime
 import pymysql
 import yaml
@@ -45,11 +46,14 @@ def checkLendClassroom():
         if len(rows)==0:
             info['errors'] = 'invalid select from ApplicationForms'
         else :
+            #print(rows)
+            insertString = 'DELETE from ApplicationForms WHERE classroomID=(%(classroomID)s) AND lendTime=(%(lendTime)s) AND weekDay=(%(weekDay)s);'
+            cursor.execute(insertString,{'classroomID':info['classroomID'],'lendTime':info['lendTime'],'weekDay':info['weekDay']})
+            rows = cursor.fetchall()
             info['lendTime'] = datetime.date.today()
             info['courseName'] = rows[0][0]
             info['userName'] = rows[0][1]
             info['reason'] = rows[0][2]
-            #print(rows)
             #insert new data to history
             insertString = 'INSERT INTO History(classroomID,courseName,userName,schoolName,lendTime,returnTime,reason)values(%(classroomID)s,%(courseName)s,%(userName)s,%(schoolName)s,%(lendTime)s,NULL,%(reason)s);'
             cursor.execute(insertString,{'classroomID':info['classroomID'],'courseName':info['courseName'],'userName':info['userName'],'schoolName':info['schoolName'],'lendTime':info['lendTime'],'reason':info['reason']})
@@ -63,7 +67,6 @@ def checkLendClassroom():
 #get all data from history
 @history.route('/seeClassroomHistory',methods=['GET'])
 def seeClassroomHistory():
-    print('=')
     info = dict()
     errors = []
     connection = pymysql.connect(host=cfg['db']['host'],user=cfg['db']['user'],password=cfg['db']['password'],db=cfg['db']['database'])
@@ -79,7 +82,11 @@ def seeClassroomHistory():
         for row in rows:
             tmp = []
             for i in range(7):
-                tmp.append(row[i])
+                print(type(row[i]))
+                if (i == 4 or i == 5) and row[i] != None:
+                    tmp.append(row[i].strftime('%Y/%m/%d %H:%M:%S'))
+                else :
+                    tmp.append(row[i])
             info['history'].append(tmp)
     info['errors'] = errors
     return jsonify(info)
