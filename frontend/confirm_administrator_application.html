@@ -45,19 +45,27 @@
                 //http://localhost:5000/see_classroom_history http://localhost:13588/users/confirmApply
                 $.getJSON("http://localhost:13588/users/confirmApply", function(data){
                     /*alert("data: " + data.userName);*/
-                
-                    let content = "";
                     
                     console.log(data);
-                    for(let i=0;i<Object.keys(data).length;i++){
-                        //0-userName 1-schoolName
-                        var str = data.users[i].split(",");
+                    data = data.users;
+                    console.log(data);
+                    let content = "";
+
+                    for(let i=0;i<data.length;i++){
+                        var str = data[i].split(",");
                         console.log(str);
                         content += "<tr>"+"<td>"+str[1]+"</td>"+"<td>"+"<input class='b' type='button' onclick= 'confirm("+ i +")' value='確認'>"+"</td>"+"<td>"+"<input class='b' type='button' onclick= 'reject("+ i +")' value='拒絕'>"+"</td>"+ "</tr>";
-                        schoolName[i] = str[0];
                     }
+                        //var str = data.users[i].split(",");
+
+                        //console.log(str[0]);
+                        //console.log(str[1]);
+                        
+                        //content += "<tr>"+"<td>"+str[1]+"</td>"+"<td>"+"<input class='b' type='button' onclick= 'confirm("+ i +")' value='確認'>"+"</td>"+"<td>"+"<input class='b' type='button' onclick= 'reject("+ i +")' value='拒絕'>"+"</td>"+ "</tr>";
+                        //schoolName[i] = str[0];
                     
-                    console.log(content);
+                    
+                    //console.log(content);
                     document.getElementById("confirm_table").innerHTML = (content);
                     
             });
@@ -81,9 +89,10 @@
 
                 //alert(schoolName[i]+"-");
                 //將申請人學號(schoolName)post到後端資料庫
+                //http://localhost:5002/post_confirm http://localhost:13588/users/postConfirm
                 $.ajax({
                     type: 'POST',
-                    url: "http://localhost:5002/post_confirm",
+                    url: "http://localhost:13588/users/postConfirm",
                     data: JSON.stringify(data),
                     contentType: 'application/json; charset=UTF-8',
                     dataType: 'json',
@@ -112,9 +121,10 @@
 
                 //alert(schoolName[i]);
                 //將申請人學號(schoolName)post到後端資料庫
+                //http://localhost:5002/post_reject http://localhost:13588/users/postReject
                 $.ajax({
                     type: 'POST',
-                    url: "http://localhost:5002/post_reject",
+                    url: "http://localhost:13588/users/postReject",
                     data: JSON.stringify(data),
                     contentType: 'application/json; charset=UTF-8',
                     dataType: 'json',
