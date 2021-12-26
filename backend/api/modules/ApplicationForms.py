@@ -7,11 +7,14 @@ import hashlib
 import random
 import string
 import datetime
+from flask_cors import CORS
 
 with open('config.yml', 'r') as f:
     cfg = yaml.safe_load(f)
     
 ApplicationForms=Blueprint("ApplicationForms",__name__) 
+CORS(ApplicationForms)
+
 #for cut path
 @ApplicationForms.route('/')
 def index():
