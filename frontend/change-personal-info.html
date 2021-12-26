@@ -28,11 +28,13 @@
 
             //將修改的資訊-使用者名稱(userName)、密碼(password)、手機(phoneNumber)post到後端  
             function check(form){
+                
                 if(form.password.value!=form.password_again.value){
                     alert("兩次密碼輸入不一致!!!");
                     return;
                 }
-                event.preventDefault();
+                //event.preventDefault();
+                console.log(form.password.value);
                 form.submit();
                 
                 alert("資訊修改成功");
@@ -64,7 +66,7 @@
                         <li><a class="dropdown-item" href="check_all_user.html"><span>檢視借用人資訊</span></a></li>
                         <li><a class="dropdown-item" href="history.html" ><span>檢視歷史</span></a></li>
                         <li><a class="dropdown-item" href="confirm_administrator_application.html"><span>確認管理員申請</span></a></li>
-                        <li><a class="dropdown-item" href="modify_user.html" >修改一般管理員權限</a></li>
+                        <li><a class="dropdown-item" href="lower_authority.html" >修改一般管理員權限</a></li>
                     </ul>
                 </div>
     
@@ -87,25 +89,26 @@
             </div>
         </header>
 
-        <form method = "POST" action = "http://localhost:5002/info" onsubmit="check(this);return false();">
+        <!--http://localhost:5002/info http://localhost:13588/users/info onsubmit="check(this); return false()--> 
+        <form method = "POST" action = "http://localhost:13588/users/info" onsubmit="check(this)">
             <!--送到後端資料庫-->
             <center>
                 <div style = "text-align:left ; WIDTH:150px">
                     <p>
                         <!--只能輸入中文或英文-->
                         <label>使用者名稱 : </label>
-                        <input type = "text" id = "userName" name = "userName" pattern = "^[\u4e00-\u9fa5]+$|^[a-zA-Z\s]+$"required>
+                        <input type = "text" id = "userName" name = "userName" pattern = "^[\u4e00-\u9fa5]+$|^[a-zA-Z\s]+$" required>
                     </p>
         
         
                     <p>
                         <label>密碼 : </label>
-                        <input type = "password" id = "password" name = "password" pattern = "[a-zA-Z0-9_]{2,20}" required>
+                        <input type = "password" id = "password" name = "password" pattern = "[a-zA-Z0-9_]{5,20}" required>
                     </p>
         
                     <p>
                         <label>再次輸入密碼 : </label>
-                        <input type = "password" id = "password_again" name = "password_again" pattern = "[a-zA-Z0-9_]{2,20}" required>
+                        <input type = "password" id = "password_again" name = "password_again" pattern = "[a-zA-Z0-9_]{5,20}" required>
                     </p>
                    
                     <p>
