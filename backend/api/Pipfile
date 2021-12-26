@@ -10,6 +10,7 @@ mariadb = "*"
 pyyaml = "*"
 flask = "*"
 mysql-connector-python = "*"
+flask-cors = "*"
 
 [dev-packages]
 

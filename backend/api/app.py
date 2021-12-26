@@ -28,13 +28,15 @@ app.register_blueprint(history,url_prefix='/history')
 
 @app.before_request 
 def timeout():
+    print(session.get("schoolName"))
     info = dict()
-    if request.path =="/users/login" or request.path =="/users/register"or request.path =="/users/setIdentityCode" or request.path=="/users/checkIdentityCode" or request.path=="/Email/sendEmail":
-        return None
-    else:
-        if not session.get("schoolName"):
-            info['errors'] = 'timeout!'
-            return jsonify(info)
+    #if request.path =="/users/login" or request.path =="/users/register"or request.path =="/users/setIdentityCode" or request.path=="/users/checkIdentityCode" or request.path=="/Email/sendEmail":
+    #    return None
+    #else:
+    #    if not session.get("schoolName"):
+    #        info['errors'] = 'timeout!'
+    #        return jsonify(info)
+    return None
             
 
 if __name__=='__main__':
