@@ -60,6 +60,19 @@
 
     </style>
 
+    <script>
+
+          
+        function check(form){
+            
+            form.submit();
+            //頁面跳轉
+            window.location.href = "new_manager-func.html";
+            //location.reload();
+        }
+        
+    </script>
+
 </head>
 
 <body>
@@ -87,7 +100,8 @@
         </div>
 
         <div class="right">
-            <form method="POST" action="http://localhost:5001/login">
+            <!--http://localhost:5001/login http://localhost:13588/users/login-->
+            <form method="POST" action="http://localhost:13588/users/login" >
                 <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
 
                 <div class="form-floating">
@@ -99,7 +113,7 @@
                     <label for="floatingPassword">Password</label>
                 </div>
 
-                <button class="w-100 btn btn-lg btn-primary" type="submit">登入</button>
+                <button class="w-100 btn btn-lg btn-primary" type="button" onclick="check(this)">登入</button>
             </form>
             <br>
             <h3>

@@ -10,6 +10,7 @@ import hashlib
 import random
 import string
 import datetime
+from flask_cors import CORS
 
 #for user register
 
@@ -18,6 +19,9 @@ with open('config.yml', 'r') as f:
 
 
 history=Blueprint("history",__name__) 
+CORS(history)
+
+
 #for cut path
 @history.route('/')
 def index():
