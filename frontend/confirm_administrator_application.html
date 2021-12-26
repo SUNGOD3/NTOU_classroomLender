@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <!--bootstrap-->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+        <meta charset = "utf-8">
+        <style type = "text/css">
+            body 	{
+				background-color:#f4f5fe;
+				font-family: 微軟正黑體, Arial, Helvetica, sans-serif;
+				overflow: hidden;
+				overflow-y: scroll;
+		    }
+		    header	{
+				background-color:#c3c8ec;
+				color:navy;
+				font-weight: bold;
+		    }
+            .head   {   font-size : 40px;
+
+            }
+            table   {   font-size : 20px;
+                        width : 70%;
+                        overflow : scroll;
+                        position: center;
+                        text-align: center;
+            }
+            caption {   font-size : 40px;
+
+            }
+            .b  {       text-align: center;
+                        width : 80px;
+                        height : 40px;
+            }
+        </style>
+
+
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script>
+            var schoolName = [];
+
+            //去後端get提出成為管理員申請人的學號(schoolName)和姓名(userName)
+            $(document).ready(function(){
+                $.getJSON("http://localhost:5000/see_classroom_history", function(data){
+                    /*alert("data: " + data.userName);*/
+                
+                    let content = "";
+
+                    for(let i=0;i<data.length;i++){
+                        content += "<tr>" + "<td>"+data[i].userName+"</td>"+"<td>"+"<input class='b' type='button' onclick= 'confirm("+ i +")' value='確認'>"+"</td>"+"<td>"+"<input class='b' type='button' onclick= 'reject("+ i +")' value='拒絕'>"+"</td>"+ "</tr>";
+                        schoolName[i] = data[i].schoolName;
+                    }
+
+                    console.log(content);
+                    document.getElementById("confirm_table").innerHTML = (content);
+                    
+            });
+            });
+
+            //允許升級成為管理員
+            function confirm(i){
+                /*
+                $(document).ready(function(){
+                    $.post("http://localhost:5001/post_confirm", { name: "John", time: "2pm" },
+                    function(data){
+                        console.log(data);
+                        alert("Data Loaded: " + data);
+                    });
+                });
+                */
+
+                var data = {
+                    "schoolName" : schoolName[i]
+                }
+
+                //alert(schoolName[i]+"-");
+                //將申請人學號(schoolName)post到後端資料庫
+                $.ajax({
+                    type: 'POST',
+                    url: "http://localhost:5002/post_confirm",
+                    data: JSON.stringify(data),
+                    contentType: 'application/json; charset=UTF-8',
+                    dataType: 'json',
+                    crossOrigin: null,
+                    
+                    success: function (data){
+                       // alert(data);
+                        alert("已確認申請!!!");
+                        location.reload();
+                    },
+
+                    error: function (xhr, type){
+                        alert(xhr+type);
+                    }
+                })
+                
+                //location.reload();
+            }
+
+            //不允許升級成為管理員
+            function reject(i){
+                
+                var data = {
+                    "schoolName" : schoolName[i]
+                }
+
+                //alert(schoolName[i]);
+                //將申請人學號(schoolName)post到後端資料庫
+                $.ajax({
+                    type: 'POST',
+                    url: "http://localhost:5002/post_reject",
+                    data: JSON.stringify(data),
+                    contentType: 'application/json; charset=UTF-8',
+                    dataType: 'json',
+                    
+                    success: function (data){
+                        alert(data+"已拒絕申請!!!");
+                        location.reload();
+                    },
+
+                    error: function (xhr, type){
+                        alert(xhr+type);
+                    }
+                })
+
+            }
+
+        </script>
+
+    </head>
+    <body>
+
+        <header class="py-3 mb-3 border-bottom">
+            <div class="container-fluid d-grid gap-3 align-items-center" style="grid-template-columns: 1fr 2fr;">
+                <div class="dropdown">
+                    <a href="#" class="d-flex align-items-center col-lg-4 mb-2 mb-lg-0 link-dark text-decoration-none dropdown-toggle" id="dropdownNavLink" data-bs-toggle="dropdown" aria-expanded="false">
+                        功能選單
+                    </a>
+                    <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownNavLink">
+                        <li><a class="dropdown-item" href="check_lend_classroom.html"><span>確認借出教室</span></a></li>
+                        <li><a class="dropdown-item" href="check_return_classroom.html"><span>確認歸還教室</span></a></li>
+                        <li><a class="dropdown-item" href="add_classroom.html"><span>新增教室</span></a></li>
+                        <li><a class="dropdown-item" href="delete_classroom.html"><span>刪除教室</span></a></li>
+                        <li><a class="dropdown-item" href="class_state.html"><span>檢視教室狀態</span></a></li>
+                        <li><a class="dropdown-item" href="modify_classroom.html"><span>修改教室狀態</span></a></li>
+                        <!-- <li><a class="dropdown-item" href="#"><span>修改借用人狀態</span></a></li> -->
+                        <li><a class="dropdown-item" href="check_all_user.html"><span>檢視借用人資訊</span></a></li>
+                        <li><a class="dropdown-item" href="history.html" ><span>檢視歷史</span></a></li>
+                        <li><a class="dropdown-item" href="confirm_administrator_application.html"><span>確認管理員申請</span></a></li>
+                        <li><a class="dropdown-item" href="#" >修改一般管理員權限</a></li>
+                    </ul>
+                </div>
+    
+                <div style="width: 40%; display:inline-block; font-size: 30px;">
+                    <div style="text-align: center;">NTOU教室借用平台</div>
+                </div>
+    
+                <div class="flex-shrink-0 dropdown" style="position: absolute; right:15px; align-items: center;">
+                    <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="ntou_logo.png" width="32" height="32" class="rounded-circle">
+                    </a>
+                    <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
+                        <!--<li><a class="dropdown-item" href="#" target = "ibody">查看個人資料</a></li>-->
+                        <li><a class="dropdown-item" href="change-personal-info.html">更改個人資料</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="index.html" >登出</a></li>
+                    </ul>
+                </div>
+    
+            </div>
+        </header>
+
+        <p class = "head" align = "center">申請人</p>
+        <p align = "center">
+            <!--將申請人資訊顯示在table-->
+            <form method = "POST" action = "http://localhost:5000/post_confirm" onsubmit="check(this);return false;">
+                <table id = "confirm_table" style="border:3px #cccccc solid;" border="1" cellspacing="0" cellpadding="25" align = "center">
+
+                </table>
+            </form>
+        </p>
+
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
+    </body>
+
+</html>
