@@ -64,6 +64,36 @@ def checkLendClassroom():
             info['errors'] = 'checkLendClassroom fail'
     return jsonify(info)
 
+@history.route('/returnClassroom',methods=['GET'])
+def returnClassroom():
+    info = dict()
+    connection = pymysql.connect(host=cfg['db']['host'],user=cfg['db']['user'],password=cfg['db']['password'],db=cfg['db']['database'])
+    cursor=connection.cursor()
+    try:
+        #select history that 'returnTime = NULL'
+        insertString = 'SELECT schoolName, userName, classroomID, lendTime, returnTime, lendWeekDay, returnWeekDay, weekDay from History WHERE returnTime is NULL'
+        cursor.execute(insertString)
+        rows = cursor.fetchall()
+        connection.commit()
+        if len(rows)==0:
+            info['errors'] = 'invalid select from History' 
+        else :
+            for i in rows:
+                info['schoolName'] = rows[i][0]
+                info['userName'] = rows[i][1]
+                info['classroomID'] = rows[i][2]
+                info['lendTime'] = rows[i][3]
+                info['returnTime'] = rows[i][4]
+                info['lendWeekDay'] = rows[i][5]
+                info['returnWeekDay'] = rows[i][6]
+                info['weekDay'] = rows[i][7]
+    except Exception: #get exception if there's still occured something wrong
+            traceback.print_exc()
+            connection.rollback()
+            info['errors'] = 'returnClassroom fail'
+    return jsonify(info)
+
+
 #get all data from history
 @history.route('/seeClassroomHistory',methods=['GET'])
 def seeClassroomHistory():
