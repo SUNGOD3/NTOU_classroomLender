@@ -53,7 +53,7 @@ def checkLendClassroom():
             #print(rows)
             insertString = 'DELETE from ApplicationForms WHERE classroomID=(%(classroomID)s) AND lendTime=(%(lendTime)s) AND weekDay=(%(weekDay)s);'
             cursor.execute(insertString,{'classroomID':info['classroomID'],'lendTime':info['lendTime'],'weekDay':info['weekDay']})
-            rows = cursor.fetchall()
+            #rows = cursor.fetchall()
             info['lendTime'] = datetime.date.today()
             info['courseName'] = rows[0][0]
             info['userName'] = rows[0][1]

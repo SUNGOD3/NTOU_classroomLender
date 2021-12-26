@@ -126,3 +126,23 @@ def selectClassroom():
         errors.append('Select fail')
     info['errors'] = errors
     return jsonify(info)
+
+@Classrooms.route('/changeClassroomStatus',methods=['POST'])
+def changeClassroomStatus():
+    #get data in form by name from mySQL
+    connection = pymysql.connect(host=cfg['db']['host'],user=cfg['db']['user'],password=cfg['db']['password'],db=cfg['db']['database'])
+    #build dictionary
+    info = dict()
+    cursor = connection.cursor()
+    info['classroomID'] = request.values.get('classroomID')
+    info['status'] = request.values.get('status')
+    try:
+        cursor.execute('UPDATE Classrooms SET status=%(status)s WHERE classroomID=%(classroomID)s',
+                       {'status':info['status'],'classroomID':info['classroomID']})
+        connection.commit() #update the data in database
+    except Exception: #get exception if there's still occured something wrong
+        traceback.print_exc()
+        connection.rollback()
+        info['errors'] = 'changeClassroomStatus fail'
+    return jsonify(info)
+    
