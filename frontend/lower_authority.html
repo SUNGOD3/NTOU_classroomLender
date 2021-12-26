@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>降低權限</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <style type="text/css">
+        body {
+            background-color: #f4f5fe;
+            font-family: 微軟正黑體, Arial, Helvetica, sans-serif;
+            overflow: hidden;
+            overflow-y: scroll;
+        }
+
+        header {
+            background-color: #c3c8ec;
+            color: navy;
+            font-weight: bold;
+        }
+
+        .main {
+            background-color: #f4f5fe;
+            position: absolute;
+            left: 20px;
+            width:75%;
+        }
+
+        button {
+            background-color: #c3c8ec;
+        }
+
+        p {
+            font-size: 20px;
+        }
+
+        table, th, tr, td {
+            text-align: center;
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+
+        .classroom:hover {
+            background-color: lightblue;
+            color: white;
+            font-weight: bold;
+        }
+
+        .subtitle {
+            font-size: 30px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="py-3 mb-3 border-bottom">
+        <div class="container-fluid d-grid gap-3 align-items-center" style="grid-template-columns: 1fr 2fr;">
+            <div class="dropdown">
+                <a href="#" class="d-flex align-items-center col-lg-4 mb-2 mb-lg-0 link-dark text-decoration-none dropdown-toggle" id="dropdownNavLink" data-bs-toggle="dropdown" aria-expanded="false">
+                    功能選單
+                </a>
+                <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownNavLink">
+                    <li><a class="dropdown-item" href="#"><span>確認借出教室</span></a></li>
+                    <li><a class="dropdown-item" href="#"><span>確認歸還教室</span></a></li>
+                    <li><a class="dropdown-item" href="add_classroom.html"><span>新增教室</span></a></li>
+                    <li><a class="dropdown-item" href="delete_classroom.html"><span>刪除教室</span></a></li>
+                    <li><a class="dropdown-item" href="class_state.html"><span>檢視教室狀態</span></a></li>
+                    <li><a class="dropdown-item" href="modify_classroom.html"><span>修改教室狀態</span></a></li>
+                    <li><a class="dropdown-item" href="check_all_user.html"><span>檢視借用人資訊</span></a></li>
+                    <li><a class="dropdown-item" href="history.html"><span>檢視歷史</span></a></li>
+                    <li><a class="dropdown-item" href="#"><span>確認管理員申請</span></a></li>
+                    <li><a class="dropdown-item" href="#">修改一般管理員權限</a></li>
+                </ul>
+            </div>
+
+            <div style="width: 40%; display:inline-block; font-size: 30px;">
+                <div style="text-align: center;">NTOU教室借用平台</div>
+            </div>
+
+            <div class="flex-shrink-0 dropdown" style="position: absolute; right:15px; align-items: center;">
+                <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">
+                    <img src="ntou_logo.png" width="32" height="32" class="rounded-circle">
+                </a>
+                <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
+                    <li><a class="dropdown-item" href="#">查看個人資料</a></li>
+                    <li><a class="dropdown-item" href="modify_info.html" target="ibody">更改個人資料</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="#">登出</a></li>
+                </ul>
+            </div>
+
+        </div>
+    </header>
+
+    <div class="main">
+        <p class="subtitle">
+            所有管理員
+        </p>
+        <br>
+        <div class="table-responsive">
+            <table class="table table-striped table-sm">
+                <thead>
+                    <tr>
+                        <th scope="col">學號</th>
+                        <th scope="col">姓名</th>
+                        <th scope="col">降級</th>
+                    </tr>
+                </thead>
+                <tbody id="data_table">
+                        
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <br />
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+
+        $(document).ready(function () {
+
+            $.get("http://localhost:5000/check_all_manager", function (data) {                
+                let content = "";
+                for (let i = 0; i < data.length; i++) {
+                    content += "<tr>" + "<td id='schoolName" + i + "'>" + data[i].schoolName + "</td> " + "<td>" + data[i].userName + "</td> " + "<td><button type='button' onclick='javascript: confirm_again(" + i + ")'>降級</button></td>" + "</tr>";
+                }
+                document.getElementById("data_table").innerHTML = content;
+            });
+
+        });
+
+        function confirm_again(i) {
+            var a, b, c, input, answer;
+            a = Math.floor(Math.random() * 100) % 3;
+            b = Math.floor(Math.random() * 100);
+            c = Math.floor(Math.random() * 100);
+            if (a == 1) {
+                answer = b + c;
+                input=window.prompt("計算" + b + "+" + c + "的結果");
+                if (answer == input) {
+                    postFunc(i);
+                }
+                else {
+                    alert("計算錯誤");
+                }
+            }
+            else if (a == 2) {
+                answer = b - c;
+                input = window.prompt("計算" + b + "-" + c + "的結果");
+                if (answer == input) {
+                    postFunc(i);
+                }
+                else {
+                    alert("計算錯誤");
+                }
+            }
+            else if (a == 0) {
+                answer = b * c;
+                input = window.prompt("計算" + b + "×" + c + "的結果");
+                if (answer == input) {
+                    postFunc(i);
+                }
+                else {
+                    alert("計算錯誤");
+                }
+            }
+        }
+
+        function postFunc (i) {
+            
+            var data = {
+                "schoolName": "",
+            }
+
+            var index = i;
+            //alert("schoolName" + index);
+            data.schoolName = document.getElementById("schoolName" + index).innerHTML;
+
+
+            $.ajax({
+                type: 'POST',
+                url: "http://localhost:5001/downgrade",
+                data: JSON.stringify(data),
+                contentType: 'application/json; charset=UTF-8',
+                dataType: 'json',
+                //success: function (data) {
+                //        alert(data)
+                //},
+                error: function (xhr, type) {
+                    alert(xhr + type);
+                }
+            });
+            
+            location.reload();
+            alert("自動重整頁面以得到後更新資訊");
+        };
+    </script>
+</body>
+
+</html>
