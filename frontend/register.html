@@ -38,7 +38,7 @@
         }
 
     </style>
-    <script src="cookie.js" type="text/javascript" charset="utf-8"></script>
+    
 </head>
 
 <body>
@@ -51,46 +51,83 @@
         <p class="subtitle">
             註冊新帳號
         </p>
-        <!--http://localhost:5000/register http://localhost:13588/users/register-->
-        <form method="POST" target="_self" action="http://localhost:13588/users/register">
+        <form method="POST" target="_self" action="http://localhost:5000/register">
             <br>
             <div class="form-floating">
-                <input type="text" class="form-control" id="floatingInput" placeholder="學號" name="schoolName" size="32">
+                <input type="text" class="form-control" id="schoolName" placeholder="學號" name="schoolName" size="32">
                 <label for="floatingInput">學號</label>
             </div>
             <br>
             <div class="form-floating">
-                <input type="text" class="form-control" id="floatingInput" placeholder="密碼" name="password">
+                <input type="password" class="form-control" id="password" placeholder="密碼" name="password">
                 <label for="floatingInput">密碼</label>
             </div>
             <br>
             <div class="form-floating">
-                <input type="text" class="form-control" id="floatingInput" placeholder="密碼" name="passwdConfirm">
+                <input type="password" class="form-control" id="passwdConfirm" placeholder="密碼" name="passwdConfirm">
                 <label for="floatingInput">確認密碼</label>
             </div>
             <br>
             <div class="form-floating">
-                <input type="text" class="form-control" id="floatingInput" placeholder="姓名" name="userName">
+                <input type="text" class="form-control" id="userName" placeholder="姓名" name="userName">
                 <label for="floatingInput">姓名</label>
             </div>
             <br>
             <div class="form-floating">
-                <input type="text" class="form-control" id="floatingInput" placeholder="手機" name="phoneNumber">
+                <input type="text" class="form-control" id="phoneNumber" placeholder="手機" name="phoneNumber">
                 <label for="floatingInput">手機</label>
             </div>
             <br>
             <div class="form-floating">
-                <input type="email" class="form-control" id="floatingInput" placeholder="學校信箱" name="Email">
+                <input type="email" class="form-control" id="Email" placeholder="學校信箱" name="Email">
                 <label for="floatingInput">學校信箱</label>
             </div>
             <br>
-            <button class="w-100 btn btn-lg btn-primary" type="submit">註冊</button>
+            <button class="w-100 btn btn-lg btn-primary" type="button" onclick="javascript: postFunc()">註冊</button>
         </form>
         <br>
         <h3><a href="index.html">返回首頁</a></h3>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+
+        function postFunc() {
+            var schoolName = document.getElementById("schoolName").value;
+            var password = document.getElementById("password").value;
+            var passwordConfirm = document.getElementById("passwdConfirm").value;
+            var userName = document.getElementById("userName").value;
+            var phoneNumber = document.getElementById("phoneNumber").value;
+            var Email = document.getElementById("Email").value;
+
+            var data = {
+                "schoolName": schoolName,
+                "password": password,
+                "userName": userName,
+                "passwdConfirm": passwordConfirm,
+                "phoneNumber": phoneNumber,
+                "Email": Email
+            }
+            console.log(data);
+
+            $.ajax({
+                type: 'POST',
+                url: "http://localhost:13588/users/register",
+                data: JSON.stringify(data),
+                contentType: 'application/json; charset=UTF-8',
+                dataType: 'json',
+                success: function (data) {
+                    alert(data);
+                    window.location.href = "index.html";
+                },
+                error: function (xhr, type) {
+                    alert(xhr + type);
+                }
+            });
+        };
+    </script>
+
 </body>
 
 </html>

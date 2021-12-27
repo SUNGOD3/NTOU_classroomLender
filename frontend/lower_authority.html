@@ -121,12 +121,25 @@
     <script>
 
         $(document).ready(function () {
-
-            $.get("http://localhost:5000/check_all_manager", function (data) {                
+            //http://localhost:13588/users/checkAllManager http://localhost:5000/check_all_manager
+            $.get("http://localhost:13588/users/checkAllManager", function (data) {                
                 let content = "";
+                console.log(data);
+
+                console.log(data);
+                data = data.users;
+                for(let i=0;i<data.length;i++){
+                    var str = data[i];
+                    console.log(str);
+                    str = str.split(',');
+                    content += "<tr>" + "<td id='schoolName" + i + "'>" + str[0] + "</td> " + "<td>" + str[1] + "</td> " + "<td><button type='button' onclick='javascript: confirm_again(" + i + ")'>降級</button></td>" + "</tr>";
+                    
+                }
+                /*
                 for (let i = 0; i < data.length; i++) {
                     content += "<tr>" + "<td id='schoolName" + i + "'>" + data[i].schoolName + "</td> " + "<td>" + data[i].userName + "</td> " + "<td><button type='button' onclick='javascript: confirm_again(" + i + ")'>降級</button></td>" + "</tr>";
                 }
+                */
                 document.getElementById("data_table").innerHTML = content;
             });
 
@@ -178,23 +191,24 @@
             var index = i;
             //alert("schoolName" + index);
             data.schoolName = document.getElementById("schoolName" + index).innerHTML;
-
-
+            console.log(data);
+            //http://localhost:13588/users/downGrade http://localhost:5001/downgrade
             $.ajax({
                 type: 'POST',
-                url: "http://localhost:5001/downgrade",
+                url: "http://localhost:13588/users/downGrade",
                 data: JSON.stringify(data),
                 contentType: 'application/json; charset=UTF-8',
                 dataType: 'json',
-                //success: function (data) {
-                //        alert(data)
-                //},
+                success: function (data) {
+                        alert(data);
+                        console.log(data);
+                },
                 error: function (xhr, type) {
                     alert(xhr + type);
                 }
             });
             
-            location.reload();
+            //location.reload();
             alert("自動重整頁面以得到後更新資訊");
         };
     </script>
