@@ -33,11 +33,11 @@ def checkLendClassroom():
     info = dict()
     cursor = connection.cursor()
     #ApplicationForms's PK = classroomID lendTime weekDay
-    info['schoolName'] = request.values.get('schoolName')
-    info['classroomID'] = request.values.get('classroomID')
-    info['lendTime'] = request.values.get('lendTime')
-    info['weekDay'] = request.values.get('weekDay')
-    info['confirmType'] = request.values.get('confirmType')
+    info['schoolName'] = request.json['schoolName']
+    info['classroomID'] = request.json['classroomID']
+    info['lendTime'] = request.json['lendTime']
+    info['weekDay'] = request.json['weekDay']
+    info['confirmType'] = request.json['confirmType']
     try:
         #update user state first
         if info['confirmType'] == '1':
@@ -58,15 +58,14 @@ def checkLendClassroom():
             insertString = 'DELETE from ApplicationForms WHERE classroomID=(%(classroomID)s) AND lendTime=(%(lendTime)s) AND weekDay=(%(weekDay)s);'
             cursor.execute(insertString,{'classroomID':info['classroomID'],'lendTime':info['lendTime'],'weekDay':info['weekDay']})
             #rows = cursor.fetchall()
-            if info['confirmType'] == '1' :
-                info['lendTime'] = datetime.date.today()
-                info['courseName'] = rows[0][0]
-                info['userName'] = rows[0][1]
-                info['reason'] = rows[0][2]
-                #insert new data to history
-                insertString = 'INSERT INTO History(classroomID,courseName,userName,schoolName,lendTime,returnTime,reason)values(%(classroomID)s,%(courseName)s,%(userName)s,%(schoolName)s,%(lendTime)s,NULL,%(reason)s);'
-                cursor.execute(insertString,{'classroomID':info['classroomID'],'courseName':info['courseName'],'userName':info['userName'],'schoolName':info['schoolName'],'lendTime':info['lendTime'],'reason':info['reason']})
-                connection.commit()
+            info['lendTime'] = datetime.datetime.now()
+            info['courseName'] = rows[0][0]
+            info['userName'] = rows[0][1]
+            info['reason'] = rows[0][2]
+            #insert new data to history
+            insertString = 'INSERT INTO History(classroomID,courseName,userName,schoolName,lendTime,returnTime,reason)values(%(classroomID)s,%(courseName)s,%(userName)s,%(schoolName)s,%(lendTime)s,NULL,%(reason)s);'
+            cursor.execute(insertString,{'classroomID':info['classroomID'],'courseName':info['courseName'],'userName':info['userName'],'schoolName':info['schoolName'],'lendTime':info['lendTime'],'reason':info['reason']})
+            connection.commit()
     except Exception: #get exception if there's still occured something wrong
             traceback.print_exc()
             connection.rollback()
