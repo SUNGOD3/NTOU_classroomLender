@@ -162,14 +162,13 @@ testDownGrade
     <hr>
 </form>
 
-changeClassroomStatus
+testchangeClassroomStatus
 <form action="http://localhost:13588/Classrooms/changeClassroomStatus" method="post">
     classroomID:<input name="classroomID"></input><br>
     status:<input name="status"></input><br>
     <input type="submit" value="送出表單">
     <hr>
 </form>
-
 testLendClassroom
 <form action="http://localhost:13588/ApplicationForms/lendClassroom" method="post">
     userName:<input name="userName"></input><br>
@@ -180,6 +179,16 @@ testLendClassroom
     courseName:<input name="courseName"></input><br>
     weekDay:<input name="weekDay"></input><br>
     reason:<input name="reason"></input><br>
+testsearchKeyword
+<form action="http://localhost:13588/Classrooms/searchKeyword" method="post">
+    searchWord:<input name="searchWord"></input><br>
+    <input type="submit" value="送出表單">
+    <hr>
+</form>
+
+testequipmentFilter
+<form action="http://localhost:13588/Classrooms/equipmentFilter" method="post">
+    commonEquipment:<input name="commonEquipment"></input><br>
     <input type="submit" value="送出表單">
     <hr>
 </form>

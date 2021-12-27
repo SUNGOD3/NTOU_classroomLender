@@ -71,18 +71,11 @@ def changeClassroom():
     info = dict()
     cursor = connection.cursor()
     info['classroomID'] = request.values.get('classroomID')
-    info['computer'] = request.values.get('computer')
-    info['projector'] = request.values.get('projector')
-    info['blackboard'] = request.values.get('blackboard')
-    info['whiteboard'] = request.values.get('whiteboard')
-    info['equipment1'] = request.values.get('equipment1')
-    info['equipment2'] = request.values.get('equipment2')
-    info['equipment3'] = request.values.get('equipment3')
-    info['equipment4'] = request.values.get('equipment4')
-    info['equipment5'] = request.values.get('equipment5')
+    info['commonEquipment'] = request.values.get('commonEquipment')
+    info['classroomID'] = request.values.get('classroomID')
     try:
-        cursor.execute('UPDATE Classrooms SET computer=%(computer)s,projector=%(projector)s,blackboard=%(blackboard)s,whiteboard=%(whiteboard)s,equipment1 = %(equipment1)s, equipment2 = %(equipment2)s, equipment3 = %(equipment3)s, equipment4 = %(equipment4)s, equipment5 = %(equipment5)s WHERE classroomID = %(classroomID)s' ,
-                       {'computer':info['computer'],'projector':info['projector'],'blackboard':info['blackboard'],'whiteboard':info['whiteboard'],'equipment1':info['equipment1'],'equipment2':info['equipment2'],'equipment3':info['equipment3'],'equipment4':info['equipment4'],'equipment5':info['equipment5'],'classroomID':info['classroomID']})
+        cursor.execute('UPDATE Classrooms SET  WHERE classroomID = %(classroomID)s' ,
+                       {'classroomID':info['classroomID']})
         connection.commit() #submit the data to database
     except Exception: #get exception if there's still occured something wrong
         traceback.print_exc()
@@ -146,3 +139,55 @@ def changeClassroomStatus():
         info['errors'] = 'changeClassroomStatus fail'
     return jsonify(info)
     
+@Classrooms.route('/searchKeyword',methods=['POST'])
+def searchKeyword():
+    connection = pymysql.connect(host=cfg['db']['host'],user=cfg['db']['user'],password=cfg['db']['password'],db=cfg['db']['database'])
+    #build dictionary
+    info = dict()
+    cursor = connection.cursor()
+    info['searchWord'] = request.values.get('searchWord')
+    try:
+        cursor.execute('SELECT specialEquipment,classroomID from Classrooms')
+        rows = cursor.fetchall()
+        connection.commit() #update the data in database
+        info['class'] = []
+        for row in rows:
+            if info['searchWord'] in row[0] :
+                info['class'].append(row[1])
+        cursor.execute('SELECT classroomID from Scheduler')
+        rows = cursor.fetchall()
+        connection.commit() #update the data in database
+        for row in rows:
+            if info['searchWord'] in row[0] :
+                if row[0] not in info['class'] :
+                    info['class'].append(row[0])
+    except Exception: #get exception if there's still occured something wrong
+        traceback.print_exc()
+        connection.rollback()
+        info['errors'] = 'search fail'
+    return jsonify(info)
+
+@Classrooms.route('/equipmentFilter',methods=['POST'])
+def equipmentFilter():
+    connection = pymysql.connect(host=cfg['db']['host'],user=cfg['db']['user'],password=cfg['db']['password'],db=cfg['db']['database'])
+    #build dictionary
+    info = dict()
+    cursor = connection.cursor()
+    info['commonEquipment'] = request.values.get('commonEquipment')
+    try:
+        cursor.execute('SELECT commonEquipment,classroomID from Classrooms')
+        rows = cursor.fetchall()
+        connection.commit()  #update the data in database
+        info['class'] = []
+        for row in rows: #string
+            ac = 1
+            for i in range(4):
+                if info['commonEquipment'][i] == '1' and row[0][i] == '0':
+                    ac = 0
+            if ac == 1:
+                info['class'].append(row[1])
+    except Exception: #get exception if there's still occured something wrong
+        traceback.print_exc()
+        connection.rollback()
+        info['errors'] = 'search fail'
+    return jsonify(info)
