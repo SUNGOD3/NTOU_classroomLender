@@ -416,7 +416,6 @@ def checkLendClassroom():
             info['errors'] = 'checkLendClassroom fail'
     return jsonify(info)
 
-<<<<<<< Updated upstream
 @users.route('/info',methods=['POST'])
 def info():
     connection = pymysql.connect(host=cfg['db']['host'],user=cfg['db']['user'],password=cfg['db']['password'],db=cfg['db']['database'])
@@ -478,9 +477,8 @@ def downGrade():
     cursor.execute("UPDATE Users SET isAdmin =%(isAdmin)s WHERE schoolName=%(schoolName)s AND isAdmin=1",{'isAdmin': 0,'schoolName':info['schoolName']})
     connection.commit()
     return jsonify(info)
-=======
 
-@users.route('/checkReturnClassrrom',method=['POST'])
+@users.route('/checkReturnClassrrom',methods=['POST'])
 def checkReturnClassroom():
     connection = pymysql.connect(host=cfg['db']['host'],user=cfg['db']['user'],password=cfg['db']['password'],db=cfg['db']['database'])
     info = dict()
@@ -517,7 +515,6 @@ def checkReturnClassroom():
     return jsonify(info)
     
     
->>>>>>> Stashed changes
 
 #   email confirm undo
 #   if a user input an error email (but legal), his student's ID fucked up. 
