@@ -80,7 +80,7 @@ def returnClassroom():
     cursor=connection.cursor()
     try:
         #select history that 'returnTime = NULL'
-        insertString = 'SELECT schoolName, userName, classroomID, lendTime, returnTime, lendWeekDay, returnWeekDay, weekDay from History WHERE returnTime is NULL'
+        insertString = 'SELECT schoolName, userName, classroomID, lendTime, returnTime, lendWeekDay, returnWeekDay from History WHERE returnTime is NULL'
         cursor.execute(insertString)
         rows = cursor.fetchall()
         connection.commit()
@@ -95,7 +95,7 @@ def returnClassroom():
                 info['returnTime'] = rows[i][4]
                 info['lendWeekDay'] = rows[i][5]
                 info['returnWeekDay'] = rows[i][6]
-                info['weekDay'] = rows[i][7]
+                
     except Exception: #get exception if there's still occured something wrong
             traceback.print_exc()
             connection.rollback()
