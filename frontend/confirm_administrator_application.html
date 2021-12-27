@@ -38,7 +38,7 @@
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script>
-            var arrschoolName = [];
+            var schoolName = [];
 
             //去後端get提出成為管理員申請人的學號(schoolName)和姓名(userName)
             $(document).ready(function(){
@@ -46,17 +46,25 @@
                 $.getJSON("http://localhost:13588/users/confirmApply", function(data){
                     /*alert("data: " + data.userName);*/
                     
-                    
-
-                        console.log(data);
-                        data = data.users;
-                        console.log(data);
                         let content = "";
 
-                        for(let i=0;i<data.length;i++){
-                            var str = data[i].split(",");
-                            console.log(str);
-                            content += "<tr>"+"<td>"+str[1]+"</td>"+"<td>"+"<input class='b' type='button' onclick= 'confirm("+ i +")' value='確認'>"+"</td>"+"<td>"+"<input class='b' type='button' onclick= 'reject("+ i +")' value='拒絕'>"+"</td>"+ "</tr>";
+                        if(data.errors.length!=0){
+                            alert(data.errors);
+                        }else{
+
+                            console.log(data);
+                            data = data.users;
+                            console.log(data);
+
+                            for(let i=0;i<data.length;i++){
+                                var str = data[i].split(",");
+                                console.log(str);
+                                content += "<tr>"+"<td>"+str[1]+"</td>"+"<td>"+"<input class='b' type='button' onclick= 'confirm("+ i +")' value='確認'>"+"</td>"+"<td>"+"<input class='b' type='button' onclick= 'reject("+ i +")' value='拒絕'>"+"</td>"+ "</tr>";
+                           
+                                schoolName[i] = str[0];
+                           
+                            }
+
                         }
 
                                    
@@ -90,8 +98,9 @@
                 */
 
                 var data = {
-                    "schoolName" : arrschoolName[i]
+                    "schoolName" : schoolName[i]
                 }
+                console.log(data);
 
                 //alert(schoolName[i]+"-");
                 //將申請人學號(schoolName)post到後端資料庫
@@ -122,7 +131,7 @@
             function reject(i){
                 
                 var data = {
-                    "schoolName" : arrschoolName[i]
+                    "schoolName" : schoolName[i]
                 }
 
                 //alert(schoolName[i]);
@@ -136,7 +145,7 @@
                     dataType: 'json',
                     
                     success: function (data){
-                        alert(data+"已拒絕申請!!!");
+                        alert("已拒絕申請!!!");
                         location.reload();
                     },
 

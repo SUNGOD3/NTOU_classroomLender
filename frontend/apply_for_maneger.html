@@ -146,22 +146,22 @@
                 "schoolName": schoolName,
             }
 
-
+            //http://localhost:13588/users/applyForManager http://localhost:5001/apply_for_manager
             $.ajax({
                 type: 'POST',
-                url: "http://localhost:5001/apply_for_manager",
+                url: "http://localhost:13588/users/applyForManager",
                 data: JSON.stringify(data),
                 contentType: 'application/json; charset=UTF-8',
                 dataType: 'json',
-                //success: function (data) {
-                //        alert(data)
-                //},
+                success: function (data) {
+                        alert(data)
+                },
                 error: function (xhr, type) {
                     alert(xhr + type);
                 }
             });
 
-            location.reload();
+            //location.reload();
             alert("自動重整頁面以得到後更新資訊");
         };
     </script>

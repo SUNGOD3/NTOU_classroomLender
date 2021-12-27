@@ -8,8 +8,10 @@ from modules.Scheduler import Scheduler
 from modules.ApplicationForms import ApplicationForms
 from modules.history import history
 import datetime
+from flask_cors import CORS
 
 app=Flask(__name__)
+CORS(app,supports_credentials=True)
 app.config['SECRET_KEY'] = os.urandom(24)
 app.config['PERMANENT_SESSION_LIFETIME'] =datetime.timedelta(minutes=10)
 # 5mins is too short !

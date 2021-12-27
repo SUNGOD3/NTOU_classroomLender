@@ -190,8 +190,8 @@ def register():
 def login():
     connection = pymysql.connect(host=cfg['db']['host'],user=cfg['db']['user'],password=cfg['db']['password'],db=cfg['db']['database'])
     info = dict()
-    schoolName = request.values.get('schoolName')
-    password = request.values.get('password')
+    schoolName = request.json['schoolName']
+    password = request.json['password']
     cursor = connection.cursor()
     cursor.execute("SELECT * from Users WHERE schoolName = %(schoolName)s",{'schoolName':schoolName})
     rows = cursor.fetchall()
@@ -362,7 +362,7 @@ def confirmApply():
 @users.route('/postConfirm',methods=['POST'])
 def postConfirm():
     info = dict()
-    info['schoolName'] = request.values.get('schoolName')
+    info['schoolName'] = request.json['schoolName']
     connection = pymysql.connect(host=cfg['db']['host'],user=cfg['db']['user'],password=cfg['db']['password'],db=cfg['db']['database'])
     cursor=connection.cursor()
     cursor.execute("UPDATE Users SET isAdmin =%(isAdmin)s , apply =%(apply)s WHERE schoolName=%(schoolName)s",{'isAdmin': 1,'apply': 0,'schoolName':info['schoolName']})
@@ -372,7 +372,7 @@ def postConfirm():
 @users.route('/postReject',methods=['POST'])
 def postReject():
     info = dict()
-    info['schoolName'] = request.values.get('schoolName')
+    info['schoolName'] = request.json['schoolName']
     connection = pymysql.connect(host=cfg['db']['host'],user=cfg['db']['user'],password=cfg['db']['password'],db=cfg['db']['database'])
     cursor=connection.cursor()
     cursor.execute("UPDATE Users SET apply =%(apply)s WHERE schoolName=%(schoolName)s",{'apply': 0,'schoolName':info['schoolName']})
@@ -421,9 +421,10 @@ def info():
     info = dict()
     errors=[]
     cursor=connection.cursor()
-    info['userName'] = request.values.get('userName')
-    info['phoneNumber'] = request.values.get('phoneNumber')
-    info['password'] = request.values.get('password')
+    info['userName'] = request.json['userName']
+    info['phoneNumber'] = request.json['phoneNumber']
+    info['password'] = request.json['password']
+    print(info)
     try:
         if len(info['userName'])>0:
             cursor.execute("UPDATE Users SET userName=%(userName)s  WHERE schoolName = %(schoolName)s",{'userName':info['userName'],'schoolName':session.get('schoolName')})
@@ -433,7 +434,7 @@ def info():
             connection.commit()
         if len(info['password'])>0:
             md5 = hashlib.md5()
-            md5.update((request.values.get('password')).encode("utf8"))
+            md5.update((request.json['password']).encode("utf8"))
             checkForm = CheckForm()
             checkForm.password(info['password'])
             errors = checkForm.getErrors()

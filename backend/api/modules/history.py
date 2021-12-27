@@ -33,10 +33,10 @@ def checkLendClassroom():
     info = dict()
     cursor = connection.cursor()
     #ApplicationForms's PK = classroomID lendTime weekDay
-    info['schoolName'] = request.values.get('schoolName')
-    info['classroomID'] = request.values.get('classroomID')
-    info['lendTime'] = request.values.get('lendTime')
-    info['weekDay'] = request.values.get('weekDay')
+    info['schoolName'] = request.json['schoolName']
+    info['classroomID'] = request.json['classroomID']
+    info['lendTime'] = request.json['lendTime']
+    info['weekDay'] = request.json['weekDay']
     try:
         #update user state first
         insertString = 'UPDATE Users SET status = 2 WHERE schoolName=(%(schoolName)s);'
@@ -54,7 +54,7 @@ def checkLendClassroom():
             insertString = 'DELETE from ApplicationForms WHERE classroomID=(%(classroomID)s) AND lendTime=(%(lendTime)s) AND weekDay=(%(weekDay)s);'
             cursor.execute(insertString,{'classroomID':info['classroomID'],'lendTime':info['lendTime'],'weekDay':info['weekDay']})
             #rows = cursor.fetchall()
-            info['lendTime'] = datetime.date.today()
+            info['lendTime'] = datetime.datetime.now()
             info['courseName'] = rows[0][0]
             info['userName'] = rows[0][1]
             info['reason'] = rows[0][2]
