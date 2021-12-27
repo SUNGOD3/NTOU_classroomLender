@@ -24,26 +24,40 @@
                     }
         </style>
 
-        <script>
 
-            //將修改的資訊-使用者名稱(userName)、密碼(password)、手機(phoneNumber)post到後端  
-            function check(form){
-                
-                if(form.password.value!=form.password_again.value){
-                    alert("兩次密碼輸入不一致!!!");
-                    return;
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script>
+            //將修改的資訊-使用者名稱(userName)、密碼(password)、手機(phoneNumber)post到後端
+            function postFunc() {
+                var userName = document.getElementById("userName").value;
+                var password = document.getElementById("password").value;
+                var phoneNumber = document.getElementById("phoneNumber").value;
+
+                var data={
+                    "userName": userName,
+                    "password": password,
+                    "phoneNumber":phoneNumber
                 }
-                //event.preventDefault();
-                console.log(form.password.value);
-                form.submit();
-                
-                alert("資訊修改成功");
-                //頁面跳轉
-                window.location.href = "new_manager-func.html";
-                //location.reload();
-            }
-            
-        </script>  
+                //http://localhost:13588/users/login http://localhost:5001/login
+                console.log(data);
+                $.ajax({
+                type: 'POST' ,
+                url: "http://localhost:13588/users/info" ,
+                data: JSON.stringify(data),
+                contentType: 'application/json; charset=UTF-8' ,
+                dataType: 'json' ,
+                success: function (data) {
+                    console.log(data);
+                    alert("資訊修改成功");
+                    //頁面跳轉
+                    window.location.href = "new_manager-func.html";
+                },
+                error: function (xhr, type) {
+                    alert(xhr + type);
+                }
+                });
+            };
+        </script>
 
     </head>
 
@@ -90,7 +104,7 @@
         </header>
 
         <!--http://localhost:5002/info http://localhost:13588/users/info onsubmit="check(this); return false()--> 
-        <form method = "POST" action = "http://localhost:13588/users/info" onsubmit="check(this)">
+        <form method = "POST" action = "http://localhost:13588/users/info">
             <!--送到後端資料庫-->
             <center>
                 <div style = "text-align:left ; WIDTH:150px">
@@ -118,7 +132,7 @@
             
         
                     <p>
-                        <input type = "submit" value = "確認修改" style = "color:firebrick" >
+                        <input type = "button" value = "確認修改" onclick="javascript: postFunc()" style = "color:firebrick" >
                     </p>
                 </div>
             </center>

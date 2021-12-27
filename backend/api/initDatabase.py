@@ -38,18 +38,12 @@ cursor.execute("CREATE TABLE IF NOT EXISTS Users( \
     PRIMARY KEY (schoolName) );")
 connection.commit()
 
+#computer/projector/blackboard/whiteboard
 cursor.execute("CREATE TABLE IF NOT EXISTS Classrooms( \
     classroomID  varchar(10) NOT NULL,\
     status int NOT NULL,\
-    computer boolean NOT NULL,\
-    projector boolean NOT NULL,\
-    blackboard boolean NOT NULL,\
-    whiteboard boolean NOT NULL,\
-    equipment1 varchar(15) NULL,\
-    equipment2 varchar(15) NULL,\
-    equipment3 varchar(15) NULL,\
-    equipment4 varchar(15) NULL,\
-    equipment5 varchar(15) NULL,\
+    commonEquipment varchar(4) NOT NULL,\
+    specialEquipment varchar(250),\
     PRIMARY KEY (classroomID) );")
 connection.commit()
 
@@ -81,7 +75,9 @@ cursor.execute("CREATE TABLE IF NOT EXISTS History( \
     userName varchar(30) NOT NULL,\
     schoolName varchar(10) NOT NULL,\
     lendTime datetime NOT NULL,\
-    returnTime datetime ,\
+    returnTime datetime,\
+    lendWeekDay int NOT NULL,\
+    returnWeekDay int,\
     reason varchar(250) NOT NULL,\
     PRIMARY KEY (classroomID,lendTime) );")
 connection.commit()

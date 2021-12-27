@@ -33,13 +33,17 @@ def checkLendClassroom():
     info = dict()
     cursor = connection.cursor()
     #ApplicationForms's PK = classroomID lendTime weekDay
-    info['schoolName'] = request.values.get('schoolName')
-    info['classroomID'] = request.values.get('classroomID')
-    info['lendTime'] = request.values.get('lendTime')
-    info['weekDay'] = request.values.get('weekDay')
+    info['schoolName'] = request.json['schoolName']
+    info['classroomID'] = request.json['classroomID']
+    info['lendTime'] = request.json['lendTime']
+    info['weekDay'] = request.json['weekDay']
+    info['confirmType'] = request.json['confirmType']
     try:
         #update user state first
-        insertString = 'UPDATE Users SET status = 2 WHERE schoolName=(%(schoolName)s);'
+        if info['confirmType'] == '1':
+            insertString = 'UPDATE Users SET status = 2 WHERE schoolName=(%(schoolName)s);'
+        else:
+            insertString = 'UPDATE Users SET status = 0 WHERE schoolName=(%(schoolName)s);'
         cursor.execute(insertString, {'schoolName':info['schoolName']})
         connection.commit() #submit the data to database 
         #search the reason from ApplicationForms
@@ -54,7 +58,7 @@ def checkLendClassroom():
             insertString = 'DELETE from ApplicationForms WHERE classroomID=(%(classroomID)s) AND lendTime=(%(lendTime)s) AND weekDay=(%(weekDay)s);'
             cursor.execute(insertString,{'classroomID':info['classroomID'],'lendTime':info['lendTime'],'weekDay':info['weekDay']})
             #rows = cursor.fetchall()
-            info['lendTime'] = datetime.date.today()
+            info['lendTime'] = datetime.datetime.now()
             info['courseName'] = rows[0][0]
             info['userName'] = rows[0][1]
             info['reason'] = rows[0][2]
@@ -67,6 +71,45 @@ def checkLendClassroom():
             connection.rollback()
             info['errors'] = 'checkLendClassroom fail'
     return jsonify(info)
+
+
+@history.route('/returnClassroom',methods=['GET'])
+def returnClassroom():
+    info = dict()
+    connection = pymysql.connect(host=cfg['db']['host'],user=cfg['db']['user'],password=cfg['db']['password'],db=cfg['db']['database'])
+    cursor=connection.cursor()
+    try:
+        #select history that 'returnTime = NULL'
+        insertString = 'SELECT schoolName, userName, classroomID, lendTime, returnTime, lendWeekDay, returnWeekDay from History WHERE returnTime is NULL'
+        cursor.execute(insertString)
+        rows = cursor.fetchall()
+        connection.commit()
+        if len(rows)==0:
+            info['errors'] = 'invalid select from History' 
+        else :
+            info['schoolName'] = []
+            info['userName'] = []
+            info['classroomID'] = []
+            info['lendTime'] = []
+            info['returnTime'] = []
+            info['lendWeekDay'] = []
+            info['returnWeekDay'] = []
+            for i in rows:
+                info['schoolName'].append(i[0])
+                info['userName'].append(i[1])
+                info['classroomID'].append(i[2])
+                info['lendTime'].append(i[3].strftime('%Y/%m/%d %H:%M'))
+                info['returnTime'].append(i[4])
+                info['lendWeekDay'].append(i[5])
+                info['returnWeekDay'].append(i[6])
+            
+                
+    except Exception: #get exception if there's still occured something wrong
+            traceback.print_exc()
+            connection.rollback()
+            info['errors'] = 'returnClassroom fail'
+    return jsonify(info)
+
 
 #get all data from history
 @history.route('/seeClassroomHistory',methods=['GET'])

@@ -2,6 +2,7 @@ from ctypes import sizeof
 from flask import Blueprint,request,jsonify,url_for,redirect,render_template,session
 import datetime
 import pymysql
+from pymysql import cursors
 import yaml
 import re
 import traceback
@@ -190,8 +191,8 @@ def register():
 def login():
     connection = pymysql.connect(host=cfg['db']['host'],user=cfg['db']['user'],password=cfg['db']['password'],db=cfg['db']['database'])
     info = dict()
-    schoolName = request.values.get('schoolName')
-    password = request.values.get('password')
+    schoolName = request.json['schoolName']
+    password = request.json['password']
     cursor = connection.cursor()
     cursor.execute("SELECT * from Users WHERE schoolName = %(schoolName)s",{'schoolName':schoolName})
     rows = cursor.fetchall()
@@ -362,7 +363,7 @@ def confirmApply():
 @users.route('/postConfirm',methods=['POST'])
 def postConfirm():
     info = dict()
-    info['schoolName'] = request.values.get('schoolName')
+    info['schoolName'] = request.json['schoolName']
     connection = pymysql.connect(host=cfg['db']['host'],user=cfg['db']['user'],password=cfg['db']['password'],db=cfg['db']['database'])
     cursor=connection.cursor()
     cursor.execute("UPDATE Users SET isAdmin =%(isAdmin)s , apply =%(apply)s WHERE schoolName=%(schoolName)s",{'isAdmin': 1,'apply': 0,'schoolName':info['schoolName']})
@@ -372,7 +373,7 @@ def postConfirm():
 @users.route('/postReject',methods=['POST'])
 def postReject():
     info = dict()
-    info['schoolName'] = request.values.get('schoolName')
+    info['schoolName'] = request.json['schoolName']
     connection = pymysql.connect(host=cfg['db']['host'],user=cfg['db']['user'],password=cfg['db']['password'],db=cfg['db']['database'])
     cursor=connection.cursor()
     cursor.execute("UPDATE Users SET apply =%(apply)s WHERE schoolName=%(schoolName)s",{'apply': 0,'schoolName':info['schoolName']})
@@ -421,9 +422,10 @@ def info():
     info = dict()
     errors=[]
     cursor=connection.cursor()
-    info['userName'] = request.values.get('userName')
-    info['phoneNumber'] = request.values.get('phoneNumber')
-    info['password'] = request.values.get('password')
+    info['userName'] = request.json['userName']
+    info['phoneNumber'] = request.json['phoneNumber']
+    info['password'] = request.json['password']
+    print(info)
     try:
         if len(info['userName'])>0:
             cursor.execute("UPDATE Users SET userName=%(userName)s  WHERE schoolName = %(schoolName)s",{'userName':info['userName'],'schoolName':session.get('schoolName')})
@@ -433,7 +435,7 @@ def info():
             connection.commit()
         if len(info['password'])>0:
             md5 = hashlib.md5()
-            md5.update((request.values.get('password')).encode("utf8"))
+            md5.update((request.json['password']).encode("utf8"))
             checkForm = CheckForm()
             checkForm.password(info['password'])
             errors = checkForm.getErrors()
@@ -475,6 +477,44 @@ def downGrade():
     cursor.execute("UPDATE Users SET isAdmin =%(isAdmin)s WHERE schoolName=%(schoolName)s AND isAdmin=1",{'isAdmin': 0,'schoolName':info['schoolName']})
     connection.commit()
     return jsonify(info)
+
+@users.route('/checkReturnClassrrom',methods=['POST'])
+def checkReturnClassroom():
+    connection = pymysql.connect(host=cfg['db']['host'],user=cfg['db']['user'],password=cfg['db']['password'],db=cfg['db']['database'])
+    info = dict()
+    cursor = connection.cursor()
+    #ApplicationForms's PK = classroomID department lendTime weekDay
+    info['schoolName'] = request.values.get('schoolName')
+    info['userName'] = request.values.get('userName')
+    info['classroomID'] = request.values.get('classroomID')
+    info['lendTime'] = request.values.get('lendTime')
+    info['weekDay'] = request.values.get('weekDay')
+    try:
+        #update user state first
+        insertString = 'UPDATE Users SET status = 1 WHERE schoolName=(%(schoolName)s);'
+        cursor.execute(insertString, {'schoolName':info['schoolName']})
+        connection.commit() #submit the data to database 
+        #search the reason from ApplicationForms
+        insertString = 'SELECT courseName,userName,reason from ApplicationForms WHERE classroomID=(%(classroomID)s) AND department=(%(department)s) AND lendTime=(%(lendTime)s) AND weekDay=(%(weekDay)s);'
+        cursor.execute(insertString,{'classroomID':info['classroomID'],'department':info['department'],'lendTime':info['lendTime'],'weekDay':info['weekDay']})
+        rows = cursor.fetchall()
+        connection.commit()
+        info['lendTime'] = datetime.date.today()
+        info['courseName'] = rows[0][0]
+        info['userName'] = rows[0][1]
+        info['reason'] = rows[0][2]
+        #print(rows)
+        #insert new data to history
+        insertString = 'INSERT INTO History(classroomID,department,courseName,userName,schoolName,lendTime,returnTime,reason)values(%(classroomID)s,%(department)s,%(courseName)s,%(userName)s,%(schoolName)s,%(lendTime)s,NULL,%(reason)s);'
+        cursor.execute(insertString,{'classroomID':info['classroomID'],'department':info['department'],'courseName':info['courseName'],'userName':info['userName'],'schoolName':info['schoolName'],'lendTime':info['lendTime'],'reason':info['reason']})
+        connection.commit()
+    except Exception: #get exception if there's still occured something wrong
+            traceback.print_exc()
+            connection.rollback()
+            info['errors'] = 'checkLendClassroom fail'
+    return jsonify(info)
+    
+    
 
 #   email confirm undo
 #   if a user input an error email (but legal), his student's ID fucked up. 

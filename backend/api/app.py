@@ -8,8 +8,10 @@ from modules.Scheduler import Scheduler
 from modules.ApplicationForms import ApplicationForms
 from modules.history import history
 import datetime
+from flask_cors import CORS
 
 app=Flask(__name__)
+CORS(app,supports_credentials=True)
 app.config['SECRET_KEY'] = os.urandom(24)
 app.config['PERMANENT_SESSION_LIFETIME'] =datetime.timedelta(minutes=10)
 # 5mins is too short !
@@ -30,13 +32,13 @@ app.register_blueprint(history,url_prefix='/history')
 def timeout():
     print(session.get("schoolName"))
     info = dict()
-    #if request.path =="/users/login" or request.path =="/users/register"or request.path =="/users/setIdentityCode" or request.path=="/users/checkIdentityCode" or request.path=="/Email/sendEmail":
-    #    return None
-    #else:
-    #    if not session.get("schoolName"):
-    #        info['errors'] = 'timeout!'
-    #        return jsonify(info)
-    return None
+    if request.path =="/users/login" or request.path =="/users/register"or request.path =="/users/setIdentityCode" or request.path=="/users/checkIdentityCode" or request.path=="/Email/sendEmail":
+        return None
+    else:
+        if not session.get("schoolName"):
+            info['errors'] = 'timeout!'
+            return jsonify(info)
+
             
 
 if __name__=='__main__':
