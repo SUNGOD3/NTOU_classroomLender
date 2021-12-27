@@ -81,7 +81,9 @@ cursor.execute("CREATE TABLE IF NOT EXISTS History( \
     userName varchar(30) NOT NULL,\
     schoolName varchar(10) NOT NULL,\
     lendTime datetime NOT NULL,\
-    returnTime datetime ,\
+    returnTime datetime,\
+    lendWeekDay int NOT NULL,\
+    returnWeekDay int,\
     reason varchar(250) NOT NULL,\
     PRIMARY KEY (classroomID,lendTime) );")
 connection.commit()
