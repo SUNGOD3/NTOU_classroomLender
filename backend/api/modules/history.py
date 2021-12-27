@@ -87,14 +87,22 @@ def returnClassroom():
         if len(rows)==0:
             info['errors'] = 'invalid select from History' 
         else :
+            info['schoolName'] = []
+            info['userName'] = []
+            info['classroomID'] = []
+            info['lendTime'] = []
+            info['returnTime'] = []
+            info['lendWeekDay'] = []
+            info['returnWeekDay'] = []
             for i in rows:
-                info['schoolName'] = rows[i][0]
-                info['userName'] = rows[i][1]
-                info['classroomID'] = rows[i][2]
-                info['lendTime'] = rows[i][3]
-                info['returnTime'] = rows[i][4]
-                info['lendWeekDay'] = rows[i][5]
-                info['returnWeekDay'] = rows[i][6]
+                info['schoolName'].append(i[0])
+                info['userName'].append(i[1])
+                info['classroomID'].append(i[2])
+                info['lendTime'].append(i[3].strftime('%Y/%m/%d %H:%M'))
+                info['returnTime'].append(i[4])
+                info['lendWeekDay'].append(i[5])
+                info['returnWeekDay'].append(i[6])
+            
                 
     except Exception: #get exception if there's still occured something wrong
             traceback.print_exc()
