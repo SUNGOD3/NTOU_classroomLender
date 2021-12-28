@@ -46,7 +46,7 @@ def deleteClassroom():
     #build dictionary
     info = dict()
     cursor = connection.cursor()
-    info['classroomID'] = request.json['schoolName']
+    info['classroomID'] = request.json['classroomID']
     try:
         cursor.execute("DELETE from Classrooms Where classroomID = %(classroomID)s",{'classroomID':info['classroomID']})
         connection.commit() #submit the data to database 
@@ -65,9 +65,9 @@ def changeClassroom():
     cursor = connection.cursor()
     info['classroomID'] = request.json['classroomID']
     info['commonEquipment'] = request.json['commonEquipment']
-    info['classroomID'] = request.json['classroomID']
+    info['specialEquipment'] = request.json['specialEquipment']
     try:
-        cursor.execute('UPDATE Classrooms SET  WHERE classroomID = %(classroomID)s' ,
+        cursor.execute('UPDATE Classrooms SET commonEquipment=%(commonEquipment)s , specialEquipment=%(specialEquipment)s WHERE classroomID = %(classroomID)s' ,
                        {'classroomID':info['classroomID']})
         connection.commit() #submit the data to database
     except Exception: #get exception if there's still occured something wrong
@@ -84,7 +84,7 @@ def selectClassroom():
     info = dict()
     errors = []
     cursor = connection.cursor()
-    info['classroomID'] = request.json['schoolName']
+    info['classroomID'] = request.json['classroomID']
     try:
         insertString = ('SELECT status from Classrooms where classroomID=%(classroomID)s')
         cursor.execute(insertString,{'classroomID':info['classroomID']})
@@ -120,7 +120,7 @@ def changeClassroomStatus():
     #build dictionary
     info = dict()
     cursor = connection.cursor()
-    info['classroomID'] = request.json['schoolName']
+    info['classroomID'] = request.json['classroomID']
     info['status'] = request.json['status']
     try:
         cursor.execute('UPDATE Classrooms SET status=%(status)s WHERE classroomID=%(classroomID)s',
