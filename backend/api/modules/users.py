@@ -534,16 +534,27 @@ def modifyUserInfo():
         info['errors'] = 'modify_User_Info fail'
     return jsonify(info)
 
-@users.route('/getUserInfo',methods=['GET'])
+@users.route('/getUserInfo',methods=['POST'])
 def getUserInfo():
     connection = pymysql.connect(host=cfg['db']['host'],user=cfg['db']['user'],password=cfg['db']['password'],db=cfg['db']['database'])
     info = dict()
     cursor = connection.cursor()
     info['schoolName'] = request.json['schoolName']
     try:
-        insertString = 'SELECT schoolName,userName,status,Email WHERE schoolName=(%(schoolName)s);'
+        insertString = 'SELECT schoolName,userName,status,Email from Users WHERE schoolName=(%(schoolName)s);'
         cursor.execute(insertString, {'schoolName':info['schoolName']})
+        rows = cursor.fetchall()
         connection.commit()
+        info['schoolName'] = []
+        info['userName'] = []
+        info['status'] = []
+        info['Email'] = []
+        print(rows)
+        for row in rows:
+            info['schoolName'].append(row[0])
+            info['userName'].append(row[1])
+            info['status'].append(row[2])
+            info['Email'].append(row[3])
     except Exception: #get exception if there's still occured something wrong
         traceback.print_exc()
         connection.rollback()
