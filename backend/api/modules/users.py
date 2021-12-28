@@ -159,12 +159,12 @@ def register():
     #build dictionary
     info = dict()
     cursor = connection.cursor()
-    info['userName'] = request.values.get('userName')
-    info['schoolName'] = request.values.get('schoolName')
-    info['phoneNumber'] = request.values.get('phoneNumber')
-    info['password'] = request.values.get('password')
-    info['passwdConfirm'] = request.values.get('passwdConfirm')
-    info['Email'] = request.values.get('Email')
+    info['userName'] = request.json['userName']
+    info['schoolName'] = request.json['schoolName']
+    info['phoneNumber'] = request.json['phoneNumber']
+    info['password'] = request.json['password']
+    info['passwdConfirm'] = request.json['passwdConfirm']
+    info['Email'] = request.json['Email']
     #check info's correctness
     errors = checkRegisterRequest(info)
     #record errors in dictionary
@@ -174,7 +174,7 @@ def register():
         try:
             insertString = 'INSERT INTO Users(userName,schoolName,password,phoneNumber,Email,isAdmin,status,apply)values(%(userName)s,%(schoolName)s,%(password)s,%(phoneNumber)s,%(Email)s,%(isAdmin)s,%(status)s,%(apply)s)'
             md5 = hashlib.md5() #hash the password for security
-            md5.update((request.values.get('password')).encode("utf8")) # for BIG5 and utf8 problem
+            md5.update(info['password'].encode("utf8")) # for BIG5 and utf8 problem
             cursor.execute(insertString, {'userName':info['userName'], 'schoolName':info['schoolName'],'password': md5.hexdigest(),'phoneNumber':info['phoneNumber'],'Email':info['Email'],'isAdmin':False,'status':0,'apply':0})
             connection.commit() #submit the data to database 
         except Exception: #get exception if there's still occured something wrong
@@ -224,7 +224,7 @@ def setIdentityCode():
     connection = pymysql.connect(host=cfg['db']['host'],user=cfg['db']['user'],password=cfg['db']['password'],db=cfg['db']['database'])
     info = dict()
     cursor = connection.cursor()
-    schoolName = request.values.get('schoolName')
+    schoolName = request.json['schoolName']
     cursor.execute("SELECT * from Users WHERE schoolName = %(schoolName)s",{'schoolName':schoolName})
     checkEmail=CheckEmail()
     checkEmail.schoolName(schoolName)
@@ -259,8 +259,8 @@ def checkIdentityCode():
     info = dict()
     errors=[]
     cursor = connection.cursor()
-    schoolName = request.values.get('schoolName')
-    identityCode=request.values.get('identityCode')
+    schoolName = request.json['schoolName']
+    identityCode=request.json['identityCode']
     cursor.execute("SELECT identityCode from Users WHERE schoolName = %(schoolName)s",{'schoolName':schoolName})
     rows = cursor.fetchall()
     connection.commit()
@@ -269,7 +269,7 @@ def checkIdentityCode():
     else:
         session.permanent = True
         #add a schoolName into session use session to timeout
-        session['schoolName']=request.values.get('schoolName')
+        session['schoolName']=request.json['schoolName']
     info['errors']=errors
     return jsonify(info)
 
@@ -286,8 +286,8 @@ def resetPassword():
     info = dict()
     errors=[]
     cursor=connection.cursor()
-    info['password'] = request.values.get('password')
-    info['passwdConfirm'] = request.values.get('passwdConfirm')
+    info['password'] = request.json['password']
+    info['passwdConfirm'] = request.json['passwdConfirm']
     errors = checkPassWord(info)
     if session.get('schoolName')==None:
         errors.append('not pass identityCode yet!')
@@ -295,7 +295,7 @@ def resetPassword():
     if len(info['errors'])==0:
         try:
             md5 = hashlib.md5()
-            md5.update((request.values.get('password')).encode("utf8"))
+            md5.update((info['password']).encode("utf8"))
             cursor.execute("UPDATE Users SET password = %(password)s WHERE schoolName = %(schoolName)s", {'password':md5.hexdigest(),'schoolName':session.get('schoolName')})
             connection.commit()
         except Exception:
@@ -387,10 +387,10 @@ def checkLendClassroom():
     info = dict()
     cursor = connection.cursor()
     #ApplicationForms's PK = classroomID lendTime weekDay
-    info['schoolName'] = request.values.get('schoolName')
-    info['classroomID'] = request.values.get('classroomID')
-    info['lendTime'] = request.values.get('lendTime')
-    info['weekDay'] = request.values.get('weekDay')
+    info['schoolName'] = request.json['schoolName']
+    info['classroomID'] = request.json['classroomID']
+    info['lendTime'] = request.json['lendTime']
+    info['weekDay'] = request.json['weekDay']
     try:
         #update user state first
         insertString = 'UPDATE Users SET status = 2 WHERE schoolName=(%(schoolName)s);'
@@ -471,7 +471,7 @@ def checkAllManager():
 @users.route('/downGrade',methods=['POST'])
 def downGrade():
     info = dict()
-    info['schoolName'] = request.values.get('schoolName')
+    info['schoolName'] = request.json['schoolName']
     connection = pymysql.connect(host=cfg['db']['host'],user=cfg['db']['user'],password=cfg['db']['password'],db=cfg['db']['database'])
     cursor=connection.cursor()
     cursor.execute("UPDATE Users SET isAdmin =%(isAdmin)s WHERE schoolName=%(schoolName)s AND isAdmin=1",{'isAdmin': 0,'schoolName':info['schoolName']})
@@ -484,11 +484,11 @@ def checkReturnClassroom():
     info = dict()
     cursor = connection.cursor()
     #ApplicationForms's PK = classroomID department lendTime weekDay
-    info['schoolName'] = request.values.get('schoolName')
-    info['userName'] = request.values.get('userName')
-    info['classroomID'] = request.values.get('classroomID')
-    info['lendTime'] = request.values.get('lendTime')
-    info['weekDay'] = request.values.get('weekDay')
+    info['schoolName'] = request.json['schoolName']
+    info['userName'] = request.json['userName']
+    info['classroomID'] = request.json['classroomID']
+    info['lendTime'] = request.json['lendTime']
+    info['weekDay'] = request.json['weekDay']
     try:
         #update user state first
         insertString = 'UPDATE Users SET status = 1 WHERE schoolName=(%(schoolName)s);'
