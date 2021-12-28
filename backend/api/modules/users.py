@@ -478,8 +478,8 @@ def downGrade():
     connection.commit()
     return jsonify(info)
 
-@users.route('/userInfo',methods=['GET'])
-def userInfo():
+@users.route('/getUserInfo',methods=['GET'])
+def getUserInfo():
     connection = pymysql.connect(host=cfg['db']['host'],user=cfg['db']['user'],password=cfg['db']['password'],db=cfg['db']['database'])
     info = dict()
     cursor = connection.cursor()
