@@ -483,7 +483,7 @@ def checkReturnClassroom():
     connection = pymysql.connect(host=cfg['db']['host'],user=cfg['db']['user'],password=cfg['db']['password'],db=cfg['db']['database'])
     info = dict()
     cursor = connection.cursor()
-    #ApplicationForms's PK = classroomID department lendTime weekDay
+    #ApplicationForms's PK = classroomID lendTime weekDay
     info['schoolName'] = request.json['schoolName']
     info['userName'] = request.json['userName']
     info['classroomID'] = request.json['classroomID']
@@ -514,7 +514,41 @@ def checkReturnClassroom():
             info['errors'] = 'checkLendClassroom fail'
     return jsonify(info)
     
-    
+@users.route('/modifyUserInfo',methods=['POST'])
+def modifyUserInfo():
+    connection = pymysql.connect(host=cfg['db']['host'],user=cfg['db']['user'],password=cfg['db']['password'],db=cfg['db']['database'])
+    info = dict()
+    cursor = connection.cursor()
+    #ApplicationForms's PK = classroomID lendTime weekDay
+    info['schoolName'] = request.json['schoolName']
+    info['userName'] = request.json['userName']
+    info['status'] = request.json['status']
+    info['Email'] = request.json['Email']
+    try:
+        insertString = 'UPDATE Users SET userName = (%(userName)s) , status = (%(status)s) , Email = (%(Email)s)  WHERE schoolName=(%(schoolName)s);'
+        cursor.execute(insertString, {'userName':info['userName'],'status':info['status'],'Email':info['Email'],'schoolName':info['schoolName']})
+        connection.commit()
+    except Exception: #get exception if there's still occured something wrong
+        traceback.print_exc()
+        connection.rollback()
+        info['errors'] = 'modify_User_Info fail'
+    return jsonify(info)
+
+@users.route('/getUserInfo',methods=['GET'])
+def getUserInfo():
+    connection = pymysql.connect(host=cfg['db']['host'],user=cfg['db']['user'],password=cfg['db']['password'],db=cfg['db']['database'])
+    info = dict()
+    cursor = connection.cursor()
+    info['schoolName'] = request.json['schoolName']
+    try:
+        insertString = 'SELECT schoolName,userName,status,Email WHERE schoolName=(%(schoolName)s);'
+        cursor.execute(insertString, {'schoolName':info['schoolName']})
+        connection.commit()
+    except Exception: #get exception if there's still occured something wrong
+        traceback.print_exc()
+        connection.rollback()
+        info['errors'] = 'get_User_Info fail'
+    return jsonify(info)
 
 #   email confirm undo
 #   if a user input an error email (but legal), his student's ID fucked up. 

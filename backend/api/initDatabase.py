@@ -64,7 +64,7 @@ cursor.execute("CREATE TABLE IF NOT EXISTS ApplicationForms( \
     phoneNumber varchar(10) NOT NULL,\
     lendTime int NOT NULL,\
     returnTime int NOT NULL,\
-    weekDay int NOT NULL,\
+    weekDay date NOT NULL,\
     reason varchar(250) NOT NULL,\
     PRIMARY KEY (classroomID,lendTime,weekday) );")
 connection.commit()
