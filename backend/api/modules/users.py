@@ -487,18 +487,14 @@ def userInfo():
     info['schoolName'] = request.values.get('schoolName')
     try:
         #search the user from Users
-        insertString = 'SELECT userName,schoolName,password,phoneNumber,Email,isAdmin,status,apply from Users WHERE schoolName=(%(schoolName)s);'
+        insertString = 'SELECT userName,schoolName,Email,status from Users WHERE schoolName=(%(schoolName)s);'
         cursor.execute(insertString,{'schoolName':info['schoolName']})
         rows = cursor.fetchall()
         connection.commit()
         info['userName'] = rows[0][0]
         info['schoolName'] = rows[0][1]
-        info['password'] = rows[0][2]
-        info['phoneNumber'] = rows[0][3]
-        info['Email'] = rows[0][4]
-        info['isAdmin'] = rows[0][5]
-        info['status'] = rows[0][6]
-        info['apply'] = rows[0][7]
+        info['Email'] = rows[0][2]
+        info['status'] = rows[0][3]
     except Exception: #get exception if there's still occured something wrong
         traceback.print_exc()
         connection.rollback()
