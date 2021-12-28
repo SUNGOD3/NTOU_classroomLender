@@ -53,7 +53,7 @@ def deleteClassroom():
     #build dictionary
     info = dict()
     cursor = connection.cursor()
-    info['classroomID'] = request.values.get('classroomID')
+    info['classroomID'] = request.json['schoolName']
     try:
         cursor.execute("DELETE from Classrooms Where classroomID = %(classroomID)s",{'classroomID':info['classroomID']})
         connection.commit() #submit the data to database 
@@ -70,9 +70,9 @@ def changeClassroom():
     #build dictionary
     info = dict()
     cursor = connection.cursor()
-    info['classroomID'] = request.values.get('classroomID')
-    info['commonEquipment'] = request.values.get('commonEquipment')
-    info['classroomID'] = request.values.get('classroomID')
+    info['classroomID'] = request.json['schoolName']
+    info['commonEquipment'] = request.json['commonEquipment']
+    info['classroomID'] = request.json['classroomID']
     try:
         cursor.execute('UPDATE Classrooms SET  WHERE classroomID = %(classroomID)s' ,
                        {'classroomID':info['classroomID']})
@@ -91,7 +91,7 @@ def selectClassroom():
     info = dict()
     errors = []
     cursor = connection.cursor()
-    info['classroomID'] = request.values.get('classroomID')
+    info['classroomID'] = request.json['schoolName']
     try:
         insertString = ('SELECT status from Classrooms where classroomID=%(classroomID)s')
         cursor.execute(insertString,{'classroomID':info['classroomID']})
@@ -127,8 +127,8 @@ def changeClassroomStatus():
     #build dictionary
     info = dict()
     cursor = connection.cursor()
-    info['classroomID'] = request.values.get('classroomID')
-    info['status'] = request.values.get('status')
+    info['classroomID'] = request.json['schoolName']
+    info['status'] = request.json['status']
     try:
         cursor.execute('UPDATE Classrooms SET status=%(status)s WHERE classroomID=%(classroomID)s',
                        {'status':info['status'],'classroomID':info['classroomID']})
@@ -145,7 +145,7 @@ def searchKeyword():
     #build dictionary
     info = dict()
     cursor = connection.cursor()
-    info['searchWord'] = request.values.get('searchWord')
+    info['searchWord'] = request.json['searchWord']
     try:
         cursor.execute('SELECT specialEquipment,classroomID from Classrooms')
         rows = cursor.fetchall()
@@ -173,7 +173,7 @@ def equipmentFilter():
     #build dictionary
     info = dict()
     cursor = connection.cursor()
-    info['commonEquipment'] = request.values.get('commonEquipment')
+    info['commonEquipment'] = request.json['commonEquipment']
     try:
         cursor.execute('SELECT commonEquipment,classroomID from Classrooms')
         rows = cursor.fetchall()
