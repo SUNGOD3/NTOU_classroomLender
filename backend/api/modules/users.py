@@ -478,42 +478,34 @@ def downGrade():
     connection.commit()
     return jsonify(info)
 
-@users.route('/checkReturnClassrrom',methods=['POST'])
-def checkReturnClassroom():
+@users.route('/userInfo',methods=['GET'])
+def userInfo():
     connection = pymysql.connect(host=cfg['db']['host'],user=cfg['db']['user'],password=cfg['db']['password'],db=cfg['db']['database'])
     info = dict()
     cursor = connection.cursor()
-    #ApplicationForms's PK = classroomID department lendTime weekDay
+    #Users' PK = schoolName 
     info['schoolName'] = request.values.get('schoolName')
-    info['userName'] = request.values.get('userName')
-    info['classroomID'] = request.values.get('classroomID')
-    info['lendTime'] = request.values.get('lendTime')
-    info['weekDay'] = request.values.get('weekDay')
     try:
-        #update user state first
-        insertString = 'UPDATE Users SET status = 1 WHERE schoolName=(%(schoolName)s);'
-        cursor.execute(insertString, {'schoolName':info['schoolName']})
-        connection.commit() #submit the data to database 
-        #search the reason from ApplicationForms
-        insertString = 'SELECT courseName,userName,reason from ApplicationForms WHERE classroomID=(%(classroomID)s) AND department=(%(department)s) AND lendTime=(%(lendTime)s) AND weekDay=(%(weekDay)s);'
-        cursor.execute(insertString,{'classroomID':info['classroomID'],'department':info['department'],'lendTime':info['lendTime'],'weekDay':info['weekDay']})
+        #search the user from Users
+        insertString = 'SELECT userName,schoolName,password,phoneNumber,Email,isAdmin,status,apply from Users WHERE schoolName=(%(schoolName)s);'
+        cursor.execute(insertString,{'schoolName':info['schoolName']})
         rows = cursor.fetchall()
         connection.commit()
-        info['lendTime'] = datetime.date.today()
-        info['courseName'] = rows[0][0]
-        info['userName'] = rows[0][1]
-        info['reason'] = rows[0][2]
-        #print(rows)
-        #insert new data to history
-        insertString = 'INSERT INTO History(classroomID,department,courseName,userName,schoolName,lendTime,returnTime,reason)values(%(classroomID)s,%(department)s,%(courseName)s,%(userName)s,%(schoolName)s,%(lendTime)s,NULL,%(reason)s);'
-        cursor.execute(insertString,{'classroomID':info['classroomID'],'department':info['department'],'courseName':info['courseName'],'userName':info['userName'],'schoolName':info['schoolName'],'lendTime':info['lendTime'],'reason':info['reason']})
-        connection.commit()
+        info['userName'] = rows[0][0]
+        info['schoolName'] = rows[0][1]
+        info['password'] = rows[0][2]
+        info['phoneNumber'] = rows[0][3]
+        info['Email'] = rows[0][4]
+        info['isAdmin'] = rows[0][5]
+        info['status'] = rows[0][6]
+        info['apply'] = rows[0][7]
     except Exception: #get exception if there's still occured something wrong
-            traceback.print_exc()
-            connection.rollback()
-            info['errors'] = 'checkLendClassroom fail'
+        traceback.print_exc()
+        connection.rollback()
+        info['errors'] = 'checkLendClassroom fail'
     return jsonify(info)
-    
+        
+        
     
 
 #   email confirm undo

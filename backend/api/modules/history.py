@@ -1,7 +1,7 @@
 from ctypes import sizeof
 from flask import Blueprint,request,jsonify,url_for,redirect,render_template,session
 from datetime import date
-import datetime
+from datetime import datetime
 import pymysql
 import yaml
 import re
@@ -101,9 +101,7 @@ def returnClassroom():
                 info['lendTime'].append(i[3].strftime('%Y/%m/%d %H:%M'))
                 info['returnTime'].append(i[4])
                 info['lendWeekDay'].append(i[5])
-                info['returnWeekDay'].append(i[6])
-            
-                
+                info['returnWeekDay'].append(i[6])      
     except Exception: #get exception if there's still occured something wrong
             traceback.print_exc()
             connection.rollback()
@@ -138,6 +136,35 @@ def seeClassroomHistory():
     info['errors'] = errors
     return jsonify(info)
 
+@history.route('/checkReturnClassrrom',methods=['POST'])
+def checkReturnClassroom():
+    connection = pymysql.connect(host=cfg['db']['host'],user=cfg['db']['user'],password=cfg['db']['password'],db=cfg['db']['database'])
+    info = dict()
+    errors = []
+    cursor = connection.cursor()
+    #History's PK = classroomID lendTime
+    #Users' PK = schoolName
+    info['schoolName'] = request.jasn('schoolName')
+    info['classroomID'] = request.json('classroomID')
+    info['lendTime'] = request.json('lendTime')
+    info['lendWeekDay'] = request.json('weekDay')
+    try:
+        #update user's status=0
+        insertString = 'UPDATE Users SET status=0 WHERE schoolName=(%(schoolName)s);'
+        cursor.execute(insertString, {'schoolName':info['schoolName']})
+        connection.commit()
+        #update history: returnTime,returnWeekDay
+        info['returnTime'] = datetime.datetime.now()
+        info['returnWeekDay'] = datetime.today().weekday() + 1
+        insertString = 'UPDATE history SET returnTime=(%(returnTime)s), returnWeekDay=(%(returnWeekDay)s) WHERE classroomID=(%(classroomID)s) AND lendTime=(%(lendTime)s);'
+        cursor.execute(insertString, {'returnTime':info['returnTime'],'returnWEekDay':info['returnWeekDay'],'classroomID':info['classroomID'],'lendTime':['lendTime']})
+        connection.commit() #submit the data to database 
+    except Exception: #get exception if there's still occured something wrong
+            traceback.print_exc()
+            connection.rollback()
+            errors = 'checkLendClassroom fail'
+    info['errors'] = errors
+    return jsonify(info)
 #   email confirm undo
 #   if a user input an error email (but legal), his student's ID fucked up. 
 

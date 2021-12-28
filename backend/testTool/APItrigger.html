@@ -169,3 +169,39 @@ changeClassroomStatus
     <input type="submit" value="送出表單">
     <hr>
 </form>
+</form>
+testLendClassroom
+<form action="http://localhost:13588/ApplicationForms/lendClassroom" method="post">
+    userName:<input name="userName"></input><br>
+    phoneNumber:<input name="phoneNumber"></input><br>
+    classroomID:<input name="classroomID"></input><br>
+    lendTime:<input name="lendTime"></input><br>
+    returnTime:<input name="returnTime"></input><br>
+    courseName:<input name="courseName"></input><br>
+    weekDay:<input name="weekDay"></input><br>
+    reason:<input name="reason"></input><br>
+testsearchKeyword
+<form action="http://localhost:13588/Classrooms/searchKeyword" method="post">
+    searchWord:<input name="searchWord"></input><br>
+    <input type="submit" value="送出表單">
+    <hr>
+</form>
+
+testuserInfo
+<form action="http://localhost:13588/users/userInfo" method="get">
+    schoolName:<input name="schoolName"></input><br>
+    <input type="submit" value="送出表單">
+    <hr>
+</form>
+
+checkReturnClassroom
+<form action="http://localhost:13588/history/checkReturnClassroom" method="post">
+    schoolName:<input name="schoolName"></input><br>
+    classroomID:<input name="classroomID"></input><br>
+    lendTime:<input name="lendTime"></input><br>
+    lendWeekDay:<input name="lendWeekDay"></input><br>
+    <input type="submit" value="送出表單">
+    <hr>
+</form>
+
+
