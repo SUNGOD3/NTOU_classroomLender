@@ -84,65 +84,52 @@
 			<!--左側-->
 			<!--選擇教室-->
 			<div class="col-6">
-				<form method="POST" action="http://localhost:5000/modify_classroom">
 					<div class="row d-flex align-items-center" style="position: relative; top: 40px; left: 40%;">
 						<h4>目前教室狀態</h4>
 						<div class="col-8 d-flex align-items-center table-responsive" style="text-align: center;">
-							<table id="classroomID" class="table table-striped table-sm" style="border-collapse: collapse; cursor: context-menu;">
+							<table id="classrooms" class="table table-striped table-sm" style="border-collapse: collapse; cursor: context-menu;">
 								<tr class="rows">
 									<th scope="col" class="floor">樓層</th>
-									<th scope="col" colspan="20">教室編號</th><!--假設每層樓教室最多20間-->
+									<th scope="col" colspan="100">教室編號</th><!--假設每層樓教室最多100間-->
 								</tr>
 							</table>
 						</div>
 					</div>
-				</form>
 			</div>
 
 			<!--右邊-->
 			<!--填寫教室編號 & 申請借用教室-->
 			<div class="col-6">
-					<form method="POST" action="http://localhost:5000/modify_classroom">
-						
-						<!--輸入教室編號-->
-						<div class="row justify-content-start" style="position: relative; top: 40px; left: 10%;">							
-							<div class="col-6">
-								<label for="classroomID" class="form-label">教室編號</label>
-								<input type="text" class="form-control" name="classroomID" placeholder="請輸入欲修改教室編號..." value="" required>
-								<div class="invalid-feedback">請輸入教室編號!</div>
-								{{classroomID}}
-							</div>	
-						</div>
-						
-						<div class="row" style="position: relative; top: 60px; left: 10%;">
-							<div class="col-6">
-								<div class="form-check">
-									<input type="radio" class="form-check-input" name="status0">
-									<label class="form-check-label" name="status0" for="status0">可借用</label>
-								</div>
-								<div class="form-check">
-									<input type="radio" class="form-check-input" name="status2">
-									<label class="form-check-label" name="status2" for="status2">禁止借用</label>
-								</div>
-								{{status0}}
-								{{status2}}
-								{{status}}
-							</div>
-						</div>	
+				<!--輸入教室編號-->
+				<div class="row justify-content-start" style="position: relative; top: 40px; left: 10%;">							
+					<div class="col-6">
+						<label for="classroomID" class="form-label">教室編號</label>
+						<input id="classroomID" type="text" class="form-control" name="classroomID" placeholder="請輸入欲修改教室編號..." value="" required>
+						<div class="invalid-feedback">請輸入教室編號!</div>
+					</div>	
+				</div>
+				
+				<!--輸入教室狀態-->
+				<div class="row" style="position: relative; top: 60px; left: 10%;">
+					<div class="col-6">
+						<input id="status_0" type="radio" name="status_0">
+						<label class="form-check-label">可借用</label>
+						<br>
+						<input id="status_2" type="radio" name="status_2">
+						<label class="form-check-label">禁止借用</label>
+					</div>
+				</div>	
 
-						<!--修改教室按鈕-->
-						<div class="row justify-content-start" style="position: relative; top: 80px; left: 10%;">
-							<div class="col-5">
-								<input id="modifyBTN" type="submit" name="button" class="btn-sm btn-secondary" value="確認修改" onclick="modify_classroom()">
-							</div>
-						</div>
-
-					</form>
-			
+				<!--修改教室按鈕-->
+				<div class="row justify-content-start" style="position: relative; top: 80px; left: 10%;">
+					<div class="col-5">
+						<input id="modifyBTN" type="submit" name="button" class="btn-sm btn-secondary" value="確認修改">
+					</div>
+				</div>		
 			</div>
 		</div>
 	</main>
-
+	
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<script>
 
@@ -155,12 +142,10 @@
 						  ["201","203","205","212"],
 						  ["101","105"],
 						  ["B07","B10","B12"]];
-		var newClassroom=document.getElementById("classroomID");
+		var newClassroom=document.getElementById("classrooms");
 		var newfloors,newCell,newIndex;
-		var status,status0,status1,status2;
-		var classroomID=[], floorNumber;
+		var floorNumber,status=0;
 		
-		//教室原本的table
 		for (var j = 0; j < floors.length; j++) {
 			var newRow = newClassroom.insertRow(j+1);
 			for (var i = 0; i < classrooms[j].length+1; i++) {
@@ -173,9 +158,9 @@
 					newCell.innerHTML=classrooms[j][i-1];
 					//newCell.style.backgroudColor="white";
 					newCell.style.cursor="pointer";
-					if (status0 == 1) newCell.style.background="Lime";
-					else if (status1 == 1) newCell.style.background="red";
-					else if (status2 == 1) newCell.style.background="gray";
+					if (status == 0) newCell.style.background="Lime";
+					else if (status == 1) newCell.style.background="red";
+					else if (status == 2) newCell.style.background="gray";
 					//該教室的狀態
 					//0:未使用
 					//1:使用中
@@ -183,64 +168,60 @@
 				}
 			}
 		}
+		$(document).ready(function(){
+            $.getJSON("http://localhost:13588/Classrooms/???", function(data){
+                //讀課表
 
-		//點選要檢視的教室
-		var table = document.getElementById("classroomID");
-        if (table != null) {
-            for (var i = 1; i < table.rows.length; i++) {
-                for (var j = 1; j < table.rows[i].cells.length; j++)
-                table.rows[i].cells[j].onclick = function () {
-                    tableText(this);
-                };
-            }
-        }
-        function tableText(tableCell) {
-            alert(tableCell.innerHTML);
-        }
-
+            });        
+        });
+		
 		
 		$('#modifyBTN').click(
-		//修改教室狀態function
-		function modify_classroom(modifyID, status0, status2){
-			console.log("start!");
-			//console.log(modifyID + " " + status);
+			//修改教室狀態function
+			function (){
+				console.log("post start!");
 
-			if (status0 == 1) status = 0;
-			else if (status2 == 1) status = 2;
-			console.log(modifyID + " " + status);
-
-			var data = {
-				"classroomID":modifyID,
-				"status":status
-			}
-			
-			//將新增的教室(classroomID)和設備post到後端資料庫
-			$.ajax({
-				type: 'POST',
-				url: "http://localhost:5000/modify_classroom",
-				data: JSON.stringify(data),
-				contentType: 'application/json; charset=UTF-8',
-				dataType: 'json',
-				crossOrigin: null,
-
-				success: function (data){
-					console.log("post success! " + modifyID);
-					location.reload();
-				},
-				error: function (xhr, type){
-					alert(xhr+type);
+				if( $("#status_0").prop("checked") ){
+					status = 0;
 				}
-			})
-		}
-		);
+				else if( $("#status_2").prop("checked") ){
+					status = 2;
+				}
 
-		
-		//從後端get修改教室(classroomID)的狀態(status)
-		$(document).ready(function(){
-			$.getJSON("http://localhost:5000/modify_test", function(data){
-				console.log("start!" + data[0].classroomID + status);
+				var classroomID = $("#classroomID").val();
+				var status0 = $("#status_0").val();
+				var status2 = $("#status_2").val();
+				console.log(status0 + ", " + status2 + ", " + status);
+
+				var data = {
+					"classroomID":classroomID,
+					"status":status
+				}
+				console.log(JSON.stringify(data));
+				
+				//將新增的教室(classroomID)和狀態(status)post到後端資料庫
+				$.ajax({
+					type: 'POST',
+					url: "http://localhost:13588/Classrooms/changeClassroomStatus",
+					data: JSON.stringify(data),
+					contentType: 'application/json; charset=UTF-8',
+					dataType: 'json',
+					crossOrigin: null,
+
+					success: function (data){
+							console.log("傳送成功");
+							//location.reload();
+					},
+					error: function (xhr, type){
+						console.log("傳送失敗");
+						console.log(xhr+type);
+					}
+				})
+
+				//修改教室狀態
+				console.log("start!" + classroomID + " " + status);
 				var isDone = 0;//是否完成修改教室狀態
-				floorNumber=data[0].classroomID.substr(0, 1);
+				floorNumber=classroomID.substr(0, 1);
 				//console.log(floorNumber);
 
 				for (var i = 0; i < floors.length; i++) {
@@ -249,13 +230,12 @@
 					if (floors[i].substr(0, 1) == floorNumber){
 						for (var j = 1; j <= len; j++){
 							//console.log(newClassroom.rows[i+1].cells[j].innerHTML);
-							if (data[0].classroomID == newClassroom.rows[i+1].cells[j].innerHTML) {
-								if (data[0].status == 0) newClassroom.rows[i+1].cells[j].style.background="Lime";
-								else if (data[0].status == 2) newClassroom.rows[i+1].cells[j].style.background="gray";
-								console.log(data[0].status+" 已修改 " + data[0].classroomID + " 教室狀態: " + newClassroom.rows[i+1].cells[j].style.background);
-								//alert("修改成功!!")
+							if (classroomID == newClassroom.rows[i+1].cells[j].innerHTML) {
+								if (status == 0) newClassroom.rows[i+1].cells[j].style.background="Lime";
+								else if (status == 2) newClassroom.rows[i+1].cells[j].style.background="gray";
+								console.log(status+" 已修改 " + classroomID + " 教室狀態: " + newClassroom.rows[i+1].cells[j].style.background);
+								alert("修改成功!!")
 								isDone = 1;	
-								//modify_classroom(data[0].classroomID);
 								break;
 							}
 						}
@@ -264,8 +244,16 @@
 				
 				if (isDone == 0){
 					console.log("修改失敗!");
-					//alert("修改失敗!!")
+					alert("修改失敗!!")
 				}
+			}
+		);
+
+		
+		//從後端get修改教室(classroomID)的狀態(status)
+		$(document).ready(function(){
+			$.getJSON("http://localhost:5000/modify_test", function(data){
+				
 			});
 		});
 

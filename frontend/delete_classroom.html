@@ -78,26 +78,22 @@
 
 			<!--現有教室-->
 			<div class="col">
-				
-				<form method="POST" action="http://localhost:5000/delete_classroom">
 					<!--現有教室-->
 					<div class="row d-flex align-items-center" style="position: relative; top: 40px; left: 40%;">
 						<h4>現有教室</h4>
 						<div class="col-8 d-flex align-items-center table-responsive" style="text-align: center;">
-							<table id="classroomID" class="table table-striped table-sm" style="border-collapse: collapse; cursor: context-menu;">
+							<table id="classrooms" class="table table-striped table-sm" style="border-collapse: collapse; cursor: context-menu;">
 								<tr class="rows">
 									<th scope="col" class="floor">樓層</th>
-									<th scope="col" colspan="20">教室編號</th><!--假設每層樓教室最多20間-->
+									<th scope="col" colspan="100">教室編號</th><!--假設每層樓教室最多100間-->
 								</tr>
 							</table>
 						</div>
 					</div>	
-				</form>
 			</div>
 
 			<!--輸入教室編號-->
 			<div class="col">
-				<form class="needs-validation" novalidate  method="POST" action="http://localhost:5000/delete_classroom">
 					<!--輸入教室編號-->
 					<div class="row justify-content-start" style="position: relative; top: 40px; left: 10%;">
 						<div class="col-4">
@@ -105,15 +101,13 @@
 							<br>
 							<input id="classroomID" type="text" class="form-control" name="classroomID" placeholder="請輸入教室編號..." value="" required>
 							<div class="invalid-feedback">請輸入教室編號!</div>
-							{{classroomID}}
 						</div>
 					</div>
 					<div class="row justify-content-start" style="position: relative; top: 60px; left: 10%;">
 						<div class="col-5">
 							<input id="deleteBTN"type="submit" name="button" class="btn-sm btn-secondary" value="刪除">
 						</div>
-					</div>
-				</form>
+					</div>	
 			</div>
 
 		</div>
@@ -131,7 +125,7 @@
 						  ["201","203","205","212"],
 						  ["101","105"],
 						  ["B07","B10","B12"]];
-		var newClassroom=document.getElementById("classroomID");
+		var newClassroom=document.getElementById("classrooms");
 		var newfloors, newCell,newIndex;
 		var equipments=[],floorNumber;
 
@@ -145,47 +139,61 @@
 				else {
 					newCell = newRow.insertCell(i);
 					newCell.innerHTML=classrooms[j][i-1];
+					//newCell.style.backgroudColor="white";
+					newCell.style.cursor="pointer";
+					if (status == 0) newCell.style.background="Lime";
+					else if (status == 1) newCell.style.background="red";
+					else if (status == 2) newCell.style.background="gray";
+					//該教室的狀態
+					//0:未使用
+					//1:使用中
+					//2:無法使用
 				}
 			}
 		}
+		$(document).ready(function(){
+            $.getJSON("http://localhost:13588/Classrooms/???", function(data){
+                //讀課表
+
+            });        
+        });
 		
 		$('#deleteBTN').click(
 			//刪除教室function
 			function (){
 				console.log("開始post到資料庫...");
+				
+                var classroomID = $("#classroomID").val();
 
 				var data = {
 					"classroomID":classroomID
 				}
-				console.log(data[0].classroomID);
-				
+				console.log("跳到 " + window.location.href);
+
 				//將要刪除的教室(classroomID)post到後端資料庫
 				$.ajax({
 					type: 'POST',
-					url: "http://localhost:5000/delete_classroom",
+					url: "http://localhost:13588/Classrooms/deleteClassroom",
 					data: JSON.stringify(data),
 					contentType: 'application/json; charset=UTF-8',
 					dataType: 'json',
 					crossOrigin: null,
 					
 					success: function (data){
-						console.log("傳送成功: " + data);
-						location.reload();
+						console.log("傳送成功");
+						console.log(JSON.stringify(data));
+						//location.reload();
 					},
 					error: function (xhr, type){
-						alert("fail"+data);
+						console.log("傳送失敗");
 						console.log(xhr+type);
 					}
 				});
-			}
-		);
 
-		//從後端get刪除的教室(classroomID)
-		$(document).ready(function(){
-			$.getJSON("http://localhost:5000/delete_test", function(data){
-				console.log("start! " + data[0].classroomID);
+				//刪除教室到table
+				console.log("start! " + classroomID);
 				var isDone = 0;//是否完成刪除教室
-				floorNumber=data[0].classroomID.substr(0, 1);
+				floorNumber=classroomID.substr(0, 1);
 				//console.log(floorNumber);
 				for (var i = 0; i < floors.length; i++) {
 					var len = classrooms[i].length;//每層樓教室數量
@@ -193,10 +201,10 @@
 					if (floors[i].substr(0, 1) == floorNumber){
 						for (var j = 1; j <= len; j++){
 							//console.log(newClassroom.rows[i+1].cells[j].innerHTML);
-							if (data[0].classroomID == newClassroom.rows[i+1].cells[j].innerHTML) {
+							if (classroomID == newClassroom.rows[i+1].cells[j].innerHTML) {
 								newClassroom.rows[i+1].deleteCell(j);
-								console.log("已刪除 " + data[0].classroomID + " 教室!!");
-								//alert("刪除成功!!")
+								console.log("已刪除 " + classroomID + " 教室!!");
+								alert("刪除成功!!")
 								isDone = 1;	
 								break;
 							}
@@ -206,10 +214,10 @@
 				
 				if (isDone == 0){
 					console.log("此教室不存在:(");
-					//alert("此教室不存在!!")
+					alert("此教室不存在!!")
 				}
-			});
-		});
+			}
+		);
 	</script>
 
 	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>

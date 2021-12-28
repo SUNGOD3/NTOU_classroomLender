@@ -85,107 +85,71 @@
 			<!--左側-->
 			<!--現有教室-->
 			<div class="col">
-
-				<form method="POST" action="http://localhost:13588/Classrooms/addClassroom">
-					<!--現有教室-->
-					<div class="row d-flex align-items-center" style="position: relative; top: 40px; left: 40%;">
-						<h4>現有教室</h4>
-						<div class="col-8 d-flex align-items-center table-responsive" style="text-align: center;">
-							<table id="classroomID" class="table table-striped table-sm" style="border-collapse: collapse; cursor: context-menu;">
-								<tr class="rows">
-									<th scope="col" class="floor">樓層</th>
-									<th scope="col" colspan="20">教室編號</th><!--假設每層樓教室最多20間-->
-								</tr>
-							</table>
-						</div>
+				<!--現有教室-->
+				<div class="row d-flex align-items-center" style="position: relative; top: 40px; left: 40%;">
+					<h4>現有教室</h4>
+					<div class="col-8 d-flex align-items-center table-responsive" style="text-align: center;">
+						<table id="classrooms" class="table table-striped table-sm" style="border-collapse: collapse; cursor: context-menu;">
+							<tr class="rows">
+								<th scope="col" class="floor">樓層</th>
+								<th scope="col" colspan="100">教室編號</th><!--假設每層樓教室最多100間-->
+							</tr>
+						</table>
 					</div>
-				</form>
+				</div>
 			</div>
 
 			<!--右邊-->
 			<!--輸入教室編號&設備名稱-->
 			<div class="col">
-				<form class="needs-validation" novalidate  method="POST" action="http://localhost:13588/Classrooms/addClassroom">
 					<!--輸入教室編號-->
 					<div class="row justify-content-start" style="position: relative; top: 40px; left: 10%;">
 						<div class="col-6">
 							<label for="classroomID" class="form-label">教室編號 (例: 101)</label>
 							<br>
-							<input type="text" class="form-control" name="classroomID" placeholder="請輸入教室編號..." value="" required>
+							<input id="classroomID"type="text" class="form-control" name="classroomID" placeholder="請輸入教室編號..." value="" required>
 							<div class="invalid-feedback">請輸入教室編號!</div>
-							{{classroomID}}
 						</div>
 					</div>
 					<!--輸入設備名稱-->
 					<div class="row justify-content-start" style="position: relative; top: 60px; left: 10%;">
-						<div class="col-6">
-							<label for="classroomID" class="form-label">請勾擇教室設備</label>
-							<div class="equipments">
-								<input type="checkbox" class="form-check-input" name="computer" offer="0">
-								<label class="form-check-label" name="computer" for="computer">電腦</label>
-							</div>
-							<div class="equipments">
-								<input type="checkbox" class="form-check-input" name="projector" offer="0">
-								<label class="form-check-label" name="projector" for="projector">投影幕</label>
-							</div>
-							<div class="equipments">
-								<input type="checkbox" class="form-check-input" name="blackboard" offer="0">
-								<label class="form-check-label" name="blackboard" for="blackboard">黑板</label>
-							</div>
-							<div class="equipments">
-								<input type="checkbox" class="form-check-input" name="whiteboard" offer="0">
-								<label class="form-check-label" name="whiteboard" for="whiteboard" >白板</label>
-							</div>
-							<div class="equipments">
-								<label for="equipments" class="form-label" name="equipment1">設備名稱1 (例: USB充電座)</label>
-								<br>
-								<input type="text" class="form-control" name="equipment1" placeholder="請輸入設備名稱..." value="" required>
-								<div class="invalid-feedback">請輸入設備名稱!</div>
-							</div>
-							<div class="equipments">
-								<label for="equipments" class="form-label" name="equipment2">設備名稱2 (例: USB充電座)</label>
-								<br>
-								<input type="text" class="form-control" name="equipment2" placeholder="請輸入設備名稱..." value="" required>
-								<div class="invalid-feedback">請輸入設備名稱!</div>
-							</div>
-							<div class="equipments">
-								<label for="equipments" class="form-label" name="equipment3">設備名稱3 (例: USB充電座)</label>
-								<br>
-								<input type="text" class="form-control" name="equipment3" placeholder="請輸入設備名稱..." value="" required>
-								<div class="invalid-feedback">請輸入設備名稱!</div>
-							</div>
-							<div class="equipments">
-								<label for="equipments" class="form-label" name="equipment4">設備名稱4 (例: USB充電座)</label>
-								<br>
-								<input type="text" class="form-control" name="equipment4" placeholder="請輸入設備名稱..." value="" required>
-								<div class="invalid-feedback">請輸入設備名稱!</div>
-							</div>
-							<div class="equipments">
-								<label for="equipments" class="form-label" name="equipment5">設備名稱5 (例: USB充電座)</label>
-								<br>
-								<input type="text" class="form-control" name="equipment5" placeholder="請輸入設備名稱..." value="" required>
-								<div class="invalid-feedback">請輸入設備名稱!</div>
+							<div class="col-6">
+								<div class="form-check">
+									<input type="checkbox" class="form-check-input" id="computer" name="computer">
+									<label class="form-check-label" name="computer" for="computer">電腦</label>
+								</div>
+								<div class="form-check">
+									<input type="checkbox" class="form-check-input" id="projector" name="projector">
+									<label class="form-check-label" name="projector" for="projector">投影幕</label>
+								</div>
+								<div class="form-check">
+									<input type="checkbox" class="form-check-input" id="blackboard" name="blackboard">
+									<label class="form-check-label" name="blackboard" for="blackboard">黑板</label>
+								</div>
+								<div class="form-check">
+									<input type="checkbox" class="form-check-input" id="whiteboard" name="whiteboard">
+									<label class="form-check-label" name="whiteboard" for="whiteboard" >白板</label>
+								</div>
+								<div>
+									<label for="specialEquipment" class="form-label">其他設備 (例: USB充電座/MAC/...)</label>
+									<input id="specialEquipment" type="text" class="form-control" name="specialEquipment" placeholder="" value=>
+								</div>
 							</div>
 							<div>
-								{{classroomID}}
-								{{computer}}
-								{{projector}}
-								{{blackboard}}
-								{{whiteboard}}
-								{{equipment1}}
-								{{equipment2}}
-								{{equipment3}}
-								{{equipment4}}
-								{{equipment5}}
+								<input id="commonEquipment" name="commonEquipment" type="hidden"></input>
 							</div>
-						</div>
+							<!--
+							<div>
+								{{commonEquipment}}
+								{{specialEquipment}}
+							</div>
+							-->
 					</div>
 					<div class="row justify-content-start" style="position: relative; top: 80px; left: 10%;">
 						<div class="col-5">
-							<input type="submit" name="button" class="btn-sm btn-secondary" value="新增" onclick="add_classroom()">
+							<input id="addBTN" type="submit" name="button" class="btn-sm btn-secondary" value="新增" onclick="add_classroom()">
 						</div>
 					</div>
-				</form>
 			</div>
 
 		</div>
@@ -203,10 +167,9 @@
 						  ["201","203","205","212"],
 						  ["101","105"],
 						  ["B07","B10","B12"]];
-		var newClassroom=document.getElementById("classroomID");
+		var newClassroom=document.getElementById("classrooms");
 		var newfloors, newCell,newIndex;
-		var classroomID=[], floorNumber;
-		var computer,projector,blackboard,whiteboard,equipment1,equipment2,equipment3,equipment4,equipment5;
+		var floorNumber;
 
 		for (var j = 0; j < floors.length; j++) {
 			var newRow = newClassroom.insertRow(j+1);
@@ -219,55 +182,99 @@
 					newCell = newRow.insertCell(i);
 					newCell.innerHTML=classrooms[j][i-1];
 					//newCell.style.backgroudColor="white";
-					//newCell.style.cursor="pointer";
+					newCell.style.cursor="pointer";
+					if (status == 0) newCell.style.background="Lime";
+					else if (status == 1) newCell.style.background="red";
+					else if (status == 2) newCell.style.background="gray";
+					//該教室的狀態
+					//0:未使用
+					//1:使用中
+					//2:無法使用
 				}
 			}
 		}
-
-		//新增教室function
-		function add_classroom(addID){
-			console.log("start!");
-
-			var data = {
-				"classroomID":addID,
-				"computer":computer,
-			    "projector":projector,
-            	"blackboard":blackboard,
-            	"whiteboard":whiteboard,
-				"equipment1":equipment1,
-				"equipment2":equipment2,
-				"equipment3":equipment3,
-				"equipment4":equipment4,
-				"equipment5":equipment5
-			}
-			console.log(addID);
-			
-			//將新增的教室(classroomID)和設備post到後端資料庫
-			$.ajax({
-				type: 'POST',
-				url: "http://localhost:13588/Classrooms/addClassroom",
-				data: JSON.stringify(data),
-				contentType: 'application/json; charset=UTF-8',
-				dataType: 'json',
-				crossOrigin: null,
-
-				success: function (data){
-					console.log("post success! " + addID);
-					location.reload();
-				},
-				error: function (xhr, type){
-					alert(xhr+type);
-				}
-			})
-		}
-
-		//從後端get新增的教室(classroomID)
 		$(document).ready(function(){
-			$.getJSON("http://localhost:13588/Classrooms/addClassroom", function(data){
-				console.log("start!" + data[0].classroomID);
+            $.getJSON("http://localhost:13588/Classrooms/???", function(data){
+                //讀課表
 
-				floorNumber=data[0].classroomID.substr(0, 1);
-				//console.log(floorNumber);
+            });        
+        });
+
+		
+		$('#addBTN').click(
+			function (){
+				console.log("click!");
+
+				if( $("#computer").prop("checked") ){
+					$("#computer").val("1");
+				} else {
+					$("#computer").val("0");
+				}
+
+				if( $("#projector").prop("checked") ){
+					$("#projector").val("1");
+				} else {
+					$("#projector").val("0");
+				}
+
+				if( $("#blackboard").prop("checked") ){
+					$("#blackboard").val("1");
+				} else {
+					$("#blackboard").val("0");
+				}
+
+				if( $("#whiteboard").prop("checked") ){
+					$("#whiteboard").val("1");
+				} else {
+					$("#whiteboard").val("0");
+				}
+				//console.log($("#computer").val() + $("#projector").val() + $("#blackboard").val() + $("#whiteboard").val());
+				$("#commonEquipment").val($("#computer").val() + $("#projector").val() + $("#blackboard").val() + $("#whiteboard").val());
+        	}
+		);
+
+		$("body").on("click","#addBTN", function(){
+			//新增教室function
+				console.log("post start!");
+			
+				var classroomID = $("#classroomID").val();
+				var status = "0";
+				var commonEquipment = $("#commonEquipment").val();
+				var specialEquipment = $("#specialEquipment").val();
+				//console.log(classroomID);
+				//console.log(commonEquipment);
+				//console.log(specialEquipment);
+
+				var data = {
+					"classroomID":classroomID,
+					"status":status,
+					"commonEquipment":commonEquipment,
+					"specialEquipment":specialEquipment
+				}
+				console.log(JSON.stringify(data));
+				
+				//將新增的教室(classroomID)和設備post到後端資料庫
+				$.ajax({
+					type: 'POST',
+					url: "http://localhost:13588/Classrooms/addClassroom",
+					data: JSON.stringify(data),
+					contentType: 'application/json; charset=UTF-8',
+					dataType: 'json',
+					crossOrigin: null,
+
+					success: function (data){
+							console.log("傳送成功");
+							//location.reload();
+					},
+					error: function (xhr, type){
+						console.log("傳送失敗");
+						console.log(xhr+type);
+					}
+				})
+
+				//新增教室到table
+				floorNumber=classroomID.substr(0, 1);
+				console.log(floorNumber);
 				for (var i = 0; i < floors.length; i++) {
 					var len = classrooms[i].length;//每層樓教室數量
 					var isDone = 0;//是否完成新增教室
@@ -277,39 +284,37 @@
 						//插入教室
 						for (var j = 1; j <= len; j++){
 							var number = newClassroom.rows[i+1].cells[j].innerHTML.substr(1, 2);
-							var insertNumber = data[0].classroomID.substr(1, 2);
+							var insertNumber = classroomID.substr(1, 2);
 							
 							//console.log(number);
 							if (number > insertNumber){//每間教室比ID大小
 								newCell = newClassroom.rows[i+1].insertCell(j);
-								newCell.innerHTML = data[0].classroomID;
+								newCell.innerHTML = classroomID;
 								console.log(newClassroom.rows[i+1].cells[j].innerHTML);//新增的教室ID
-								//alert("新增成功!!");
+								alert("新增成功!!");
 								newIndex = j;
-								console.log(newIndex);
-								console.log("新增" + data[0].classroomID + "成功!!");
+								//console.log(newIndex);
+								console.log("新增" + classroomID + "成功!!");
 								isDone = 1;
-								add_classroom(data[0].classroomID);
 								break;
 							}
 						}
 						//新增在最後
 						if (isDone != 1) {
 							newCell = newClassroom.rows[i+1].insertCell(len+1);
-							newCell.innerHTML = data[0].classroomID;
+							newCell.innerHTML = classroomID;
 							console.log(newClassroom.rows[i+1].cells[len+1].innerHTML);//新增的教室ID
-							//alert("新增成功!!");
+							alert("新增成功!!");
 							newIndex = len + 1;
-							console.log(newIndex);
-							console.log("新增" + data[0].classroomID + "成功!!");
+							//console.log(newIndex);
+							console.log("新增" + classroomID + "成功!!");
 							isDone = 1;
-							add_classroom(data[0].classroomID);
 							break;
 						}
 					}
 				}
-			});
-		});
+			}
+		);
 
     </script>
 

@@ -36,8 +36,6 @@
 				font-weight: bold;
 		}
 	</style>
-
-	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 </head>
 <body>
 	<header class="py-3 mb-3 border-bottom">
@@ -81,84 +79,65 @@
 			<!--設備篩選 & 關鍵字搜尋 & 選擇教室-->
 			<div class="col-4">
 				
-				<!-- 設備篩選 -->
-				<form method="POST" action="http://localhost:5000/class_state">
-				<div class="row justify-content-start" style="position: relative; top: 40px; left: 10%;">
-					<h4>設備篩選</h4>
-					<div class="col-6">
-						<div class="form-check">
-							<input type="checkbox" class="form-check-input" id="computer" name="computer">
-							<label class="form-check-label" name="computer" for="computer">電腦</label>
+					<!-- 設備篩選 -->
+					<div class="row justify-content-start" style="position: relative; top: 40px; left: 10%;">
+						<h4>設備篩選</h4>
+						<div class="col-6">
+							<div class="form-check">
+								<input type="checkbox" class="form-check-input" id="computer" name="computer">
+								<label class="form-check-label" name="computer" for="computer">電腦</label>
+							</div>
+							<div class="form-check">
+								<input type="checkbox" class="form-check-input" id="projector" name="projector">
+								<label class="form-check-label" name="projector" for="projector">投影幕</label>
+							</div>
+							<div class="form-check">
+								<input type="checkbox" class="form-check-input" id="blackboard" name="blackboard">
+								<label class="form-check-label" name="blackboard" for="blackboard">黑板</label>
+							</div>
+							<div class="form-check">
+								<input type="checkbox" class="form-check-input" id="whiteboard" name="whiteboard">
+								<label class="form-check-label" name="whiteboard" for="whiteboard" >白板</label>
+							</div>
+							<!-- <input id="filterBTN" type="submit" name="button" class="btn-sm btn-secondary" value="篩選"></input> -->
 						</div>
-						<div class="form-check">
-							<input type="checkbox" class="form-check-input" id="projector" name="projector">
-							<label class="form-check-label" name="projector" for="projector">投影幕</label>
+						<div>
+							<input id="commonEquipment" name="commonEquipment" type="hidden"></input>
 						</div>
-						<div class="form-check">
-							<input type="checkbox" class="form-check-input" id="blackboard" name="blackboard">
-							<label class="form-check-label" name="blackboard" for="blackboard">黑板</label>
-						</div>
-						<div class="form-check">
-							<input type="checkbox" class="form-check-input" id="whiteboard" name="whiteboard">
-							<label class="form-check-label" name="whiteboard" for="whiteboard" >白板</label>
-						</div>
-						<input id="filter" type="submit" name="button" class="btn-sm btn-secondary" value="篩選"></input>
-					</div>
-					<div>
-						<input id="commonEquipment" name="commonEquipment" type="hidden"></input>
-					</div>
-                    <div>
-                        篩選結果: 
-						{{commonEquipment}}
 					</div>
 
-				</form>
-				</div>
-
-				<!--關鍵字搜尋-->
-                <form method="POST" action="http://localhost:5000/class_state">
+					<!--關鍵字搜尋-->
                     <div class="row justify-content-start" style="position: relative; top: 60px; left: 10%;">
 						<h4>關鍵字搜尋</h4>
                         <div class="col-5">
-                            <input type="text" class="form-control" name="searchWord" placeholder="search..." value="" required>
+                            <input id="searchWord" type="text" class="form-control" name="searchWord" placeholder="search..." value="" required>
                         </div>
                         <div class="col">
-							<input type="submit" name="button" class="btn-sm btn-secondary" value="搜尋"></input>
+							<input id="filter_searchBTN" type="submit" name="button" class="btn-sm btn-secondary" value="搜尋"></input>
                         </div>
-						<div>
-							{{searchWord}}
-						</div>
                     </div>
-                </form>
                     
-
-				<form method="GET" action="http://localhost:5000/class_state">
 					<!--選擇教室-->
 					<div class="row d-flex align-items-center" style="position: relative; top: 80px; left: 10%;">
 						<h4>選擇教室</h4>
 						<div class="col-6 d-flex align-items-center table-responsive" style="text-align: center;">
-							<table id="classroomID" class="table table-striped table-sm" style="border-collapse: collapse; cursor: context-menu;">
+							<table id="classrooms" class="table table-striped table-sm" style="border-collapse: collapse; cursor: context-menu;">
 								<tr class="rows">
 									<th scope="col" class="floor">樓層</th>
-									<th scope="col" colspan="20">教室編號</th><!--假設每層樓教室最多20間-->
+									<th scope="col" colspan="100">教室編號</th><!--假設每層樓教室最多100間-->
 								</tr>
 							</table>
 						</div>
 					</div>
-				</form>
-
 			</div>
 			
 			<!--右側-->
 			<!--教室資訊 & 一週教室狀態(表格)-->
 			<div class="col-6">
-				<form method="POST" action="http://localhost:5000/select_classroom">
 
 					<!--1.教室資訊-->
 					<div class="row justify-content-start" style="position: relative; top: 20px; left: 20px;  margin: auto;">
-						<h5> 
-							{{classroomID}}教室使用現況
-						</h5>
+						<h5>教室使用現況</h5>
 					</div>
 
 					<!--2.一週教室狀態(表格)-->
@@ -176,76 +155,209 @@
 							</tr>
 						</table>
 					</div>
-				</form>
 			</div>
 
 		</div>
 	</main>
 	
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+	<!--
+	//post
+	//設備篩選: commonEquipment(回傳字串)
+	//關鍵字搜尋: searchWord
+	-->
 	<script>
-		//設備篩選: commonEquipment回傳字串
-        $("body").on("click","#filter", function(){
-            if( $("#computer").prop("checked") ){
-                $("#computer").val("1");
-            } else {
-                $("#computer").val("0");
-            }
+		$('#filter_searchBTN').click(
+			function(){
+				console.log("click!");
 
-            if( $("#projector").prop("checked") ){
-                $("#projector").val("1");
-            } else {
-                $("#projector").val("0");
-            }
+				if( $("#computer").prop("checked") ){
+					$("#computer").val("1");
+				} else {
+					$("#computer").val("0");
+				}
 
-            if( $("#blackboard").prop("checked") ){
-                $("#blackboard").val("1");
-            } else {
-                $("#blackboard").val("0");
-            }
+				if( $("#projector").prop("checked") ){
+					$("#projector").val("1");
+				} else {
+					$("#projector").val("0");
+				}
 
-            if( $("#whiteboard").prop("checked") ){
-                $("#whiteboard").val("1");
-            } else {
-                $("#whiteboard").val("0");
-            }
-            //console.log($("#computer").val() + $("#projector").val() + $("#blackboard").val() + $("#whiteboard").val());
-            $("#commonEquipment").val($("#computer").val() + $("#projector").val() + $("#blackboard").val() + $("#whiteboard").val());
-            console.log($("#commonEquipment").val());
-        });
-    </script>
-	
-    <script>
+				if( $("#blackboard").prop("checked") ){
+					$("#blackboard").val("1");
+				} else {
+					$("#blackboard").val("0");
+				}
+
+				if( $("#whiteboard").prop("checked") ){
+					$("#whiteboard").val("1");
+				} else {
+					$("#whiteboard").val("0");
+				}
+				//console.log($("#computer").val() + $("#projector").val() + $("#blackboard").val() + $("#whiteboard").val());
+				$("#commonEquipment").val($("#computer").val() + $("#projector").val() + $("#blackboard").val() + $("#whiteboard").val());
+
+				var commonEquipment = $("#commonEquipment").val();
+				var searchWord = $("#searchWord").val();
+
+				//console.log(commonEquipment);
+				//console.log(searchWord);
+				
+				console.log("equipmentFilter");
+
+				var equipmentFilter = {
+					"commonEquipment":commonEquipment
+				}
+				console.log(JSON.stringify(equipmentFilter));
+				
+				//將新增的教室(classroomID)和設備post到後端資料庫
+				$.ajax({
+					type: 'POST',
+					url: "http://localhost:13588/Classrooms/equipmentFilter",
+					data: JSON.stringify(equipmentFilter),
+					contentType: 'application/json; charset=UTF-8',
+					dataType: 'json',
+					crossOrigin: null,
+
+					success: function (data){
+							console.log("傳送成功");
+							//location.reload();
+					},
+					error: function (xhr, type){
+						console.log("傳送失敗");
+						console.log(xhr+type);
+					}
+				})
+
+
+				console.log("searchKeyword");
+
+				var searchKeyword = {
+					"searchWord":searchWord
+				}
+				console.log(JSON.stringify(searchKeyword));
+				
+				//將新增的教室(classroomID)和設備post到後端資料庫
+				$.ajax({
+					type: 'POST',
+					url: "http://localhost:13588/Classrooms/searchKeyword",
+					data: JSON.stringify(searchKeyword),
+					contentType: 'application/json; charset=UTF-8',
+					dataType: 'json',
+					crossOrigin: null,
+
+					success: function (data){
+							console.log("傳送成功");
+							//location.reload();
+					},
+					error: function (xhr, type){
+						console.log("傳送失敗");
+						console.log(xhr+type);
+					}
+				})
+
+			}
+			
+
+
+			,function(){
+			//get
+			//設備篩選 & 關鍵字搜尋 的教室(classroomID)
+			var classroomID1=[],classroomID2=[];
+			var selected=[];
+			var k=0;
+
+			$.getJSON("http://localhost:13588/Classrooms/equipmentFilter", function(data){
+				console.log(data.length);
+                for (var i = 0; i < data.length; i++) {
+                    classroomID1[i]  = data[i].split(",");
+                    console.log(classroomID1[i]);
+				}
+			});
+
+			$.getJSON("http://localhost:13588/Classrooms/searchKeyword", function(data){
+				console.log(data.length);
+                for (var i = 0; i < data.length; i++) {
+                    classroomID2[i]  = data[i].split(",");
+                    console.log(classroomID2[i]);
+				}
+			});
+
+			//比較 (設備篩選or關鍵字搜尋) 的教室(classroomID)
+			for (var i = 0; i < classroomID1.length; i++,k++) {
+				selected[k] = classroomID1[i];
+				
+			}
+			//selected = classroomID1;
+			for (var j = 0; j < classroomID2.length; j++) {
+				for (var i = 0; i < classroomID1.length; i++) {
+					if (classroomID1[i] != classroomID2[j]){
+						selected[k] = classroomID2[j];
+						k++;
+					}
+				}
+			}
+
+			//顯示結果(classroomID), color:yellow
+				if (newClassroom != null) {
+					for (var i = 1; i < newClassroom.rows.length; i++) {
+						for (var j = 1; j < newClassroom.rows[i].cells.length; j++){
+							newClassroom.rows[i].cells[j].style.background="gray";
+							newClassroom.rows[i].cells[j].style.cursor="context-menu";
+						}
+					}
+				}
+				if (newClassroom != null) {
+					while(k--){
+						for (var i = 1; i < newClassroom.rows.length; i++) {
+							for (var j = 1; j < newClassroom.rows[i].cells.length; j++){
+								if (selected[k] == newClassroom.rows[i].cells[j].innerHTML) {
+									newClassroom.rows[i].cells[j].style.background="yellow";
+									newClassroom.rows[i].cells[j].style.cursor="pointer";
+									console.log(newClassroom.rows[i].cells[j].innerHTML+" is same, color: "+newClassroom.rows[i].cells[j].style.background);
+								}
+							}
+						}
+					}
+				}
+			}
+		);
+
 		//教室table
-        const floors=["6","5","4","3","2","1","B1"];
-        const classrooms=[["606","666"],
+        var floors=["6","5","4","3","2","1","B1"];
+        var classroom=[["606","666"],
 						  ["505","555"],
 					  	  ["407","409"],
 						  ["301","303"],
 						  ["201","203","205","212"],
 						  ["101","105"],
 						  ["B07","B10","B12"]];
-		var classroomID=document.getElementById("classroomID");
+		var newClassroom=document.getElementById("classrooms");
 		var newfloors, newCell;
 
 		for (var j = 0; j < floors.length; j++) {
-			var newRow = classroomID.insertRow(j+1);
-			for (var i = 0; i < classrooms[j].length+1; i++) {
+			var newRow = newClassroom.insertRow(j+1);
+			for (var i = 0; i < classroom[j].length+1; i++) {
 				if (i == 0) {
 					newfloors = newRow.insertCell(i);
 					newfloors.innerHTML=floors[j];
 				}
 				else {
 					newCell = newRow.insertCell(i);
-					newCell.innerHTML=classrooms[j][i-1];
+					newCell.innerHTML=classroom[j][i-1];
 					//newCell.style.backgroudColor="white";
 					newCell.style.cursor="pointer";
 				}
 			}
 		}
 
+		
+
+
+
 		//點選要檢視的教室
-		var table = document.getElementById("classroomID");
+		var table = document.getElementById("classrooms");
         if (table != null) {
             for (var i = 1; i < table.rows.length; i++) {
                 for (var j = 1; j < table.rows[i].cells.length; j++)
@@ -255,39 +367,41 @@
             }
         }
         function tableText(tableCell) {
+			//post: classroomID ,get: 教室狀態(status) 課程名稱(courseName)
             //console.log(tableCell.innerHTML);
 			
-			var classroomID = tableCell.innerHTML;
-			console.log("click:" + classroomID);
+			var query_classroomID = tableCell.innerHTML;
+			var query=1;
+
+			console.log("click:" + query_classroomID);
 			console.log("開始post到資料庫...");
 
 			var data = {
-				"classroomID":classroomID
-			}
+				"classroomID":query_classroomID
+			}	
 
-			console.log(data);
+			console.log("跳到 " + window.location.href);
+			console.log(JSON.stringify(data));
 
-			//將教室(classroomID)post到後端資料庫
+			//將要查詢的教室(classroomID)post到後端資料庫
 			$.ajax({
 				type: 'POST',
-				url: "http://localhost:5000/class_state",
+				url: "http://localhost:13588/Classrooms/selectClassroom",
 				data: JSON.stringify(data),
 				contentType: 'application/json; charset=UTF-8',
 				dataType: 'json',
-				//crossOrigin: null,
-				
-
+				crossOrigin: null,
+					
 				success: function (data){
 					console.log("傳送成功");
-					console.log(JSON.stringify(data));
-					location.reload();
+					//location.reload();
 				},
 				error: function (xhr, type){
+					console.log("傳送失敗");
 					console.log(xhr+type);
-					console.log(JSON.stringify(data));
 				}
-			})
-		
+			});
+
         }
     </script>  
 
@@ -314,7 +428,7 @@
 				else {
             		newCell = newRow.insertCell(i);
               	    newCell.innerHTML = "";
-              	    if (status == 0) newCell.style.background="green";
+              	    if (status == 0) newCell.style.background="lime";
               	    else if (status == 1) newCell.style.background="red";
               	    else if (status == 2) newCell.style.background="gray";
 					//該教室的狀態
