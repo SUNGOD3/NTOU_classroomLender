@@ -70,7 +70,8 @@
                                 var str = data[i]
                                 console.log(str);
                                 content += "<tr>" + "<td>" + str[0] + "</td>" + "<td>" + str[2] + "</td>" + "<td>" + str[4] + "~" + str[5] + "</td>";
-                                if(str[5]==""){
+                               
+                                if(!str[5]){
                                     content += "<td>" + "No" + "</td>";
                                 }else{
                                     content += "<td>" + "Yes" + "</td>";

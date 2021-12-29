@@ -379,6 +379,7 @@ def postReject():
     info['schoolName'] = request.json['schoolName']
     connection = pymysql.connect(host=cfg['db']['host'],user=cfg['db']['user'],password=cfg['db']['password'],db=cfg['db']['database'])
     cursor=connection.cursor()
+    print('hello')
     cursor.execute("UPDATE Users SET apply =%(apply)s WHERE schoolName=%(schoolName)s",{'apply': 0,'schoolName':info['schoolName']})
     connection.commit()
     return jsonify(info)
@@ -531,6 +532,7 @@ def modifyUserInfo():
     info['userName'] = request.json['userName']
     info['status'] = request.json['status']
     info['Email'] = request.json['Email']
+    print(info)
     try:
         insertString = 'UPDATE Users SET userName = (%(userName)s) , status = (%(status)s) , Email = (%(Email)s)  WHERE schoolName=(%(schoolName)s);'
         cursor.execute(insertString, {'userName':info['userName'],'status':info['status'],'Email':info['Email'],'schoolName':info['schoolName']})
