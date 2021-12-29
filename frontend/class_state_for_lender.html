@@ -202,11 +202,10 @@
 		var newfloors, newCell, newIndex;
 		var countid=0;
 		$(document).ready(function(){
-				var data = {
-					"classroomID":classroomID
-				}
-				console.log("post equipmentFilter: " + JSON.stringify(data));
-				$.ajax({
+			var data={
+				"classroomID":classroomID
+			}
+			$.ajax({
 					type: 'GET',
 					url: "http://localhost:13588/Classrooms/getClassrooms",
 					data: JSON.stringify(data),
@@ -248,6 +247,7 @@
 								}
 							}
 						}
+						//window.location.reload()  //重新整理頁面
 					},
 					error: function (xhr, type){
 						console.log("傳送失敗");
@@ -256,7 +256,6 @@
 				}) 
         });
 
-		
 		
 		//post 設選篩選+關鍵字搜尋 到資料庫
 		//讀取 設備篩選&關鍵字搜尋 的教室(classroomID)

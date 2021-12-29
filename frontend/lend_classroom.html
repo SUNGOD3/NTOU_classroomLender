@@ -47,7 +47,7 @@
                 <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownNavLink">
                     <li><a class="dropdown-item" href="class_state_for_lender.html"><span>檢視教室狀態</span></a></li>
                     <li><a class="dropdown-item" href="lend_classroom.html"><span>借用教室</span></a></li>
-                    <li><a class="dropdown-item" href="history_for_lender.html"><span>檢視歷史</span></a></li>
+                    <li><a class="dropdown-item" href="history.html"><span>檢視歷史</span></a></li>
                     <li><a class="dropdown-item" href="apply_for_maneger.html"><span>申請成為管理員</span></a></li>
                 </ul>
             </div>
@@ -307,6 +307,7 @@
 			}
 		}
 				
+
 		//讀入資料庫現有教室
 		const floors=["6","5","4","3","2","1","B1"];
 		const classrooms=[];
@@ -314,11 +315,10 @@
 		var newfloors, newCell, newIndex;
 		var countid=0;
 		$(document).ready(function(){
-				var data = {
-					"classroomID":classroomID
-				}
-				console.log("post equipmentFilter: " + JSON.stringify(data));
-				$.ajax({
+			var data={
+				"classroomID":classroomID
+			}
+			$.ajax({
 					type: 'GET',
 					url: "http://localhost:13588/Classrooms/getClassrooms",
 					data: JSON.stringify(data),
@@ -360,6 +360,7 @@
 								}
 							}
 						}
+						//window.location.reload()  //重新整理頁面
 					},
 					error: function (xhr, type){
 						console.log("傳送失敗");
@@ -367,8 +368,8 @@
 					}
 				}) 
         });
-
 		
+
 		//post 設選篩選+關鍵字搜尋 到資料庫
 		//讀取 設備篩選&關鍵字搜尋 的教室(classroomID)
 		var classroomID1=[],classroomID2=[];
@@ -422,9 +423,6 @@
 					contentType: 'application/json; charset=UTF-8',
 					dataType: 'json',
 					crossOrigin: null,
-					xhrFields: {
-						withCredentials: true
-					},
 
 					success: function (data){
 						console.log("傳送成功" + JSON.stringify(data));
@@ -457,9 +455,6 @@
 					contentType: 'application/json; charset=UTF-8',
 					dataType: 'json',
 					crossOrigin: null,
-					xhrFields: {
-						withCredentials: true
-					},
 
 					success: function (data){
 						console.log("傳送成功" + JSON.stringify(searchKeyword));
@@ -560,9 +555,6 @@
 						contentType: 'application/json; charset=UTF-8',
 						dataType: 'json',
 						crossOrigin: null,
-						xhrFields: {
-							withCredentials: true
-						},
 							
 						success: function (data){
 							console.log("傳送ID成功");
@@ -676,9 +668,6 @@
 					contentType: 'application/json; charset=UTF-8',
 					dataType: 'json',
 					crossOrigin: null,
-					xhrFields: {
-						withCredentials: true
-					},
 					
 					success: function (data){
 						alert("申請成功!");
