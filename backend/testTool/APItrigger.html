@@ -197,7 +197,7 @@
     </form>
     testgetuserinfo
 
-    <form  method="post">
+    <form  action = "http://localhost:13588/users/getUserInfo" method="post">
         schoolName:<input id="schoolName">
         <br>
         <button type="button" onclick="javascript: postFunc_get_user_info()">送出表單</button>
@@ -256,5 +256,14 @@
 
         };
     </script>
+
+    <form action="http://localhost:13588/history/checkReturnClassroom" method="post">
+        schoolName:<input name="schoolName"></input><br>
+        classroomID:<input name="classroomID"></input><br>
+        lendTime:<input name="lendTime"></input><br>
+        lendWeekDay:<input name="lendWeekDay"></input><br>
+        <input type="submit" value="送出表單">
+        <hr>
+    </form>
 </body>
 </html>

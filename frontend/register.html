@@ -51,7 +51,8 @@
         <p class="subtitle">
             註冊新帳號
         </p>
-        <form method="POST" target="_self" action="http://localhost:5000/register">
+        <!--http://localhost:13588/users/register http://localhost:5000/register-->
+        <form method="POST" target="_self" action="http://localhost:13588/users/register">
             <br>
             <div class="form-floating">
                 <input type="text" class="form-control" id="schoolName" placeholder="學號" name="schoolName" size="32">
@@ -117,6 +118,9 @@
                 data: JSON.stringify(data),
                 contentType: 'application/json; charset=UTF-8',
                 dataType: 'json',
+                xhrFields: {
+                        withCredentials: true
+                    },
                 success: function (data) {
                     alert(data);
                     window.location.href = "index.html";

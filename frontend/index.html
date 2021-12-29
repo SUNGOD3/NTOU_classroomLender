@@ -129,7 +129,6 @@
         function postFunc() {
             var schoolName = document.getElementById("schoolName").value;
             var password = document.getElementById("password").value;
-            //sessionStorage.schoolName = schoolName;
 
             var data={
                 "schoolName": schoolName,
@@ -143,18 +142,21 @@
             data: JSON.stringify(data),
             contentType: 'application/json; charset=UTF-8' ,
             dataType: 'json' ,
+            crossDomain: true,
+            xhrFields: {
+                withCredentials: true
+            },
             success: function (data) {
-                console.log(data);
-                if (data.isAdmin == 0) {
-                    location.href = "lender_func.html";
+                console.log(data);                
+                if (data.errors!="") {
+                    alert("未順利登入" + data.errors);
                 }
                 else if (data.isAdmin == 1) {
                     location.href = "new_manager-func.html";
                 }
-                else {
-                    alert("未順利登入" + data.error);
-                }
-                
+                else if (data.isAdmin == 0){
+                    location.href = "lender_func.html";
+                }                
             },
             error: function (xhr, type) {
             alert(xhr + type);

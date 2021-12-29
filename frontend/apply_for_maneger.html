@@ -153,6 +153,9 @@
                 data: JSON.stringify(data),
                 contentType: 'application/json; charset=UTF-8',
                 dataType: 'json',
+                xhrFields: {
+                        withCredentials: true
+                    },
                 success: function (data) {
                         console.log(data)
                         alert(data)

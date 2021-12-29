@@ -41,20 +41,28 @@
                 //http://localhost:13588/users/login http://localhost:5001/login
                 console.log(data);
                 $.ajax({
-                type: 'POST' ,
-                url: "http://localhost:13588/users/info" ,
-                data: JSON.stringify(data),
-                contentType: 'application/json; charset=UTF-8' ,
-                dataType: 'json' ,
-                success: function (data) {
-                    console.log(data);
-                    alert("資訊修改成功");
-                    //頁面跳轉
-                    window.location.href = "new_manager-func.html";
-                },
-                error: function (xhr, type) {
-                    alert(xhr + type);
-                }
+                    type: 'POST' ,
+                    url: "http://localhost:13588/users/info" ,
+                    data: JSON.stringify(data),
+                    contentType: 'application/json; charset=UTF-8' ,
+                    dataType: 'json' ,
+                    crossDomain: true,
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    success: function (data) {
+                        console.log(data);
+                        if(data.errors.length!=0){
+                            alert(data.errors+"!請再試一次!");
+                        }else{
+                            alert("資訊修改成功");
+                        }
+                        //頁面跳轉
+                        window.location.href = "new_manager-func.html";
+                    },
+                    error: function (xhr, type) {
+                        alert(xhr + type);
+                    }
                 });
             };
         </script>

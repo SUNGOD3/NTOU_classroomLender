@@ -146,7 +146,7 @@ def checkRegisterRequest(data):
     return Errors
 
 users=Blueprint("users",__name__) 
-CORS(users)
+CORS(users,resources={r"/*": {"origins": "*"}},supports_credentials=True)
 #for cut path
 @users.route('/')
 def index():
@@ -213,7 +213,7 @@ def login():
             session.permanent = True
             #add a schoolName into session use session to timeout
             session['schoolName']=row[1]
-            print(session['schoolName'])
+            print(session.get('schoolName'))
             print(1)
         else:
             Errors.append('password error')
@@ -425,12 +425,16 @@ def info():
     info = dict()
     errors=[]
     cursor=connection.cursor()
+    print(0)
     info['userName'] = request.json['userName']
     info['phoneNumber'] = request.json['phoneNumber']
     info['password'] = request.json['password']
+    print(00)
     print(info)
     try:
         if len(info['userName'])>0:
+            print(2)
+            print(session.get('schoolName'))
             cursor.execute("UPDATE Users SET userName=%(userName)s  WHERE schoolName = %(schoolName)s",{'userName':info['userName'],'schoolName':session.get('schoolName')})
             connection.commit()
         if len(info['phoneNumber'])>0:
