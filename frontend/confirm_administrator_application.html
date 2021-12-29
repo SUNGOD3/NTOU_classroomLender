@@ -41,10 +41,52 @@
             var schoolName = [];
 
             //去後端get提出成為管理員申請人的學號(schoolName)和姓名(userName)
+            
             $(document).ready(function(){
                 //http://localhost:5000/see_classroom_history http://localhost:13588/users/confirmApply
+
+                $.ajax({
+                    type: 'GET',
+                    url: "http://localhost:13588/users/confirmApply",
+                    contentType: 'application/json; charset=UTF-8',
+                    dataType: 'json',
+                    crossOrigin: null,
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    
+                    success: function (data){
+                       // alert(data);
+                       let content = "";
+
+                        if(data.errors.length!=0){
+                            alert(data.errors);
+                        }else{
+
+                            console.log(data);
+                            data = data.users;
+                            console.log(data);
+
+                            for(let i=0;i<data.length;i++){
+                                var str = data[i].split(",");
+                                console.log(str);
+                                content += "<tr>"+"<td>"+str[1]+"</td>"+"<td>"+"<input class='b' type='button' onclick= 'confirm("+ i +")' value='確認'>"+"</td>"+"<td>"+"<input class='b' type='button' onclick= 'reject("+ i +")' value='拒絕'>"+"</td>"+ "</tr>";
+                           
+                                schoolName[i] = str[0];
+                           
+                            }
+                            document.getElementById("confirm_table").innerHTML = (content);
+                        }
+                    },
+
+                    error: function (xhr, type){
+                        alert(xhr+type);
+                    }
+                })
+
+                /*
                 $.getJSON("http://localhost:13588/users/confirmApply", function(data){
-                    /*alert("data: " + data.userName);*/
+                    
                     
                         let content = "";
 
@@ -66,7 +108,7 @@
                             }
 
                         }
-
+                */
                                    
 
     
@@ -80,9 +122,9 @@
                     
                     
                     //console.log(content);
-                    document.getElementById("confirm_table").innerHTML = (content);
+                    //document.getElementById("confirm_table").innerHTML = (content);
                     
-            });
+                //});
             });
 
             //允許升級成為管理員

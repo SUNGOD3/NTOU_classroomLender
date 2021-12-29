@@ -9,11 +9,14 @@ import hashlib
 import random
 import string
 import datetime
+from flask_cors import CORS
 
 with open('config.yml', 'r') as f:
     cfg = yaml.safe_load(f)
 
 Classrooms=Blueprint("Classrooms",__name__) 
+CORS(Classrooms,resources={r"/*": {"origins": "*"}},supports_credentials=True)
+
 #for cut path
 @Classrooms.route('/')
 def index():

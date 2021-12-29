@@ -48,6 +48,54 @@
                 $(document).ready(function(){
                     //get_Applicationforms
                     //http://localhost:5000/lend_classroom http://localhost:13588/ApplicationForms/getApplicationForms
+
+                    $.ajax({
+                        type: 'GET',
+                        url: "http://localhost:13588/ApplicationForms/getApplicationForms",
+                        contentType: 'application/json; charset=UTF-8',
+                        dataType: 'json',
+                        crossOrigin: null,
+                        xhrFields: {
+                        withCredentials: true
+                        },
+                        
+                        success: function (data){
+                            let content = "";
+
+                            if(data.errors.length!=0){
+                                alert(data.errors);
+                            }else{
+
+                                console.log(data);
+
+                                content = "<tr><th>姓名</th><th>教室編號</th><th>使用時間</th><th>使用星期</th></tr>";
+
+                                data = data.data;
+                                console.log(data.length);
+                                for(let i=0;i<data.length;i++){
+                                        var str = data[i].split(",");
+                                        console.log(str);
+                                        content += "<tr>" + "<td>"+str[1]+"</td>"+"<td>"+str[2]+"</td>"+"<td>"+str[3]+"~"+str[4]+"</td>"+"<td>"+str[5]+"</td>"+"<td>"+"<input class='b' type='button' onclick= 'confirm("+ i +")' value='確認'>"+"</td>"+"<td>"+"<input class='b' type='button' onclick= 'reject("+ i +")' value='拒絕'>"+"</td>"+ "</tr>";
+                                    
+                                        schoolName[i] = str[0];
+                                        classroomID[i] = str[2];
+                                        lendTime[i] = str[3];
+                                        returnTime[i] = str[4];
+                                        weekDay[i] = str[5];
+                                
+                                }
+
+                                document.getElementById("lend_classroom_table").innerHTML = (content);                                
+
+                            }
+                        },
+
+                        error: function (xhr, type){
+                            alert(xhr+type);
+                        }
+                    })
+                    
+                    /*
                     $.getJSON("http://localhost:13588/ApplicationForms/getApplicationForms", function(data){
 
                         let content = "";
@@ -79,7 +127,7 @@
 
                         }
 
-                        
+                       */ 
 
                         /*
                         for(let i=0;i<data.length;i++){
@@ -105,10 +153,10 @@
                             }
                         */
 
-                        console.log(content);
-                        document.getElementById("lend_classroom_table").innerHTML = (content);
+                       // console.log(content);
+                       // document.getElementById("lend_classroom_table").innerHTML = (content);
                         
-                });
+               // });
                 });
 
                 //確認借出申請
@@ -136,6 +184,9 @@
                     contentType: 'application/json; charset=UTF-8',
                     dataType: 'json',
                     crossOrigin: null,
+                    xhrFields: {
+                        withCredentials: true
+                    },
                     
                     success: function (data){
                         //alert(data+"已確認歸還!!!");

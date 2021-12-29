@@ -14,7 +14,7 @@ with open('config.yml', 'r') as f:
     cfg = yaml.safe_load(f)
     
 ApplicationForms=Blueprint("ApplicationForms",__name__) 
-CORS(ApplicationForms)
+CORS(ApplicationForms,resources={r"/*": {"origins": "*"}},supports_credentials=True)
 
 #for cut path
 @ApplicationForms.route('/')

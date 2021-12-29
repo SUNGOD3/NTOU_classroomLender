@@ -6,6 +6,7 @@ import yaml
 import traceback
 import string
 import smtplib
+from flask_cors import CORS
 
 with open('config.yml', 'r') as f:
     cfg = yaml.safe_load(f)
@@ -17,6 +18,7 @@ GmailAccount=mailUserData['GmailAccount']['Account']
 Gmailpasswd=mailUserData['GmailAccount']['password']
 
 Email=Blueprint("Email",__name__)
+CORS(Email,resources={r"/*": {"origins": "*"}},supports_credentials=True)
 
 @Email.route('/')
 def index():
