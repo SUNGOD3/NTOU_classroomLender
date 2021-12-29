@@ -105,7 +105,7 @@ def returnClassroom():
                 info['lendTime'].append(i[3].strftime('%Y/%m/%d %H:%M:%S'))
                 info['returnTime'].append(i[4])
                 info['lendWeekDay'].append(i[5])
-                info['returnWeekDay'].append(i[6])
+                info['returnWeekDay'].append(i[6])      
             
                 
     except Exception: #get exception if there's still occured something wrong
@@ -175,7 +175,6 @@ def checkReturnClassroom():
             errors = 'checkLendClassroom fail'
     info['errors'] = errors
     return jsonify(info)
-
 #   email confirm undo
 #   if a user input an error email (but legal), his student's ID fucked up. 
 
