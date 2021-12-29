@@ -62,7 +62,7 @@
                     <li><a class="dropdown-item" href="class_state.html"><span>檢視教室狀態</span></a></li>
                     <li><a class="dropdown-item" href="lend_classroom.html"><span>借用教室</span></a></li>
                     <li><a class="dropdown-item" href="history.html"><span>檢視歷史</span></a></li>
-                    <li><a class="dropdown-item" href="#"><span>申請成為管理員</span></a></li>
+                    <li><a class="dropdown-item" href="apply_for_maneger.html"><span>申請成為管理員</span></a></li>
                 </ul>
             </div>
 
@@ -76,10 +76,10 @@
                     <!-- alt="mdo" -->
                 </a>
                 <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
-                    <li><a class="dropdown-item" href="#">查看個人資料</a></li>
-                    <li><a class="dropdown-item" href="modify_info.html" target="ibody">更改個人資料</a></li>
+                    <!--<li><a class="dropdown-item" href="#">查看個人資料</a></li>-->
+                    <li><a class="dropdown-item" href="change-personal-info.html" target="ibody">更改個人資料</a></li>
                     <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="#">登出</a></li>
+                    <li><a class="dropdown-item" href="index.html">登出</a></li>
                 </ul>
             </div>
 
@@ -153,7 +153,11 @@
                 data: JSON.stringify(data),
                 contentType: 'application/json; charset=UTF-8',
                 dataType: 'json',
+                xhrFields: {
+                        withCredentials: true
+                    },
                 success: function (data) {
+                        console.log(data)
                         alert(data)
                 },
                 error: function (xhr, type) {

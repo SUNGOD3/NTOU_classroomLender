@@ -61,8 +61,8 @@
                     功能選單
                 </a>
                 <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownNavLink">
-                    <li><a class="dropdown-item" href="#"><span>確認借出教室</span></a></li>
-                    <li><a class="dropdown-item" href="#"><span>確認歸還教室</span></a></li>
+                    <li><a class="dropdown-item" href="check_lend_classroom.html"><span>確認借出教室</span></a></li>
+                    <li><a class="dropdown-item" href="check_return_classroom.html"><span>確認歸還教室</span></a></li>
                     <li><a class="dropdown-item" href="add_classroom.html"><span>新增教室</span></a></li>
                     <li><a class="dropdown-item" href="delete_classroom.html"><span>刪除教室</span></a></li>
                     <li><a class="dropdown-item" href="class_state.html"><span>檢視教室狀態</span></a></li>
@@ -70,8 +70,8 @@
                     <!-- <li><a class="dropdown-item" href="#"><span>修改借用人狀態</span></a></li> -->
                     <li><a class="dropdown-item" href="check_all_user.html"><span>檢視借用人資訊</span></a></li>
                     <li><a class="dropdown-item" href="history.html"><span>檢視歷史</span></a></li>
-                    <li><a class="dropdown-item" href="#"><span>確認管理員申請</span></a></li>
-                    <li><a class="dropdown-item" href="#">修改一般管理員權限</a></li>
+                    <li><a class="dropdown-item" href="confirm_administrator_application.html"><span>確認管理員申請</span></a></li>
+                    <li><a class="dropdown-item" href="lower_authority.html">修改一般管理員權限</a></li>
                 </ul>
             </div>
 
@@ -84,10 +84,10 @@
                     <img src="ntou_logo.png" width="32" height="32" class="rounded-circle">
                 </a>
                 <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
-                    <li><a class="dropdown-item" href="#">查看個人資料</a></li>
+                    <li><a class="dropdown-item" href="change-personal-info.html">查看個人資料</a></li>
                     <li><a class="dropdown-item" href="modify_info.html" target="ibody">更改個人資料</a></li>
                     <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="#">登出</a></li>
+                    <li><a class="dropdown-item" href="index.html">登出</a></li>
                 </ul>
             </div>
 
@@ -124,8 +124,8 @@
     <script>
 
         $(document).ready(function () {
-
-            $.get("http://localhost:5000/check_all_user", function (data) {                
+            //http://localhost:13588/users/checkAllUser http://localhost:5000/check_all_user
+            $.get("http://localhost:13588/users/checkAllUser", function (data) {                
                 let content = "";
                 for (let i = 0; i < data.length; i++) {
                     content += "<tr>" + "<td id='schoolName" + i + "'>" + data[i].schoolName + "</td> " + "<td>" + data[i].userName + "</td> " + "<td>" + data[i].Email + "</td>" + "<td>" + data[i].status + "</td>" + "<td><a href='modify_user.html' target='_blank' onclick='javascript: postFunc(" + i + ")'>修改</a></td>" + "</tr>";
@@ -145,13 +145,16 @@
             alert("schoolName" + index);
             data.schoolName = document.getElementById("schoolName" + index).innerHTML;
 
-
+            //http://localhost:13588/users/getUserInfo http://localhost:5001/user_infro
             $.ajax({
                 type: 'POST',
-                url: "http://localhost:5001/user_infro",
+                url: "http://localhost:13588/users/getUserInfo",
                 data: JSON.stringify(data),
                 contentType: 'application/json; charset=UTF-8',
                 dataType: 'json',
+                xhrFields: {
+                        withCredentials: true
+                },
                 success: function (data) {
                     alert(data);
                 },

@@ -57,11 +57,10 @@
                         }else{
 
                             console.log(data);
-                            data = data.data;
-                            console.log(data);
 
                             content = "<tr><th>姓名</th><th>教室編號</th><th>使用時間</th><th>使用星期</th></tr>";
 
+                            data = data.data;
                             console.log(data.length);
                             for(let i=0;i<data.length;i++){
                                     var str = data[i].split(",");
@@ -75,6 +74,8 @@
                                     weekDay[i] = str[5];
                             
                             }
+
+                            
 
                         }
 
@@ -168,6 +169,9 @@
                     data: JSON.stringify(data),
                     contentType: 'application/json; charset=UTF-8',
                     dataType: 'json',
+                    xhrFields: {
+                        withCredentials: true
+                    },
                     
                     success: function (data){
                         alert("已取消借出申請!!!");

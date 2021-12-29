@@ -61,16 +61,16 @@
                     功能選單
                 </a>
                 <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownNavLink">
-                    <li><a class="dropdown-item" href="#"><span>確認借出教室</span></a></li>
-                    <li><a class="dropdown-item" href="#"><span>確認歸還教室</span></a></li>
+                    <li><a class="dropdown-item" href="check_lend_classroom.html"><span>確認借出教室</span></a></li>
+                    <li><a class="dropdown-item" href="check_return_classroom.html"><span>確認歸還教室</span></a></li>
                     <li><a class="dropdown-item" href="add_classroom.html"><span>新增教室</span></a></li>
                     <li><a class="dropdown-item" href="delete_classroom.html"><span>刪除教室</span></a></li>
                     <li><a class="dropdown-item" href="class_state.html"><span>檢視教室狀態</span></a></li>
                     <li><a class="dropdown-item" href="modify_classroom.html"><span>修改教室狀態</span></a></li>
                     <li><a class="dropdown-item" href="check_all_user.html"><span>檢視借用人資訊</span></a></li>
                     <li><a class="dropdown-item" href="history.html"><span>檢視歷史</span></a></li>
-                    <li><a class="dropdown-item" href="#"><span>確認管理員申請</span></a></li>
-                    <li><a class="dropdown-item" href="#">修改一般管理員權限</a></li>
+                    <li><a class="dropdown-item" href="confirm_administrator_application.html"><span>確認管理員申請</span></a></li>
+                    <li><a class="dropdown-item" href="lower_authority.html">修改一般管理員權限</a></li>
                 </ul>
             </div>
 
@@ -83,10 +83,10 @@
                     <img src="ntou_logo.png" width="32" height="32" class="rounded-circle">
                 </a>
                 <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
-                    <li><a class="dropdown-item" href="#">查看個人資料</a></li>
-                    <li><a class="dropdown-item" href="modify_info.html" target="ibody">更改個人資料</a></li>
+                    <!--<li><a class="dropdown-item" href="#">查看個人資料</a></li>-->
+                    <li><a class="dropdown-item" href="change-personal-info.html" target="ibody">更改個人資料</a></li>
                     <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="#">登出</a></li>
+                    <li><a class="dropdown-item" href="index.html">登出</a></li>
                 </ul>
             </div>
 
@@ -121,12 +121,25 @@
     <script>
 
         $(document).ready(function () {
-
-            $.get("http://localhost:5000/check_all_manager", function (data) {                
+            //http://localhost:13588/users/checkAllManager http://localhost:5000/check_all_manager
+            $.get("http://localhost:13588/users/checkAllManager", function (data) {                
                 let content = "";
+                console.log(data);
+
+                console.log(data);
+                data = data.users;
+                for(let i=0;i<data.length;i++){
+                    var str = data[i];
+                    console.log(str);
+                    str = str.split(',');
+                    content += "<tr>" + "<td id='schoolName" + i + "'>" + str[0] + "</td> " + "<td>" + str[1] + "</td> " + "<td><button type='button' onclick='javascript: confirm_again(" + i + ")'>降級</button></td>" + "</tr>";
+                    
+                }
+                /*
                 for (let i = 0; i < data.length; i++) {
                     content += "<tr>" + "<td id='schoolName" + i + "'>" + data[i].schoolName + "</td> " + "<td>" + data[i].userName + "</td> " + "<td><button type='button' onclick='javascript: confirm_again(" + i + ")'>降級</button></td>" + "</tr>";
                 }
+                */
                 document.getElementById("data_table").innerHTML = content;
             });
 
@@ -178,23 +191,27 @@
             var index = i;
             //alert("schoolName" + index);
             data.schoolName = document.getElementById("schoolName" + index).innerHTML;
-
-
+            console.log(data);
+            //http://localhost:13588/users/downGrade http://localhost:5001/downgrade
             $.ajax({
                 type: 'POST',
-                url: "http://localhost:5001/downgrade",
+                url: "http://localhost:13588/users/downGrade",
                 data: JSON.stringify(data),
                 contentType: 'application/json; charset=UTF-8',
                 dataType: 'json',
-                //success: function (data) {
-                //        alert(data)
-                //},
+                xhrFields: {
+                        withCredentials: true
+                    },
+                success: function (data) {
+                        alert(data);
+                        console.log(data);
+                },
                 error: function (xhr, type) {
                     alert(xhr + type);
                 }
             });
             
-            location.reload();
+            //location.reload();
             alert("自動重整頁面以得到後更新資訊");
         };
     </script>

@@ -38,6 +38,7 @@
         }
 
     </style>
+
 </head>
 
 <body>
@@ -50,7 +51,7 @@
         <p class="subtitle">
             註冊新帳號
         </p>
-        <!--http://localhost:5000/register http://localhost:13588/users/register-->
+        <!--http://localhost:13588/users/register http://localhost:5000/register-->
         <form method="POST" target="_self" action="http://localhost:13588/users/register">
             <br>
             <div class="form-floating">
@@ -59,12 +60,15 @@
             </div>
             <br>
             <div class="form-floating">
-                <input type="text" class="form-control" id="password" placeholder="密碼" name="password">
+
+                <input type="password" class="form-control" id="password" placeholder="密碼" name="password">
                 <label for="floatingInput">密碼</label>
             </div>
             <br>
             <div class="form-floating">
-                <input type="text" class="form-control" id="passwdConfirm" placeholder="密碼" name="passwdConfirm">
+
+                <input type="password" class="form-control" id="passwdConfirm" placeholder="密碼" name="passwdConfirm">
+
                 <label for="floatingInput">確認密碼</label>
             </div>
             <br>
@@ -96,7 +100,9 @@
         function postFunc() {
             var schoolName = document.getElementById("schoolName").value;
             var password = document.getElementById("password").value;
-            var passwdConfirm = document.getElementById("passwdConfirm").value;
+
+            var passwordConfirm = document.getElementById("passwdConfirm").value;
+
             var userName = document.getElementById("userName").value;
             var phoneNumber = document.getElementById("phoneNumber").value;
             var Email = document.getElementById("Email").value;
@@ -105,7 +111,8 @@
                 "schoolName": schoolName,
                 "password": password,
                 "userName": userName,
-                "passwdConfirm": passwdConfirm,
+                "passwdConfirm": passwordConfirm,
+
                 "phoneNumber": phoneNumber,
                 "Email": Email
             }
@@ -117,8 +124,13 @@
                 data: JSON.stringify(data),
                 contentType: 'application/json; charset=UTF-8',
                 dataType: 'json',
+
+                xhrFields: {
+                        withCredentials: true
+                    },
                 success: function (data) {
                     alert(data);
+                    window.location.href = "index.html";
                 },
                 error: function (xhr, type) {
                     alert(xhr + type);
@@ -126,6 +138,7 @@
             });
         };
     </script>
+
 </body>
 
 </html>

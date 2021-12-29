@@ -19,7 +19,7 @@ with open('config.yml', 'r') as f:
 
 
 history=Blueprint("history",__name__) 
-CORS(history)
+CORS(history,resources={r"/*": {"origins": "*"}},supports_credentials=True)
 
 
 #for cut path
@@ -38,6 +38,7 @@ def checkLendClassroom():
     info['lendTime'] = request.json['lendTime']
     info['weekDay'] = request.json['weekDay']
     info['confirmType'] = request.json['confirmType']
+    print(info)
     try:
         #update user state first
         if info['confirmType'] == '1':
@@ -63,8 +64,8 @@ def checkLendClassroom():
             info['userName'] = rows[0][1]
             info['reason'] = rows[0][2]
             #insert new data to history
-            insertString = 'INSERT INTO History(classroomID,courseName,userName,schoolName,lendTime,returnTime,reason)values(%(classroomID)s,%(courseName)s,%(userName)s,%(schoolName)s,%(lendTime)s,NULL,%(reason)s);'
-            cursor.execute(insertString,{'classroomID':info['classroomID'],'courseName':info['courseName'],'userName':info['userName'],'schoolName':info['schoolName'],'lendTime':info['lendTime'],'reason':info['reason']})
+            insertString = 'INSERT INTO History(classroomID,courseName,userName,schoolName,lendTime,returnTime,lendWeekDay,returnWeekDay,reason)values(%(classroomID)s,%(courseName)s,%(userName)s,%(schoolName)s,%(lendTime)s,NULL,%(lendWeekDay)s,NULL,%(reason)s);'
+            cursor.execute(insertString,{'classroomID':info['classroomID'],'courseName':info['courseName'],'userName':info['userName'],'schoolName':info['schoolName'],'lendTime':info['lendTime'],'reason':info['reason'],'lendWeekDay':info['weekDay']})
             connection.commit()
     except Exception: #get exception if there's still occured something wrong
             traceback.print_exc()
@@ -135,6 +136,36 @@ def seeClassroomHistory():
                 else :
                     tmp.append(row[i])
             info['history'].append(tmp)
+    info['errors'] = errors
+    return jsonify(info)
+
+@history.route('/checkReturnClassrrom',methods=['POST'])
+def checkReturnClassroom():
+    connection = pymysql.connect(host=cfg['db']['host'],user=cfg['db']['user'],password=cfg['db']['password'],db=cfg['db']['database'])
+    info = dict()
+    errors = []
+    cursor = connection.cursor()
+    #History's PK = classroomID lendTime
+    #Users' PK = schoolName
+    info['schoolName'] = request.jasn('schoolName')
+    info['classroomID'] = request.json('classroomID')
+    info['lendTime'] = request.json('lendTime')
+    info['lendWeekDay'] = request.json('weekDay')
+    try:
+        #update user's status=0
+        insertString = 'UPDATE Users SET status=0 WHERE schoolName=(%(schoolName)s);'
+        cursor.execute(insertString, {'schoolName':info['schoolName']})
+        connection.commit()
+        #update history: returnTime,returnWeekDay
+        info['returnTime'] = datetime.datetime.now()
+        info['returnWeekDay'] = datetime.today().weekday() + 1
+        insertString = 'UPDATE history SET returnTime=(%(returnTime)s), returnWeekDay=(%(returnWeekDay)s) WHERE classroomID=(%(classroomID)s) AND lendTime=(%(lendTime)s);'
+        cursor.execute(insertString, {'returnTime':info['returnTime'],'returnWEekDay':info['returnWeekDay'],'classroomID':info['classroomID'],'lendTime':['lendTime']})
+        connection.commit() #submit the data to database 
+    except Exception: #get exception if there's still occured something wrong
+            traceback.print_exc()
+            connection.rollback()
+            errors = 'checkLendClassroom fail'
     info['errors'] = errors
     return jsonify(info)
 

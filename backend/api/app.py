@@ -11,10 +11,11 @@ import datetime
 from flask_cors import CORS
 
 app=Flask(__name__)
-CORS(app,supports_credentials=True)
+CORS(app,resources={r"/*": {"origins": "*"}},supports_credentials=True)
 app.config['SECRET_KEY'] = os.urandom(24)
 app.config['PERMANENT_SESSION_LIFETIME'] =datetime.timedelta(minutes=10)
 # 5mins is too short !
+app.config.update(SESSION_COOKIE_SAMESITE="None", SESSION_COOKIE_SECURE=True)
 
 @app.route('/')
 def index():
@@ -31,14 +32,14 @@ app.register_blueprint(history,url_prefix='/history')
 @app.before_request 
 def timeout():
     print(session.get("schoolName"))
-    #info = dict()
-    #if request.path =="/users/login" or request.path =="/users/register"or request.path =="/users/setIdentityCode" or request.path=="/users/checkIdentityCode" or request.path=="/Email/sendEmail":
-    return None
-    #else:
-    #    if not session.get("schoolName"):
-    #        info['errors'] = 'timeout!'
-    #        return jsonify(info)
-
+    info = dict()
+    if request.path =="/users/login" or request.path =="/users/register"or request.path =="/users/setIdentityCode" or request.path=="/users/checkIdentityCode" or request.path=="/Email/sendEmail":
+        return None
+    else:
+        if not session.get("schoolName"):
+            info['errors'] = 'timeout!'
+            return jsonify(info)
+    #return None
             
 
 if __name__=='__main__':
