@@ -142,17 +142,14 @@
 		var newfloors, newCell, newIndex;
 		var countid=0;
 		$(document).ready(function(){
-
-			//將equipmentFilter post到後端資料庫
-			var equipmentFilter = {
-					"commonEquipment":commonEquipment,
-					"classroomID":classroomID1
+				var data = {
+					"classroomID":classroomID
 				}
-				console.log("post equipmentFilter: " + JSON.stringify(equipmentFilter));
+				console.log("post equipmentFilter: " + JSON.stringify(data));
 				$.ajax({
 					type: 'GET',
 					url: "http://localhost:13588/Classrooms/getClassrooms",
-					data: JSON.stringify(equipmentFilter),
+					data: JSON.stringify(data),
 					contentType: 'application/json; charset=UTF-8',
 					dataType: 'json',
 					crossOrigin: null,
@@ -163,6 +160,7 @@
 					success: function (data){
 						console.log("傳送成功" + JSON.stringify(data));
 						//console.log(data);
+						console.log(JSON.stringify(data));
 						console.log(Object.values(data)[0]);
 
 						var array1=Object.values(data)[0];
@@ -181,16 +179,12 @@
 						console.log(array1.length);
 						for (var k = 0; k < array1.length; k++) {
 							for (var i = 0; i < floors.length; i++) {
-								ID = array1[k].toString();
+								var ID = array1[k].toString();
 								var floorNumber = ID.substr(0, 1);
 								if (floorNumber == floors[i]){
-									console.log(ID);
-									var classroomNumber = newClassroom.rows[i+1].cells.length;
+									var classroomNumber = newClassroom.rows[i+1].length;
 									newCell = newClassroom.rows[i+1].insertCell(classroomNumber);
-									newCell.innerHTML = " <input id = '"+ ID + "' type='button' class='btn-sm btn-secondary' value='" + ID + "'>";
-									
-									var test = document.getElementById("idBTN");
-									console.log(test);
+									newCell.innerHTML=ID;
 								}
 							}
 						}
@@ -201,6 +195,7 @@
 					}
 				}) 
         });
+
 		
 		$('#modifyBTN').click(
 			//修改教室狀態function
