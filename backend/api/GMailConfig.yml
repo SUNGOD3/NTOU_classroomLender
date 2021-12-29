@@ -1,0 +1,4 @@
+GmailAccount:
+    host : localhost
+    Account : "classroomLender"
+    password : "classroomLender12345"

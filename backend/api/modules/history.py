@@ -102,6 +102,8 @@ def returnClassroom():
                 info['returnTime'].append(i[4])
                 info['lendWeekDay'].append(i[5])
                 info['returnWeekDay'].append(i[6])      
+            
+                
     except Exception: #get exception if there's still occured something wrong
             traceback.print_exc()
             connection.rollback()

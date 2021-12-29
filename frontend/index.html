@@ -144,7 +144,15 @@
             dataType: 'json' ,
             success: function (data) {
                 console.log(data);
-                //alert(data);
+                if (data.error!="") {
+                    alert("未順利登入" + data.error);
+                }
+                else if (data.isAdmin == 1) {
+                    location.href = "new_manager-func.html";
+                }
+                else if (data.isAdmin == 0){
+                    location.href = "lender_func.html";
+                }                
             },
             error: function (xhr, type) {
             alert(xhr + type);
