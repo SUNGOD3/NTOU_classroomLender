@@ -38,8 +38,59 @@
            $(document).ready(function(){
                 
                 //http://localhost:5000/see_classroom_history http://localhost:13588/history/seeClassroomHistory
+               
+                $.ajax({
+                    type: 'GET',
+                    url: "http://localhost:13588/history/seeClassroomHistory",
+                    contentType: 'application/json; charset=UTF-8',
+                    dataType: 'json',
+                    crossOrigin: null,
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    
+                    success: function (data){
+                       // alert(data);
+                       let content = '';
+
+                        //console.log(!data.errors);
+                        if(data.errors.length!=0){
+                            alert(data.errors);
+                        }else{
+
+                            console.log(data);
+                            data = data.history;
+                            console.log(data);
+                            
+                            content =  "<tr><th>教室</th><th>借用人</th><th>使用時間</th><th>是否歸還</th></tr>";
+                            //alert(data.length);
+
+                            for(let i=0;i<data.length;i++){
+                            //  var str = data[i].split(",");
+                                var str = data[i]
+                                console.log(str);
+                                content += "<tr>" + "<td>" + str[0] + "</td>" + "<td>" + str[2] + "</td>" + "<td>" + str[4] + "~" + str[5] + "</td>";
+                               
+                                if(!str[5]){
+                                    content += "<td>" + "No" + "</td>";
+                                }else{
+                                    content += "<td>" + "Yes" + "</td>";
+                                }
+                                content += "</tr>"
+                            }
+                        }
+                            document.getElementById("history_table").innerHTML = content;    
+                    },
+
+                    error: function (xhr, type){
+                        alert(xhr+type);
+                    }
+                })
+               
+                /*
                 $.getJSON("http://localhost:13588/history/seeClassroomHistory", function(data){
 
+                    
                     let content = '';
 
                     //console.log(!data.errors);
@@ -68,22 +119,13 @@
                         }
 
                     }
-
+                    
                     
 
-                    /*
-                    for (let i=0;i<data.length; i++){
-                        content += "<tr>" + "<td>" + data[i].classroomID + "</td>" + "<td>" + data[i].userName + "</td>" + "<td>" + data[i].lendTime + "~" + data[i].returnTime + "</td>" + "</tr>";
-                        if(returnTime==""){
-                            content += "<td>" + "No" + "</td>";
-                        }else{
-                            content += "<td>" + "Yes" + "</td>";
-                        }
-                    }
-                    */
+                
                     console.log(content);
                     document.getElementById("history_table").innerHTML = content;
-                });
+                });*/
           
             });
 

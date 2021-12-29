@@ -13,7 +13,7 @@ from flask_cors import CORS
 app=Flask(__name__)
 CORS(app,resources={r"/*": {"origins": "*"}},supports_credentials=True)
 app.config['SECRET_KEY'] = os.urandom(24)
-app.config['PERMANENT_SESSION_LIFETIME'] =datetime.timedelta(minutes=10)
+app.config['PERMANENT_SESSION_LIFETIME'] =datetime.timedelta(minutes=30)
 # 5mins is too short !
 app.config.update(SESSION_COOKIE_SAMESITE="None", SESSION_COOKIE_SECURE=True)
 
