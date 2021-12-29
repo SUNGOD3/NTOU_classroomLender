@@ -135,44 +135,71 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<script>
 
+		//讀入資料庫現有教室
 		const floors=["6","5","4","3","2","1","B1"];
 		const classrooms=[];
 		var newClassroom=document.getElementById("classrooms");
 		var newfloors, newCell, newIndex;
-		
+		var countid=0;
 		$(document).ready(function(){
-            $.getJSON("http://localhost:13588/Classrooms/getClassrooms", function(data){
-					
-					//console.log(data);
-					console.log(JSON.stringify(data));
-					console.log(Object.values(data)[0]);
 
-					var array1=Object.values(data)[0];
-					//console.log(array1.toString());
-					var element1 = array1.toString();
-					console.log(element1);
+			//將equipmentFilter post到後端資料庫
+			var equipmentFilter = {
+					"commonEquipment":commonEquipment,
+					"classroomID":classroomID1
+				}
+				console.log("post equipmentFilter: " + JSON.stringify(equipmentFilter));
+				$.ajax({
+					type: 'GET',
+					url: "http://localhost:13588/Classrooms/getClassrooms",
+					data: JSON.stringify(equipmentFilter),
+					contentType: 'application/json; charset=UTF-8',
+					dataType: 'json',
+					crossOrigin: null,
+					xhrFields: {
+						withCredentials: true
+					},
 
-					//floor
-					for (var j = 0; j < floors.length; j++) {
-						var newRow = newClassroom.insertRow(j+1);
-						newfloors = newRow.insertCell(0);
-						newfloors.innerHTML=floors[j];
-					}
-					
-					//讀入教室ID
-					console.log(array1.length);
-					for (var k = 0; k < array1.length; k++) {
-						for (var i = 0; i < floors.length; i++) {
-							var ID = array1[k].toString();
-							var floorNumber = ID.substr(0, 1);
-							if (floorNumber == floors[i]){
-								var classroomNumber = newClassroom.rows[i+1].length;
-								newCell = newClassroom.rows[i+1].insertCell(classroomNumber);
-								newCell.innerHTML=ID;
+					success: function (data){
+						console.log("傳送成功" + JSON.stringify(data));
+						//console.log(data);
+						console.log(Object.values(data)[0]);
+
+						var array1=Object.values(data)[0];
+						//console.log(array1.toString());
+						var element1 = array1.toString();
+						console.log(element1);
+
+						//floor
+						for (var j = 0; j < floors.length; j++) {
+							var newRow = newClassroom.insertRow(j+1);
+							newfloors = newRow.insertCell(0);
+							newfloors.innerHTML=floors[j];
+						}
+						
+						//讀入教室ID
+						console.log(array1.length);
+						for (var k = 0; k < array1.length; k++) {
+							for (var i = 0; i < floors.length; i++) {
+								ID = array1[k].toString();
+								var floorNumber = ID.substr(0, 1);
+								if (floorNumber == floors[i]){
+									console.log(ID);
+									var classroomNumber = newClassroom.rows[i+1].cells.length;
+									newCell = newClassroom.rows[i+1].insertCell(classroomNumber);
+									newCell.innerHTML = " <input id = '"+ ID + "' type='button' class='btn-sm btn-secondary' value='" + ID + "'>";
+									
+									var test = document.getElementById("idBTN");
+									console.log(test);
+								}
 							}
 						}
+					},
+					error: function (xhr, type){
+						console.log("傳送失敗");
+						console.log(xhr+type);
 					}
-            });        
+				}) 
         });
 		
 		$('#modifyBTN').click(
