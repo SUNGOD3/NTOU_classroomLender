@@ -38,7 +38,7 @@
         }
 
     </style>
-    
+
 </head>
 
 <body>
@@ -60,12 +60,15 @@
             </div>
             <br>
             <div class="form-floating">
+
                 <input type="password" class="form-control" id="password" placeholder="密碼" name="password">
                 <label for="floatingInput">密碼</label>
             </div>
             <br>
             <div class="form-floating">
+
                 <input type="password" class="form-control" id="passwdConfirm" placeholder="密碼" name="passwdConfirm">
+
                 <label for="floatingInput">確認密碼</label>
             </div>
             <br>
@@ -97,7 +100,9 @@
         function postFunc() {
             var schoolName = document.getElementById("schoolName").value;
             var password = document.getElementById("password").value;
+
             var passwordConfirm = document.getElementById("passwdConfirm").value;
+
             var userName = document.getElementById("userName").value;
             var phoneNumber = document.getElementById("phoneNumber").value;
             var Email = document.getElementById("Email").value;
@@ -107,6 +112,7 @@
                 "password": password,
                 "userName": userName,
                 "passwdConfirm": passwordConfirm,
+
                 "phoneNumber": phoneNumber,
                 "Email": Email
             }
@@ -118,6 +124,7 @@
                 data: JSON.stringify(data),
                 contentType: 'application/json; charset=UTF-8',
                 dataType: 'json',
+
                 xhrFields: {
                         withCredentials: true
                     },

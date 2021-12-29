@@ -39,42 +39,44 @@
 </head>
 <body>
 	<header class="py-3 mb-3 border-bottom">
-        <div class="container-fluid d-grid gap-3 align-items-center" style="grid-template-columns: 1fr 2fr;">
-            <div class="dropdown">
-                <a href="#" class="d-flex align-items-center col-lg-4 mb-2 mb-lg-0 link-dark text-decoration-none dropdown-toggle" id="dropdownNavLink" data-bs-toggle="dropdown" aria-expanded="false">
-                    功能選單
-                </a>
-                <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownNavLink">
-                    <li><a class="dropdown-item" href="#"><span>確認借出教室</span></a></li>
-                    <li><a class="dropdown-item" href="#"><span>確認歸還教室</span></a></li>
-                    <li><a class="dropdown-item" href="add_classroom.html"><span>新增教室</span></a></li>
-                    <li><a class="dropdown-item" href="delete_classroom.html"><span>刪除教室</span></a></li>
-                    <li><a class="dropdown-item" href="class_state.html"><span>檢視教室狀態</span></a></li>
-                    <li><a class="dropdown-item" href="modify_classroom.html"><span>修改教室狀態</span></a></li>
-                    <li><a class="dropdown-item" href="check_all_user.html"><span>檢視借用人資訊</span></a></li>
-                    <li><a class="dropdown-item" href="history.html"><span>檢視歷史</span></a></li>
-                    <li><a class="dropdown-item" href="#"><span>確認管理員申請</span></a></li>
-					<li><a class="dropdown-item" href="#">修改一般管理員權限</a></li>
-                </ul>
-            </div>
+	<div class="container-fluid d-grid gap-3 align-items-center" style="grid-template-columns: 1fr 2fr;">
+		<div class="dropdown">
+			<a href="#" class="d-flex align-items-center col-lg-4 mb-2 mb-lg-0 link-dark text-decoration-none dropdown-toggle" id="dropdownNavLink" data-bs-toggle="dropdown" aria-expanded="false">
+				功能選單
+			</a>
+			<ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownNavLink">
+				<li><a class="dropdown-item" href="check_lend_classroom.html"><span>確認借出教室</span></a></li>
+				<li><a class="dropdown-item" href="check_return_classroom.html"><span>確認歸還教室</span></a></li>
+				<li><a class="dropdown-item" href="add_classroom.html"><span>新增教室</span></a></li>
+				<li><a class="dropdown-item" href="delete_classroom.html"><span>刪除教室</span></a></li>
+				<li><a class="dropdown-item" href="class_state.html"><span>檢視教室狀態</span></a></li>
+				<li><a class="dropdown-item" href="modify_classroom.html"><span>修改教室狀態</span></a></li>
+				<!-- <li><a class="dropdown-item" href="#"><span>修改借用人狀態</span></a></li> -->
+				<li><a class="dropdown-item" href="check_all_user.html"><span>檢視借用人資訊</span></a></li>
+				<li><a class="dropdown-item" href="history.html" ><span>檢視歷史</span></a></li>
+				<li><a class="dropdown-item" href="confirm_administrator_application.html"><span>確認管理員申請</span></a></li>
+				<li><a class="dropdown-item" href="lower_authority.html" >修改一般管理員權限</a></li>
+			</ul>
+		</div>
 
-			<div style="width: 40%; position: relative; top: auto; left: 4%; text-align: center; display:inline-block; font-size: 30px;">
-				<div style="text-align: center;">NTOU教室借用平台</div>
-			</div>
+		<div style="width: 40%; display:inline-block; font-size: 30px;">
+			<div style="text-align: center;">NTOU教室借用平台</div>
+		</div>
 
-            <div class="flex-shrink-0 dropdown" style="position: absolute; right:15px; align-items: center;">
-                <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">
-                    <img src="ntou_logo.png" width="32" height="32" class="rounded-circle">
-                </a>
-				<ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
-					<li><a class="dropdown-item" href="modify_info.html" target="ibody">更改個人資料</a></li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="#">登出</a></li>
-                </ul>
-            </div>
+		<div class="flex-shrink-0 dropdown" style="position: absolute; right:15px; align-items: center;">
+			<a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">
+				<img src="ntou_logo.png" width="32" height="32" class="rounded-circle">
+			</a>
+			<ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
+				<!--<li><a class="dropdown-item" href="#" target = "ibody">查看個人資料</a></li>-->
+				<li><a class="dropdown-item" href="change-personal-info.html">更改個人資料</a></li>
+				<li><hr class="dropdown-divider"></li>
+				<li><a class="dropdown-item" href="index.html" >登出</a></li>
+			</ul>
+		</div>
 
-        </div>
-    </header>
+	</div>
+	</header>
 	<main>
 		
 		<div class="row" style="position: auto; top: auto; left: auto; margin: auto; padding: auto;">
@@ -133,48 +135,45 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<script>
 
-		//教室table
 		const floors=["6","5","4","3","2","1","B1"];
-        const classrooms=[["606","666"],
-						  ["505","555"],
-					  	  ["407","409"],
-						  ["301","303"],
-						  ["201","203","205","212"],
-						  ["101","105"],
-						  ["B07","B10","B12"]];
+		const classrooms=[];
 		var newClassroom=document.getElementById("classrooms");
-		var newfloors,newCell,newIndex;
-		var floorNumber,status=0;
+		var newfloors, newCell, newIndex;
 		
-		for (var j = 0; j < floors.length; j++) {
-			var newRow = newClassroom.insertRow(j+1);
-			for (var i = 0; i < classrooms[j].length+1; i++) {
-				if (i == 0) {
-					newfloors = newRow.insertCell(i);
-					newfloors.innerHTML=floors[j];
-				}
-				else {
-					newCell = newRow.insertCell(i);
-					newCell.innerHTML=classrooms[j][i-1];
-					//newCell.style.backgroudColor="white";
-					newCell.style.cursor="pointer";
-					if (status == 0) newCell.style.background="Lime";
-					else if (status == 1) newCell.style.background="red";
-					else if (status == 2) newCell.style.background="gray";
-					//該教室的狀態
-					//0:未使用
-					//1:使用中
-					//2:無法使用
-				}
-			}
-		}
 		$(document).ready(function(){
-            $.getJSON("http://localhost:13588/Classrooms/???", function(data){
-                //讀課表
+            $.getJSON("http://localhost:13588/Classrooms/getClassrooms", function(data){
+					
+					//console.log(data);
+					console.log(JSON.stringify(data));
+					console.log(Object.values(data)[0]);
 
+					var array1=Object.values(data)[0];
+					//console.log(array1.toString());
+					var element1 = array1.toString();
+					console.log(element1);
+
+					//floor
+					for (var j = 0; j < floors.length; j++) {
+						var newRow = newClassroom.insertRow(j+1);
+						newfloors = newRow.insertCell(0);
+						newfloors.innerHTML=floors[j];
+					}
+					
+					//讀入教室ID
+					console.log(array1.length);
+					for (var k = 0; k < array1.length; k++) {
+						for (var i = 0; i < floors.length; i++) {
+							var ID = array1[k].toString();
+							var floorNumber = ID.substr(0, 1);
+							if (floorNumber == floors[i]){
+								var classroomNumber = newClassroom.rows[i+1].length;
+								newCell = newClassroom.rows[i+1].insertCell(classroomNumber);
+								newCell.innerHTML=ID;
+							}
+						}
+					}
             });        
         });
-		
 		
 		$('#modifyBTN').click(
 			//修改教室狀態function
@@ -209,8 +208,8 @@
 					crossOrigin: null,
 
 					success: function (data){
-							console.log("傳送成功");
-							//location.reload();
+						console.log("傳送成功");
+						window.location.reload()  //重新整理頁面
 					},
 					error: function (xhr, type){
 						console.log("傳送失敗");

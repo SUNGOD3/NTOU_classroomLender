@@ -96,16 +96,20 @@ def selectClassroom():
             errors.append("Unexpect error:two or more classroom have same ID!")
         else:
             info['status'] = rows[0][0]
-            if info['status'] == 1:
-                insertString = ('SELECT courseName from History where classroomID=%(classroomID)s and returnTime IS NULL' )
-                cursor.execute(insertString,{'classroomID':info['classroomID']})
-                rows = cursor.fetchall()
-                connection.commit()
-                if len(rows) == 0:
-                    errors.append("Unexpect error:Classroom has been lent,but history can't find up!")
-                info['courseName'] = rows
-            else:
-                info['courseName'] = "NULL"
+            insertString = ('SELECT courseName,weekDay,lendTime,returnTime from ApplicationForms where classroomID=%(classroomID)s' )
+            cursor.execute(insertString,{'classroomID':info['classroomID']})
+            rows = cursor.fetchall()
+            connection.commit()
+            info['courseName']=[]
+            info['weekDay']=[]
+            info['lendTime']=[]
+            info['returnTime']=[]
+            print(rows)
+            for row in rows:
+                info['courseName'].append(row[0])
+                info['weekDay'].append(row[1])
+                info['lendTime'].append(row[2])
+                info['returnTime'].append(row[3])
     except Exception:
         traceback.print_exc()
         connection.rollback()
@@ -183,4 +187,23 @@ def equipmentFilter():
         traceback.print_exc()
         connection.rollback()
         info['errors'] = 'search fail'
+    return jsonify(info)
+
+@Classrooms.route('/getClassrooms',methods=['GET'])
+def getClassrooms():
+    connection = pymysql.connect(host=cfg['db']['host'],user=cfg['db']['user'],password=cfg['db']['password'],db=cfg['db']['database'])
+    #build dictionary
+    info = dict()
+    cursor = connection.cursor()
+    try:
+        cursor.execute('SELECT classroomID from Classrooms')
+        rows = cursor.fetchall()
+        connection.commit()  #update the data in database
+        info['classroomID'] = []
+        for row in rows: #string
+            info['classroomID'].append(row)
+    except Exception: #get exception if there's still occured something wrong
+        traceback.print_exc()
+        connection.rollback()
+        info['errors'] = 'get Classrooms fail'
     return jsonify(info)
