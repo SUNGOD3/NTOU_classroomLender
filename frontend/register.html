@@ -124,12 +124,12 @@
                 data: JSON.stringify(data),
                 contentType: 'application/json; charset=UTF-8',
                 dataType: 'json',
-
+                crossOrigin: null,
                 xhrFields: {
-                        withCredentials: true
-                    },
+                    withCredentials: true
+                },
                 success: function (data) {
-                    alert(data);
+                    console.log(data);
                     window.location.href = "index.html";
                 },
                 error: function (xhr, type) {

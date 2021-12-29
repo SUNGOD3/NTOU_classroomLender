@@ -117,14 +117,6 @@
         var schoolName = "";
         var password = "";
         var passwordConfirm = "";
-        
-        //$(document).ready(function () {
-
-        //    $.get("http://localhost:5000/get_schoolName", function (data) {
-        //        schoolName = data.schoolName;
-        //    });
-
-        //});
 
         function confirm_again() {
             schoolName = document.getElementById("schoolName").value;
@@ -153,12 +145,12 @@
                 data: JSON.stringify(data),
                 contentType: 'application/json; charset=UTF-8',
                 dataType: 'json',
+                crossOrigin: null,
                 xhrFields: {
                         withCredentials: true
-                    },
+                },
                 success: function (data) {
-                        console.log(data)
-                        alert(data)
+                    console.log(data);
                 },
                 error: function (xhr, type) {
                     alert(xhr + type);
