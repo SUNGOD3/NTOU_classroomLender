@@ -153,8 +153,9 @@ def checkReturnClassroom():
     info['schoolName'] = request.json['schoolName']
     info['classroomID'] = request.json['classroomID']
     info['lendTime'] = request.json['lendTime']
-    info['lendTime'] = datetime.datetime.strptime(info['lendTime'],"%Y/%m/%d %H:%M:%S")
+    #info['lendTime'] = datetime.datetime.strftime(info['lendTime'],"%Y/%m/%d %H:%M:%S")
     #info['lendTime'] = datetime.strptime(info['lendTime'],'%Y/%m/%d %H:%M:%S').datetime()
+    info['lendTime'] = datetime.datetime.strptime(info['lendTime'],"%Y/%m/%d %H:%M:%S").strftime("%Y/%m/%d %H:%M:%S")
     print(info['lendTime'])
     info['lendWeekDay'] = request.json['weekDay']
     try:
@@ -163,11 +164,12 @@ def checkReturnClassroom():
         cursor.execute(insertString, {'schoolName':info['schoolName']})
         connection.commit()
         #update history: returnTime,returnWeekDay
-        info['returnTime'] = datetime.datetime.now()
+        info['returnTime'] = datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S")
         print(info)
         info['returnWeekDay'] = datetime.datetime.today().weekday() + 1
+        print(info)
         insertString = 'UPDATE history SET returnTime=(%(returnTime)s), returnWeekDay=(%(returnWeekDay)s) WHERE classroomID=(%(classroomID)s) AND lendTime=(%(lendTime)s);'
-        cursor.execute(insertString, {'returnTime':info['returnTime'],'returnWeekDay':info['returnWeekDay'],'classroomID':info['classroomID'],'lendTime':['lendTime']})
+        cursor.execute(insertString, {'returnTime':info['returnTime'],'returnWeekDay':info['returnWeekDay'],'classroomID':info['classroomID'],'lendTime':info['lendTime']})
         connection.commit() #submit the data to database 
     except Exception: #get exception if there's still occured something wrong
             traceback.print_exc()
