@@ -196,8 +196,9 @@
         <hr>
     </form>
     testgetuserinfo
-    <form method="post">
-        schoolName:<input id="schoolName"></input>
+
+    <form  method="post">
+        schoolName:<input id="schoolName">
         <br>
         <button type="button" onclick="javascript: postFunc_get_user_info()">送出表單</button>
         <hr>
@@ -241,6 +242,7 @@
             $.ajax({
                 type: 'POST',
                 url: "http://localhost:13588/users/getUserInfo",
+
                 data: JSON.stringify(data),
                 contentType: 'application/json; charset=UTF-8',
                 dataType: 'json',
