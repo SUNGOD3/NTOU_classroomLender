@@ -137,10 +137,7 @@
         <hr>
     </form>
 
-    selectClassroom
-    <form action="http://localhost:13588/Classrooms/selectClassroom" method="post">
-        classroomID:<input name="classroomID"></input><br>
-    </form>
+
 
     testInfo
     <form action="http://localhost:13588/users/info" method="post">
@@ -196,14 +193,58 @@
         <hr>
     </form>
     testgetuserinfo
-    <form action="http://localhost:13588/Classrooms/equipmentFilter" method="post">
-        schoolName:<input id="schoolName"></input>
+
+    <form  method="post">
+        schoolName:<input id="schoolName">
         <br>
         <button type="button" onclick="javascript: postFunc_get_user_info()">送出表單</button>
         <hr>
     </form>
+	getClassrooms
+	<form  method="get">
+        <br>
+        <button type="button" onclick="javascript: postFunc_get_Classrooms()">送出表單</button>
+        <hr>
+    </form>
+	
+	selectClassroom
+    <form method="post">
+        classroomID:<input id="classroomID"></input><br>
+		<br>
+        <button type="button" onclick="javascript: postFunc_select_Classroom()">送出表單</button>
+        <hr>
+    </form>
+	
+	
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
+		function postFunc_select_Classroom() {
+            var classroomID = document.getElementById("classroomID").value;
+			var courseName,weekDay,lendTime,returnTime;
+			
+            var data = {
+                "courseName": courseName,
+                "weekDay": weekDay,
+				"lendTime": lendTime,
+                "returnTime": returnTime
+			}
+            console.log(data);
+            $.ajax({
+                type: 'POST',
+                url: "http://localhost:13588/Classrooms/selectClassroom",
+                data: JSON.stringify(data),
+                contentType: 'application/json; charset=UTF-8',
+                dataType: 'json',
+                success: function (data) {
+                    console.log(data);
+
+                },
+                error: function (xhr, type) {
+                    alert(xhr + type);
+                }
+            });
+        };
+
 
         function postFunc_login() {
             var schoolName = document.getElementById("schoolName").value;
@@ -229,19 +270,43 @@
                 }
             });
         };
-
-        function postFunc_get_user_info() {
-
-            var data = {
-                "schoolName": "",
+		
+		function postFunc_get_Classrooms() {
+		
+			var classroomID;
+			var data = {
+                "classroomID": classroomID
             }
 
+            $.ajax({
+                type: 'GET',
+                url: "http://localhost:13588/Classrooms/getClassrooms",
+
+                data: JSON.stringify(data),
+                contentType: 'application/json; charset=UTF-8',
+                dataType: 'json',
+                success: function (data) {
+                    console.log(data);
+                },
+                error: function (xhr, type) {
+                    alert(xhr + type);
+                }
+            });
+
+        };
+		
+        function postFunc_get_user_info() {
+
             var schoolName = document.getElementById("schoolName").value;
+            var data = {
+                "schoolName": schoolName,
+            }
 
 
             $.ajax({
                 type: 'POST',
                 url: "http://localhost:13588/users/getUserInfo",
+
                 data: JSON.stringify(data),
                 contentType: 'application/json; charset=UTF-8',
                 dataType: 'json',
