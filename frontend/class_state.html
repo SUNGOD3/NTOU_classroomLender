@@ -47,7 +47,7 @@
                 <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownNavLink">
                     <li><a class="dropdown-item" href="class_state.html"><span>檢視教室狀態</span></a></li>
                     <li><a class="dropdown-item" href="lend_classroom.html"><span>借用教室</span></a></li>
-                    <li><a class="dropdown-item" href="history.html"><span>檢視歷史</span></a></li>
+                    <li><a class="dropdown-item" href="history_for_lender.html"><span>檢視歷史</span></a></li>
                     <li><a class="dropdown-item" href="apply_for_maneger.html"><span>申請成為管理員</span></a></li>
                 </ul>
             </div>
@@ -294,6 +294,9 @@
 					contentType: 'application/json; charset=UTF-8',
 					dataType: 'json',
 					crossOrigin: null,
+					xhrFields: {
+						withCredentials: true
+					},
 
 					success: function (data){
 						console.log("傳送成功" + JSON.stringify(data));
@@ -326,6 +329,9 @@
 					contentType: 'application/json; charset=UTF-8',
 					dataType: 'json',
 					crossOrigin: null,
+					xhrFields: {
+						withCredentials: true
+					},
 
 					success: function (data){
 						console.log("傳送成功" + JSON.stringify(searchKeyword));
@@ -427,6 +433,9 @@
 						contentType: 'application/json; charset=UTF-8',
 						dataType: 'json',
 						crossOrigin: null,
+						xhrFields: {
+							withCredentials: true
+						},
 							
 						success: function (data){
 							console.log("傳送ID成功");

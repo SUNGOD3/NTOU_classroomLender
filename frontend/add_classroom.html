@@ -262,6 +262,9 @@
 					contentType: 'application/json; charset=UTF-8',
 					dataType: 'json',
 					crossOrigin: null,
+					xhrFields: {
+						withCredentials: true
+					},
 
 					success: function (data){
 							console.log("傳送成功");

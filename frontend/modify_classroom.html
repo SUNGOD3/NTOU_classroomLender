@@ -206,6 +206,9 @@
 					contentType: 'application/json; charset=UTF-8',
 					dataType: 'json',
 					crossOrigin: null,
+					xhrFields: {
+						withCredentials: true
+					},
 
 					success: function (data){
 						console.log("傳送成功");
@@ -247,15 +250,6 @@
 				}
 			}
 		);
-
-		
-		//從後端get修改教室(classroomID)的狀態(status)
-		$(document).ready(function(){
-			$.getJSON("http://localhost:5000/modify_test", function(data){
-				
-			});
-		});
-
 
 	</script>  
 
