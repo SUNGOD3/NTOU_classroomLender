@@ -143,9 +143,9 @@
             contentType: 'application/json; charset=UTF-8' ,
             dataType: 'json' ,
             success: function (data) {
-                console.log(data);
-                if (data.error!="") {
-                    alert("未順利登入" + data.error);
+                console.log(data);                
+                if (data.errors!="") {
+                    alert("未順利登入" + data.errors);
                 }
                 else if (data.isAdmin == 1) {
                     location.href = "new_manager-func.html";
