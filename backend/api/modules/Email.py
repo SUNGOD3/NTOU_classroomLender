@@ -27,7 +27,7 @@ def sendEmail():
     connection = pymysql.connect(host=cfg['db']['host'],user=cfg['db']['user'],password=cfg['db']['password'],db=cfg['db']['database'])
     info = dict()
     cursor = connection.cursor()
-    Email = request.values.get('Email')
+    Email = request.json['Email']
     cursor.execute("SELECT identityCode from Users WHERE Email = %(Email)s",{'Email':Email})
     rows = cursor.fetchall()
     connection.commit()

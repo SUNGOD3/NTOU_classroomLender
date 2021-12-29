@@ -145,8 +145,16 @@
             dataType: 'json' ,
             success: function (data) {
                 console.log(data);
-                //alert(data);
-                window.location.href = "apply_for_maneger.html";
+                if (data.isAdmin == 0) {
+                    location.href = "lender_func.html";
+                }
+                else if (data.isAdmin == 1) {
+                    location.href = "new_manager-func.html";
+                }
+                else {
+                    alert("未順利登入" + data.error);
+                }
+                
             },
             error: function (xhr, type) {
             alert(xhr + type);

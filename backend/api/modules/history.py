@@ -96,15 +96,15 @@ def returnClassroom():
             info['lendWeekDay'] = []
             info['returnWeekDay'] = []
             for i in rows:
-                print(i)
                 info['schoolName'].append(i[0])
                 info['userName'].append(i[1])
                 info['classroomID'].append(i[2])
-                info['lendTime'].append(i[3])
+                info['lendTime'].append(i[3].strftime('%Y/%m/%d %H:%M'))
                 info['returnTime'].append(i[4])
                 info['lendWeekDay'].append(i[5])
                 info['returnWeekDay'].append(i[6])
-
+            
+                
     except Exception: #get exception if there's still occured something wrong
             traceback.print_exc()
             connection.rollback()
