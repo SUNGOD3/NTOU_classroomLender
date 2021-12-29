@@ -203,6 +203,7 @@ def login():
     else:
         cursor.execute("SELECT * from Users WHERE schoolName = %(schoolName)s",{'schoolName':schoolName})
         rows = cursor.fetchall()
+        print(rows)
         connection.commit()
         row = rows[0]
         md5 = hashlib.md5()
@@ -212,6 +213,8 @@ def login():
             session.permanent = True
             #add a schoolName into session use session to timeout
             session['schoolName']=row[1]
+            print(session['schoolName'])
+            print(1)
         else:
             Errors.append('password error')
         info['isAdmin'] = row[5]

@@ -38,6 +38,7 @@ def checkLendClassroom():
     info['lendTime'] = request.json['lendTime']
     info['weekDay'] = request.json['weekDay']
     info['confirmType'] = request.json['confirmType']
+    print(info)
     try:
         #update user state first
         if info['confirmType'] == '1':
@@ -63,8 +64,8 @@ def checkLendClassroom():
             info['userName'] = rows[0][1]
             info['reason'] = rows[0][2]
             #insert new data to history
-            insertString = 'INSERT INTO History(classroomID,courseName,userName,schoolName,lendTime,returnTime,reason)values(%(classroomID)s,%(courseName)s,%(userName)s,%(schoolName)s,%(lendTime)s,NULL,%(reason)s);'
-            cursor.execute(insertString,{'classroomID':info['classroomID'],'courseName':info['courseName'],'userName':info['userName'],'schoolName':info['schoolName'],'lendTime':info['lendTime'],'reason':info['reason']})
+            insertString = 'INSERT INTO History(classroomID,courseName,userName,schoolName,lendTime,returnTime,lendWeekDay,returnWeekDay,reason)values(%(classroomID)s,%(courseName)s,%(userName)s,%(schoolName)s,%(lendTime)s,NULL,%(lendWeekDay)s,NULL,%(reason)s);'
+            cursor.execute(insertString,{'classroomID':info['classroomID'],'courseName':info['courseName'],'userName':info['userName'],'schoolName':info['schoolName'],'lendTime':info['lendTime'],'reason':info['reason'],'lendWeekDay':info['weekDay']})
             connection.commit()
     except Exception: #get exception if there's still occured something wrong
             traceback.print_exc()
@@ -87,15 +88,23 @@ def returnClassroom():
         if len(rows)==0:
             info['errors'] = 'invalid select from History' 
         else :
+            info['schoolName'] = []
+            info['userName'] = []
+            info['classroomID'] = []
+            info['lendTime'] = []
+            info['returnTime'] = []
+            info['lendWeekDay'] = []
+            info['returnWeekDay'] = []
             for i in rows:
-                info['schoolName'] = rows[i][0]
-                info['userName'] = rows[i][1]
-                info['classroomID'] = rows[i][2]
-                info['lendTime'] = rows[i][3]
-                info['returnTime'] = rows[i][4]
-                info['lendWeekDay'] = rows[i][5]
-                info['returnWeekDay'] = rows[i][6]
-                
+                print(i)
+                info['schoolName'].append(i[0])
+                info['userName'].append(i[1])
+                info['classroomID'].append(i[2])
+                info['lendTime'].append(i[3])
+                info['returnTime'].append(i[4])
+                info['lendWeekDay'].append(i[5])
+                info['returnWeekDay'].append(i[6])
+
     except Exception: #get exception if there's still occured something wrong
             traceback.print_exc()
             connection.rollback()
