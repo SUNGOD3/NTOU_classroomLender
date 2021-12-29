@@ -498,29 +498,22 @@ def checkReturnClassroom():
     info['lendTime'] = request.json['lendTime']
     info['weekDay'] = request.json['weekDay']
     try:
-        #update user state first
-        insertString = 'UPDATE Users SET status = 1 WHERE schoolName=(%(schoolName)s);'
-        cursor.execute(insertString, {'schoolName':info['schoolName']})
-        connection.commit() #submit the data to database 
-        #search the reason from ApplicationForms
-        insertString = 'SELECT courseName,userName,reason from ApplicationForms WHERE classroomID=(%(classroomID)s) AND department=(%(department)s) AND lendTime=(%(lendTime)s) AND weekDay=(%(weekDay)s);'
-        cursor.execute(insertString,{'classroomID':info['classroomID'],'department':info['department'],'lendTime':info['lendTime'],'weekDay':info['weekDay']})
+        #search the user from Users
+        insertString = 'SELECT userName,schoolName,Email,status from Users WHERE schoolName=(%(schoolName)s);'
+        cursor.execute(insertString,{'schoolName':info['schoolName']})
         rows = cursor.fetchall()
         connection.commit()
-        info['lendTime'] = datetime.date.today()
-        info['courseName'] = rows[0][0]
-        info['userName'] = rows[0][1]
-        info['reason'] = rows[0][2]
-        #print(rows)
-        #insert new data to history
-        insertString = 'INSERT INTO History(classroomID,department,courseName,userName,schoolName,lendTime,returnTime,reason)values(%(classroomID)s,%(department)s,%(courseName)s,%(userName)s,%(schoolName)s,%(lendTime)s,NULL,%(reason)s);'
-        cursor.execute(insertString,{'classroomID':info['classroomID'],'department':info['department'],'courseName':info['courseName'],'userName':info['userName'],'schoolName':info['schoolName'],'lendTime':info['lendTime'],'reason':info['reason']})
-        connection.commit()
+        info['userName'] = rows[0][0]
+        info['schoolName'] = rows[0][1]
+        info['Email'] = rows[0][2]
+        info['status'] = rows[0][3]
     except Exception: #get exception if there's still occured something wrong
-            traceback.print_exc()
-            connection.rollback()
-            info['errors'] = 'checkLendClassroom fail'
+        traceback.print_exc()
+        connection.rollback()
+        info['errors'] = 'checkLendClassroom fail'
     return jsonify(info)
+        
+        
     
 @users.route('/modifyUserInfo',methods=['POST'])
 def modifyUserInfo():
