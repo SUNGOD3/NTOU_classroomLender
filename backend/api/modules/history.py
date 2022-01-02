@@ -7,6 +7,7 @@ import yaml
 import re
 import traceback
 import hashlib
+import pandas as pd
 import random
 import string
 import time
@@ -67,8 +68,9 @@ def checkLendClassroom():
             info['reason'] = rows[0][2]
             #insert new data to history
             if info['confirmType'] == '1':
+                info['lendWeekDay'] = pd.Timestamp(datetime.datetime.strptime(info['weekDay'],"%Y-%m-%d")).dayofweek
                 insertString = 'INSERT INTO History(classroomID,courseName,userName,schoolName,lendTime,returnTime,lendWeekDay,returnWeekDay,reason)values(%(classroomID)s,%(courseName)s,%(userName)s,%(schoolName)s,%(lendTime)s,NULL,%(lendWeekDay)s,NULL,%(reason)s);'
-                cursor.execute(insertString,{'classroomID':info['classroomID'],'courseName':info['courseName'],'userName':info['userName'],'schoolName':info['schoolName'],'lendTime':info['lendTime'],'reason':info['reason'],'lendWeekDay':info['weekDay']})
+                cursor.execute(insertString,{'classroomID':info['classroomID'],'courseName':info['courseName'],'userName':info['userName'],'schoolName':info['schoolName'],'lendTime':info['lendTime'],'reason':info['reason'],'lendWeekDay':info['lendWeekDay']})
                 connection.commit()
     except Exception: #get exception if there's still occured something wrong
             traceback.print_exc()
