@@ -67,6 +67,7 @@
                     <li><a class="dropdown-item" href="delete_classroom.html"><span>刪除教室</span></a></li>
                     <li><a class="dropdown-item" href="class_state.html"><span>檢視教室狀態</span></a></li>
                     <li><a class="dropdown-item" href="modify_classroom.html"><span>修改教室狀態</span></a></li>
+                    <!-- <li><a class="dropdown-item" href="#"><span>修改借用人狀態</span></a></li> -->
                     <li><a class="dropdown-item" href="check_all_user.html"><span>檢視借用人資訊</span></a></li>
                     <li><a class="dropdown-item" href="history.html"><span>檢視歷史</span></a></li>
                     <li><a class="dropdown-item" href="confirm_administrator_application.html"><span>確認管理員申請</span></a></li>
@@ -83,8 +84,8 @@
                     <img src="ntou_logo.png" width="32" height="32" class="rounded-circle">
                 </a>
                 <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
-                    <!--<li><a class="dropdown-item" href="#">查看個人資料</a></li>-->
-                    <li><a class="dropdown-item" href="change-personal-info.html" target="ibody">更改個人資料</a></li>
+                    <!--<li><a class="dropdown-item" href="#" target = "ibody">查看個人資料</a></li>-->
+                    <li><a class="dropdown-item" href="change-personal-info.html">更改個人資料</a></li>
                     <li><hr class="dropdown-divider"></li>
                     <li><a class="dropdown-item" href="index.html">登出</a></li>
                 </ul>
@@ -121,27 +122,41 @@
     <script>
 
         $(document).ready(function () {
-            //http://localhost:13588/users/checkAllManager http://localhost:5000/check_all_manager
-            //$.get("http://localhost:13588/users/checkAllManager", function (data) {                
-            //    let content = "";
-            //    console.log(data);
+            $.ajax({
+                type: 'GET',
+                url: "http://localhost:13588/users/getAdmin",
+                contentType: 'application/json; charset=UTF-8',
+                dataType: 'json',
+                crossOrigin: null,
+                xhrFields: {
+                    withCredentials: true
+                },
+                success: function (data) {
+                    if (data.errors != "") {
+                        alert(data.errors);
+                        if (data.errors == "timeout!") {
+                            location.href = "index.html";
+                        }
 
-            //    console.log(data);
-            //    data = data.users;
-            //    for(let i=0;i<data.length;i++){
-            //        var str = data[i];
-            //        console.log(str);
-            //        str = str.split(',');
-            //        content += "<tr>" + "<td id='schoolName" + i + "'>" + str[0] + "</td> " + "<td>" + str[1] + "</td> " + "<td><button type='button' onclick='javascript: confirm_again(" + i + ")'>降級</button></td>" + "</tr>";
-                    
-            //    }
-            //    /*
-            //    for (let i = 0; i < data.length; i++) {
-            //        content += "<tr>" + "<td id='schoolName" + i + "'>" + data[i].schoolName + "</td> " + "<td>" + data[i].userName + "</td> " + "<td><button type='button' onclick='javascript: confirm_again(" + i + ")'>降級</button></td>" + "</tr>";
-            //    }
-            //    */
-            //    document.getElementById("data_table").innerHTML = content;
-            //});
+                    }
+                    else {
+                        if (data.isAdmin != 2) {
+                            alert("此為最高權限管理員的功能，頁面將跳回管理員功能選單");
+                            location.href = "new_manager-func.html";
+                        }
+                        else {
+                            init();
+                        }
+                    }
+                },
+                error: function (xhr, type) {
+                    alert(xhr + type);
+                }
+            });
+        });
+
+        function init() {
+            //http://localhost:13588/users/checkAllManager http://localhost:5000/check_all_manager
             $.ajax({
                 type: 'GET',
                 url: "http://localhost:13588/users/checkAllManager",
@@ -152,63 +167,64 @@
                     withCredentials: true
                 },
                 success: function (data) {
-                    let content = "";
-                    console.log(data);
+                    if (data.errors != "") {
+                        alert(data.errors);
+                        if (data.errors == "timeout!") {
+                            location.href = "index.html";
+                        }
+                    }
+                    else {
+                        let content = "";
+                        console.log(data);
 
-                    data = data.users;
-                    for (let i = 0; i < data.length; i++) {
-                        var str = data[i];
-                        console.log(str);
-                        str = str.split(',');
-                        content += "<tr>" + "<td id='schoolName" + i + "'>" + str[0] + "</td> " + "<td>" + str[1] + "</td> " + "<td><button type='button' onclick='javascript: confirm_again(" + i + ")'>降級</button></td>" + "</tr>";
+                        data = data.users;
+                        for (let i = 0; i < data.length; i++) {
+                            var str = data[i];
+                            //console.log(str);
+                            str = str.split(',');
+                            content += "<tr>" + "<td id='schoolName" + i + "'>" + str[0] + "</td> " + "<td>" + str[1] + "</td> " + "<td><button type='button' onclick='javascript: confirm_again(" + i + ")'>降級</button></td>" + "</tr>";
 
-                    }                
-                    document.getElementById("data_table").innerHTML = content;
+                        }
+                        document.getElementById("data_table").innerHTML = content;
+                    }
+                },
+                error: function (xhr, type) {
+                    alert(xhr + type);
+                }
+            });
+        }            
+
+        function confirm_again(i) {
+            var password = window.prompt("輸入密碼");
+
+            var data = {
+                "password": password,
+            }
+
+            $.ajax({
+                type: 'POST',
+                url: "http://localhost:13588/users/passwordConfirm",
+                data: JSON.stringify(data),
+                contentType: 'application/json; charset=UTF-8',
+                dataType: 'json',
+                crossOrigin: null,
+                xhrFields: {
+                    withCredentials: true
+                },
+                success: function (data) {
+                    if (data.errors != "") {
+                        alert(data.errors);
+                        location.reload();
+                    }
+                    else {
+                        postFunc(i);
+                    }
                 },
                 error: function (xhr, type) {
                     alert(xhr + type);
                 }
             });
             
-
-        });
-
-        function confirm_again(i) {
-            var a, b, c, input, answer;
-            a = Math.floor(Math.random() * 100) % 3;
-            b = Math.floor(Math.random() * 100);
-            c = Math.floor(Math.random() * 100);
-            if (a == 1) {
-                answer = b + c;
-                input=window.prompt("計算" + b + "+" + c + "的結果");
-                if (answer == input) {
-                    postFunc(i);
-                }
-                else {
-                    alert("計算錯誤");
-                }
-            }
-            else if (a == 2) {
-                answer = b - c;
-                input = window.prompt("計算" + b + "-" + c + "的結果");
-                if (answer == input) {
-                    postFunc(i);
-                }
-                else {
-                    alert("計算錯誤");
-                }
-            }
-            else if (a == 0) {
-                answer = b * c;
-                input = window.prompt("計算" + b + "×" + c + "的結果");
-                if (answer == input) {
-                    postFunc(i);
-                }
-                else {
-                    alert("計算錯誤");
-                }
-            }
-            location.reload();
         }
 
         function postFunc (i) {
@@ -218,7 +234,6 @@
             }
 
             var index = i;
-            //alert("schoolName" + index);
             data.schoolName = document.getElementById("schoolName" + index).innerHTML;
             console.log(data);
             //http://localhost:13588/users/downGrade http://localhost:5001/downgrade
@@ -230,11 +245,10 @@
                 dataType: 'json',
                 crossOrigin: null,
                 xhrFields: {
-                        withCredentials: true
+                   withCredentials: true
                 },
                 success: function (data) {
-                        alert(data);
-                        console.log(data);
+                    console.log(data);
                 },
                 error: function (xhr, type) {
                     alert(xhr + type);
