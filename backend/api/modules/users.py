@@ -563,7 +563,31 @@ def getUserInfo():
         info['errors'] = 'get_User_Info fail'
     return jsonify(info)
 
+
+@users.route('/getAdmin',methods=['POST'])
+def getAdmin():
+    connection = pymysql.connect(host=cfg['db']['host'],user=cfg['db']['user'],password=cfg['db']['password'],db=cfg['db']['database'])
+    info = dict()
+    errors=[]
+    cursor=connection.cursor()
+    if session.get('schoolName')==None:
+        info['errors'] = 'timeout!'
+    else:
+        try:
+            cursor.execute("SELECT isAdmin from Users WHERE schoolName = %(schoolName)s",{'schoolName':session.get('schoolName')})
+            row = cursor.fetchall()
+            connection.commit()
+            info['schoolName'] = row
+        except Exception:
+            traceback.print_exc()
+            connection.rollback()
+            info['errors'] = 'getAdmin fail'
+    return jsonify(info)
+
+
+
 #   email confirm undo
 #   if a user input an error email (but legal), his student's ID fucked up. 
 
 #   html should alert if sign up failed when reload
+
