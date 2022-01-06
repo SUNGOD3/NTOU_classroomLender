@@ -11,6 +11,7 @@ pyyaml = "*"
 flask = "*"
 mysql-connector-python = "*"
 flask-cors = "*"
+pandas = "*"
 
 [dev-packages]
 

@@ -151,16 +151,21 @@
                     withCredentials: true
                 },
                 success: function (data) {
-                    console.log(data);
-                    data = data.users;
-                    console.log(data);
-                    let content = "<thead><tr><th scope ='col'>學號</th><th scope='col'>姓名</th><th scope='col'>信箱</th><th scope='col'>狀態</th><th scope='col'>修改</th> </tr ></thead >";
-                    for (let i = 0; i < data.length; i++) {
-                        str = data[i].split(",");
-                        console.log(str);
-                        content += "<tr>" + "<td id='schoolName" + i + "'>" + str[0] + "</td> " + "<td>" + str[1] + "</td> " + "<td>" + str[3] + "</td>" + "<td>" + str[2] + "</td>" + "<td><button type='button' onclick='javascript: postFunc(" + i + ")'>修改</button></td>" + "</tr>";
+                    if (data.errors != "") {
+                        alert(data.errors);
                     }
-                    document.getElementById("data_table").innerHTML = content;
+                    else {
+                        console.log(data);
+                        data = data.users;
+                        console.log(data);
+                        let content = "<thead><tr><th scope ='col'>學號</th><th scope='col'>姓名</th><th scope='col'>信箱</th><th scope='col'>狀態</th><th scope='col'>修改</th> </tr ></thead >";
+                        for (let i = 0; i < data.length; i++) {
+                            str = data[i].split(",");
+                            console.log(str);
+                            content += "<tr>" + "<td id='schoolName" + i + "'>" + str[0] + "</td> " + "<td>" + str[1] + "</td> " + "<td>" + str[3] + "</td>" + "<td>" + str[2] + "</td>" + "<td><button type='button' onclick='javascript: postFunc(" + i + ")'>修改</button></td>" + "</tr>";
+                        }
+                        document.getElementById("data_table").innerHTML = content;
+                    }
                 },
                 error: function (xhr, type) {
                     alert(xhr + type);
@@ -190,37 +195,42 @@
                     withCredentials: true
                 },
                 success: function (data) {
-                    console.log(data);
-                    document.getElementById("data_table").innerHTML = "";
-                    document.getElementById("subtitle").innerHTML = "修改借用人";
+                    if (data.errors != "") {
+                        alert(data.errors);
+                    }
+                    else {
+                        console.log(data);
+                        document.getElementById("data_table").innerHTML = "";
+                        document.getElementById("subtitle").innerHTML = "修改借用人";
 
-                    userName_content = "姓名: " + data.userName + "  <button id = 'userName_button' type = 'button'> 修改</button>";
-                    //password_content = "密碼: " + data.password + "  <button id = 'password_button' type = 'button'> 修改</button>";
-                    Email_content = "信箱: " + data.Email + "  <button id = 'Email_button' type = 'button'> 修改</button>";
-                    status_content = "狀態: " + data.status + "  <button id = 'status_button' type = 'button'> 修改</button>";
-                    schoolName_content = "帳號(學號): " + data.schoolName;
+                        userName_content = "姓名: " + data.userName + "  <button id = 'userName_button' type = 'button'> 修改</button>";
+                        //password_content = "密碼: " + data.password + "  <button id = 'password_button' type = 'button'> 修改</button>";
+                        Email_content = "信箱: " + data.Email + "  <button id = 'Email_button' type = 'button'> 修改</button>";
+                        status_content = "狀態: " + data.status + "  <button id = 'status_button' type = 'button'> 修改</button>";
+                        schoolName_content = "帳號(學號): " + data.schoolName;
 
-                    schoolName = data.schoolName;
-                    userName = data.userName;
-                    //password = data.password;
-                    Email = data.Email;
-                    status = data.status;
+                        schoolName = data.schoolName;
+                        userName = data.userName;
+                        //password = data.password;
+                        Email = data.Email;
+                        status = data.status;
 
-                    document.getElementById("userName_div").innerHTML = userName_content;
-                    document.getElementById("schoolName_div").innerHTML = schoolName_content;
-                    //document.getElementById("password_div").innerHTML = password_content;
-                    document.getElementById("Email_div").innerHTML = Email_content;
-                    document.getElementById("status_div").innerHTML = status_content;
+                        document.getElementById("userName_div").innerHTML = userName_content;
+                        document.getElementById("schoolName_div").innerHTML = schoolName_content;
+                        //document.getElementById("password_div").innerHTML = password_content;
+                        document.getElementById("Email_div").innerHTML = Email_content;
+                        document.getElementById("status_div").innerHTML = status_content;
 
-                    var userNameButton = document.getElementById("userName_button");
-                    //var passwordButton = document.getElementById("password_button");
-                    var EmailButton = document.getElementById("Email_button");
-                    var statusButton = document.getElementById("status_button");
+                        var userNameButton = document.getElementById("userName_button");
+                        //var passwordButton = document.getElementById("password_button");
+                        var EmailButton = document.getElementById("Email_button");
+                        var statusButton = document.getElementById("status_button");
 
-                    userNameButton.addEventListener("click", modify_userName, false);
-                    //passwordButton.addEventListener("click", modify_password, false);
-                    EmailButton.addEventListener("click", modify_Email, false);
-                    statusButton.addEventListener("click", modify_status, false);
+                        userNameButton.addEventListener("click", modify_userName, false);
+                        //passwordButton.addEventListener("click", modify_password, false);
+                        EmailButton.addEventListener("click", modify_Email, false);
+                        statusButton.addEventListener("click", modify_status, false);
+                    }
                 },
                 error: function (xhr, type) {
                     alert(xhr + type);
@@ -233,8 +243,7 @@
         function post_modify_Func() {
             var data = {
                 "userName": userName,
-                "schoolName": schoolName,
-                //"password": password,                
+                "schoolName": schoolName,              
                 "Email": Email,
                 "status": status
             }
@@ -250,8 +259,14 @@
                     withCredentials: true
                 },
                 success: function (data) {
-                    console.log(data);
-                    location.reload();
+                    if (data.errors != "") {
+                        alert(data.errors);
+                    }
+                    else {
+                        alert("更改成功");
+                        console.log(data);
+                        location.reload();
+                    }
                 },
                 error: function (xhr, type) {
                     alert(xhr + type);
@@ -264,11 +279,6 @@
             var content = "<input type='text' class='form-control' placeholder='姓名' id='userName' name='userName' size='20'>" + "<button type='button' onclick='javascript: get_userName()'>確認</button>";
             document.getElementById("userName_div").innerHTML = content;
         }
-
-        //function modify_password() {
-        //    var content = "<input type='password' class='form-control' placeholder='密碼' id='password' name='password' size='20'>" + "<button type='button' onclick='javascript: get_password()'>確認</button>";
-        //    document.getElementById("password_div").innerHTML = content;
-        //}
 
         function modify_Email() {
             var content = "<input type='email' class='form-control' placeholder='信箱' id='Email' name='Email' size='20'>" + "<button type='button' onclick='javascript: get_Email()'>確認</button>";
@@ -284,11 +294,6 @@
             userName = document.getElementById("userName").value;
             post_modify_Func();
         }
-
-        //function get_password() {
-        //    password = document.getElementById("password").value;
-        //    postFunc();
-        //}
 
         function get_Email() {
             Email = document.getElementById("Email").value;

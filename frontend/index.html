@@ -148,15 +148,18 @@
             },
             success: function (data) {
                 console.log(data);                
-                if (data.errors!="") {
+                if (data.errors != "") {
                     alert("未順利登入" + data.errors);
                 }
-                else if (data.isAdmin == 1) {
+                else if (data.isAdmin == 1 || data.isAdmin == 2) {
                     location.href = "new_manager-func.html";
                 }
-                else if (data.isAdmin == 0){
+                else if (data.isAdmin == 0) {
                     location.href = "lender_func.html";
-                }                
+                }
+                else {
+                    alert("未知錯誤");
+                }
             },
             error: function (xhr, type) {
             alert(xhr + type);

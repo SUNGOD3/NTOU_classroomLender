@@ -47,7 +47,7 @@
                 <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownNavLink">
                     <li><a class="dropdown-item" href="class_state_for_lender.html"><span>檢視教室狀態</span></a></li>
                     <li><a class="dropdown-item" href="lend_classroom.html"><span>借用教室</span></a></li>
-                    <li><a class="dropdown-item" href="history.html"><span>檢視歷史</span></a></li>
+                    <li><a class="dropdown-item" href="history_for_lender.html"><span>檢視歷史</span></a></li>
                     <li><a class="dropdown-item" href="apply_for_maneger.html"><span>申請成為管理員</span></a></li>
                 </ul>
             </div>
@@ -351,12 +351,16 @@
 						console.log(array1.length);
 						for (var k = 0; k < array1.length; k++) {
 							for (var i = 0; i < floors.length; i++) {
-								var ID = array1[k].toString();
+								ID = array1[k].toString();
 								var floorNumber = ID.substr(0, 1);
 								if (floorNumber == floors[i]){
-									var classroomNumber = newClassroom.rows[i+1].length;
+									console.log(ID);
+									var classroomNumber = newClassroom.rows[i+1].cells.length;
 									newCell = newClassroom.rows[i+1].insertCell(classroomNumber);
-									newCell.innerHTML=ID;
+									newCell.innerHTML = " <input id = '"+ ID + "' type='button' class='btn-sm btn-secondary' value='" + ID + "'>";
+
+									var test = document.getElementById("idBTN");
+									console.log(test);
 								}
 							}
 						}
@@ -423,6 +427,9 @@
 					contentType: 'application/json; charset=UTF-8',
 					dataType: 'json',
 					crossOrigin: null,
+					xhrFields: {
+						withCredentials: true
+					},
 
 					success: function (data){
 						console.log("傳送成功" + JSON.stringify(data));
@@ -455,6 +462,9 @@
 					contentType: 'application/json; charset=UTF-8',
 					dataType: 'json',
 					crossOrigin: null,
+					xhrFields: {
+						withCredentials: true
+					},
 
 					success: function (data){
 						console.log("傳送成功" + JSON.stringify(searchKeyword));
@@ -555,6 +565,9 @@
 						contentType: 'application/json; charset=UTF-8',
 						dataType: 'json',
 						crossOrigin: null,
+						xhrFields: {
+							withCredentials: true
+						},
 							
 						success: function (data){
 							console.log("傳送ID成功");
@@ -668,6 +681,9 @@
 					contentType: 'application/json; charset=UTF-8',
 					dataType: 'json',
 					crossOrigin: null,
+					xhrFields: {
+						withCredentials: true
+					},
 					
 					success: function (data){
 						alert("申請成功!");

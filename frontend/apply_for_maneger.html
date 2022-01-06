@@ -59,9 +59,9 @@
                     功能選單
                 </a>
                 <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownNavLink">
-                    <li><a class="dropdown-item" href="class_state.html"><span>檢視教室狀態</span></a></li>
+                    <li><a class="dropdown-item" href="class_state_for_lender.html"><span>檢視教室狀態</span></a></li>
                     <li><a class="dropdown-item" href="lend_classroom.html"><span>借用教室</span></a></li>
-                    <li><a class="dropdown-item" href="history.html"><span>檢視歷史</span></a></li>
+                    <li><a class="dropdown-item" href="history_for_lender.html"><span>檢視歷史</span></a></li>
                     <li><a class="dropdown-item" href="apply_for_maneger.html"><span>申請成為管理員</span></a></li>
                 </ul>
             </div>
@@ -73,16 +73,13 @@
             <div class="flex-shrink-0 dropdown" style="position: absolute; right:15px; align-items: center;">
                 <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">
                     <img src="ntou_logo.png" width="32" height="32" class="rounded-circle">
-                    <!-- alt="mdo" -->
-                </a>
-                <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
-                    <!--<li><a class="dropdown-item" href="#">查看個人資料</a></li>-->
-                    <li><a class="dropdown-item" href="change-personal-info.html" target="ibody">更改個人資料</a></li>
+                </a> <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
+                    <!--<li><a class="dropdown-item" href="#" target = "ibody">查看個人資料</a></li>-->
+                    <li><a class="dropdown-item" href="change-personal-info.html">更改個人資料</a></li>
                     <li><hr class="dropdown-divider"></li>
                     <li><a class="dropdown-item" href="index.html">登出</a></li>
                 </ul>
             </div>
-
         </div>
     </header>
     <div class="main">
@@ -137,7 +134,7 @@
             var data = {
                 "schoolName": schoolName,
             }
-
+            console.log(data);
             //http://localhost:13588/users/applyForManager http://localhost:5001/apply_for_manager
             $.ajax({
                 type: 'POST',
@@ -147,18 +144,28 @@
                 dataType: 'json',
                 crossOrigin: null,
                 xhrFields: {
-                        withCredentials: true
+                    withCredentials: true
                 },
                 success: function (data) {
-                    console.log(data);
+                    if (data.errors != "") {
+                        alert("未順利申請" + data.errors);
+                        if (data.errors == "timeout!") {
+                            location.href = "index.html";
+                        }
+                    }
+                    else {
+                        alert("成功申請");
+                        location.href = "lender_func.html";
+                        
+                    }
+                    
                 },
                 error: function (xhr, type) {
                     alert(xhr + type);
                 }
             });
 
-            //location.reload();
-            alert("自動重整頁面以得到後更新資訊");
+            
         };
     </script>
 </body>
