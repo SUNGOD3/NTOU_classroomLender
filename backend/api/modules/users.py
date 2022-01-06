@@ -585,6 +585,30 @@ def getAdmin():
     return jsonify(info)
 
 
+@users.route('/confirmPassword',methods=['POST'])
+def confirmPassword():
+    connection = pymysql.connect(host=cfg['db']['host'],user=cfg['db']['user'],password=cfg['db']['password'],db=cfg['db']['database'])
+    info = dict()
+    cursor=connection.cursor()
+    info['password'] = request.json['password']
+    info['errors'] = []
+    if session.get('schoolName')==None:
+        info['errors'] = 'timeout!'
+    else:
+        info['schoolName'] = session.get('schoolName')
+        try:
+            md5 = hashlib.md5() #hash the password for security
+            md5.update(info['password'].encode("utf8")) # for BIG5 and utf8 problem
+            cursor.execute("SELECT schoolName from Users WHERE password = %(password)s and schoolName = %(schoolName)s",{'password':md5.hexdigest(),'schoolName':session.get('schoolName')})
+            row = cursor.fetchall()
+            connection.commit() #submit the data to database 
+            if row[0] != session.get('schoolName'):
+                info['errors'] = 'error password!'
+        except Exception:
+            traceback.print_exc()
+            connection.rollback()
+            info['errors'] = 'confirm Password fail'
+    return jsonify(info)
 
 #   email confirm undo
 #   if a user input an error email (but legal), his student's ID fucked up. 
