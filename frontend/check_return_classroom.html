@@ -33,6 +33,71 @@
                         width : 80px;
                         height : 40px;
             }
+
+            .rwd-table {
+            　background: #fff;
+            　overflow: auto;
+            }
+
+            .rwd-table tr:nth-of-type(2n){
+            　background: #eee;
+            }
+            .rwd-table th,
+            .rwd-table td {
+            　margin: 0.5em 1em;
+            }
+            .rwd-table {
+            　min-width: 100%;
+            }
+
+            /*
+            .rwd-table th {
+            　display: none;
+            }*/
+
+            .rwd-table td {
+            　display: block;
+            }
+
+            .rwd-table td:before {
+            　content: attr(data-th) " : ";
+            　font-weight: bold;
+            　width: 6.5em;
+            　display: inline-block;
+            }
+
+            .rwd-table th, .rwd-table td {
+            　text-align: left;
+            }
+
+            .rwd-table th, .rwd-table td:before {
+            　color: #D20B2A;
+            　font-weight: bold;
+            }
+
+            @media (min-width: 480px) {
+            .rwd-table td:before {
+            　display: inline-block;
+            }
+            .rwd-table th, .rwd-table td {
+            　display: table-cell;
+            　padding: 0.25em 0.5em;
+            }
+            .rwd-table th:first-child,
+            .rwd-table td:first-child {
+            　padding-left: 0;
+            }
+            .rwd-table th:last-child,
+            .rwd-table td:last-child {
+            　padding-right: 0;
+            }
+            .rwd-table th,
+            .rwd-table td {
+            　padding: 1em !important;
+            }
+            }
+
+
         </style>
 
             <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -61,16 +126,25 @@
                         let content = "";
 
                         if(data.errors!=undefined){
-                           alert(data.errors);
+                            if(data.errors=='timeout!'){
+                                alert("timeout!"+"請重新登入");
+                                window.location.href = "index.html";
+                            }else{
+                                alert(data.errors);
+                                window.location.href = "new_manager-func.html";
+                                //alert(data.errors+"!請再試一次!");
+                            }
+                           //alert(data.errors);
                         }else{
 
-                            content = "<tr><th>姓名</th><th>教室編號</th><th>使用時間</th><th>使用星期</th></tr>";
+                            content = "<tr><th>姓名</th><th>教室編號</th><th>借出時間</th><th>使用星期</th></tr>";
 
                             //+"<td>"+"<input class='b' type='button' onclick= 'reject("+ i +")' value='拒絕'>"+"</td>"
                             console.log(content);
                             for(let i=0;i<data.classroomID.length;i++){
                                 console.log(data.userName[i]);
-                                content += "<tr>" + "<td>"+data.userName[i]+"</td>"+"<td>"+data.classroomID[i]+"</td>"+"<td>"+data.lendTime[i]+"~???"+"</td>"+"<td>"+data.lendWeekDay[i]+"</td>"+"<td>"+"<input class='b' type='button' onclick= 'confirm("+ i +")' value='確認'>"+"</td>"+ "</tr>";
+                                //content += "<tr>" + "<td>"+data.userName[i]+"</td>"+"<td>"+data.classroomID[i]+"</td>"+"<td>"+data.lendTime[i]+"~???"+"</td>"+"<td>"+data.lendWeekDay[i]+"</td>"+"<td>"+"<input class='b' type='button' onclick= 'confirm("+ i +")' value='確認'>"+"</td>"+ "</tr>";
+                                content += "<tr>" + "<td data-th='姓名'>"+data.userName[i]+"</td>"+"<td data-th='教室編號'>"+data.classroomID[i]+"</td>"+"<td data-th='借出時間'>"+data.lendTime[i]+"</td>"+"<td data-th='使用星期'>"+data.lendWeekDay[i]+"</td>"+"<td>"+"<input class='b' type='button' onclick= 'confirm("+ i +")' value='確認'>"+"</td>"+ "</tr>";
                                 schoolName[i] = data.schoolName[i];
                                 classroomID[i] = data.classroomID[i];
                                 lendTime[i] = data.lendTime[i];
@@ -240,7 +314,7 @@
         <p class = "head" align = "center">歸還申請</p>
         <p align = "center">
             <!--還教室申請放入table-->
-            <table id = "return_classroom_table" style="border:3px #cccccc solid;" border="1" cellspacing="0" cellpadding="25" align = "center">
+            <table class = "return_classroom_table" id = "history_table" style="border:3px #cccccc solid;" border="1" cellspacing="0" cellpadding="10" align = "center">
 
             </table>
         </p>

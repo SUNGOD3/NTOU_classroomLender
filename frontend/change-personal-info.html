@@ -22,6 +22,13 @@
            #Body    {
                         margin:0 auto;
                     }
+            @media  (max-width:600px){
+                        body   {    overflow: unset;
+                                    float: unset;
+                                    width: 100%;
+                                    height: auto;
+                        }
+                    }
         </style>
 
 
@@ -53,12 +60,23 @@
                     success: function (data) {
                         console.log(data);
                         if(data.errors.length!=0){
-                            alert(data.errors+"!請再試一次!");
+                            if(data.errors=='timeout!'){
+                                alert("timeout!"+"請重新登入");
+                                window.location.href = "index.html";
+                            }else{
+                                alert(data.errors+"!請再試一次!");
+                                //document.getElementById("userName").value = "";
+                                //document.getElementById("password").value = "";
+                                //document.getElementById("password_again").value = "";
+                                //document.getElementById("phoneNumber").value = "";
+                                location.reload();
+                            }
                         }else{
                             alert("資訊修改成功");
+                            //頁面跳轉
+                            window.location.href = "new_manager-func.html";
                         }
-                        //頁面跳轉
-                        window.location.href = "new_manager-func.html";
+                        
                     },
                     error: function (xhr, type) {
                         alert(xhr + type);

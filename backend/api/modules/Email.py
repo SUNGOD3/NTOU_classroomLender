@@ -34,7 +34,7 @@ def sendEmail():
     rows = cursor.fetchall()
     connection.commit()
     if not len(rows):
-           info['error']='Email doesn\'t exist'
+           info['errors']='Email doesn\'t exist'
     else:
         content = MIMEMultipart()  #建立MIMEMultipart物件
         content["subject"] = "NTOU_classroomLender"  #郵件標題
@@ -49,8 +49,9 @@ def sendEmail():
                 smtp.login(GmailAccount, Gmailpasswd)  # 登入寄件者gmail
                 smtp.send_message(content)  # 寄送郵件
                 print('Sent message successfully....')
+                info['errors']=''
             except Exception as e:
-                info['error']='Sent message failed'
+                info['errors']='Sent message failed'
                 e.traceback()
         info['email']=Email
         return jsonify(info)
