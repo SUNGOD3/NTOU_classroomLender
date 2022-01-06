@@ -51,7 +51,6 @@
 				<li><a class="dropdown-item" href="delete_classroom.html"><span>刪除教室</span></a></li>
 				<li><a class="dropdown-item" href="class_state.html"><span>檢視教室狀態</span></a></li>
 				<li><a class="dropdown-item" href="modify_classroom.html"><span>修改教室狀態</span></a></li>
-				<!-- <li><a class="dropdown-item" href="#"><span>修改借用人狀態</span></a></li> -->
 				<li><a class="dropdown-item" href="check_all_user.html"><span>檢視借用人資訊</span></a></li>
 				<li><a class="dropdown-item" href="history.html" ><span>檢視歷史</span></a></li>
 				<li><a class="dropdown-item" href="confirm_administrator_application.html"><span>確認管理員申請</span></a></li>
@@ -59,7 +58,7 @@
 			</ul>
 		</div>
 
-		<div style="width: 40%; display:inline-block; font-size: 30px;">
+		<div style="width: 40%; position: relative; top: auto; left: 4%; text-align: center; display:inline-block; font-size: 30px;">
 			<div style="text-align: center;">NTOU教室借用平台</div>
 		</div>
 
@@ -134,17 +133,43 @@
 	
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<script>
-
-		//讀入資料庫現有教室
-		const floors=["6","5","4","3","2","1","B1"];
-		const classrooms=[];
-		var newClassroom=document.getElementById("classrooms");
-		var newfloors, newCell, newIndex;
-		var countid=0;
-		$(document).ready(function(){
-			var data={
-				"classroomID":classroomID
+//初始空白課表
+const weekDays = ["節次", "星期一","星期二","星期三","星期四","星期五","星期六","星期日"];
+        const classTimes = ["第0節<br>06:20~08:10", "第1節<br>08:20~09:10", "第2節<br>09:20~10:10", 
+                         	"第3節<br>10:20~11:10", "第4節<br>11:15~12:05", "第5節<br>12:10~13:00", 
+                        	"第6節<br>13:10~14:00", "第7節<br>14:10~15:00", "第8節<br>15:10~16:00", 
+                         	"第9節<br>16:05~16:55", "第10節<br>17:30~18:20", "第11節<br>18:30~19:20", 
+                         	"第12節<br>19:25~20:15", "第13節<br>20:20~21:10", "第14節<br>21:15~22:05"];
+		var scheduler = document.getElementById("scheduler");
+		var newclassTimes,newCell;
+		var ID;
+		for (var i = 0; i < weekDays.length; i++) {
+			scheduler.rows[0].cells[i].innerHTML = weekDays[i];
+		}
+		for (var j = 0; j < classTimes.length; j++) {
+			var newRow = scheduler.insertRow(j+1);
+			for (var i = 0; i < weekDays.length; i++) {
+				if (i == 0) {
+					newclassTimes = newRow.insertCell(i);
+					newclassTimes.innerHTML=classTimes[j];
+				}
+				else {
+					newCell = newRow.insertCell(i);
+					newCell.innerHTML = "";
+				}
 			}
+		}
+		
+		//讀入資料庫現有教室
+		const floors = ["6","5","4","3","2","1","B1"];
+		const classrooms = [];
+		var newClassroom = document.getElementById("classrooms");
+		var newfloors, newCell, newIndex;
+		$(document).ready(function(){
+			var data = {
+				"classroomID":classroomID
+			}	
+			console.log("跳到 " + window.location.href);		
 			$.ajax({
 					type: 'GET',
 					url: "http://localhost:13588/Classrooms/getClassrooms",
@@ -155,42 +180,38 @@
 					xhrFields: {
 						withCredentials: true
 					},
-
 					success: function (data){
-						console.log("傳送成功" + JSON.stringify(data));
-						//console.log(data);
-						console.log(JSON.stringify(data));
-						console.log(Object.values(data)[0]);
-
-						var array1=Object.values(data)[0];
-						//console.log(array1.toString());
-						var element1 = array1.toString();
+						console.log("讀取成功: " + JSON.stringify(data));
+						var array1 = Object.values(data)[0];//2d array to 1d array
+						var element1 = array1.toString();//array to string
 						console.log(element1);
 
-						//floor
-						for (var j = 0; j < floors.length; j++) {
-							var newRow = newClassroom.insertRow(j+1);
-							newfloors = newRow.insertCell(0);
-							newfloors.innerHTML=floors[j];
+						if (data.errors != "") {//檢查是否timeout
+                        	alert(data.errors);
 						}
-						
-						//讀入教室ID
-						console.log(array1.length);
-						for (var k = 0; k < array1.length; k++) {
-							for (var i = 0; i < floors.length; i++) {
-								var ID = array1[k].toString();
-								var floorNumber = ID.substr(0, 1);
-								if (floorNumber == floors[i]){
-									var classroomNumber = newClassroom.rows[i+1].length;
-									newCell = newClassroom.rows[i+1].insertCell(classroomNumber);
-									newCell.innerHTML=ID;
+						else {
+							//floor
+							for (var j = 0; j < floors.length; j++) {
+								var newRow = newClassroom.insertRow(j+1);
+								newfloors = newRow.insertCell(0);
+								newfloors.innerHTML = floors[j];
+							}
+							//讀入教室ID
+							console.log(array1.length);
+							for (var k = 0; k < array1.length; k++) {
+								for (var i = 0; i < floors.length; i++) {
+									var ID = array1[k].toString();
+									var floorNumber = ID.substr(0, 1);
+									if (floorNumber == floors[i]){
+										var classroomNumber = newClassroom.rows[i+1].length;
+										newCell = newClassroom.rows[i+1].insertCell(classroomNumber);
+										newCell.innerHTML = ID;
+									}
 								}
 							}
 						}
-						//window.location.reload()  //重新整理頁面
 					},
 					error: function (xhr, type){
-						console.log("傳送失敗");
 						console.log(xhr+type);
 					}
 				}) 
@@ -220,7 +241,7 @@
 				}
 				console.log(JSON.stringify(data));
 				
-				//將新增的教室(classroomID)和狀態(status)post到後端資料庫
+				//將新增的教室(classroomID)和狀態(status)post到資料庫
 				$.ajax({
 					type: 'POST',
 					url: "http://localhost:13588/Classrooms/changeClassroomStatus",
@@ -231,45 +252,50 @@
 					xhrFields: {
 						withCredentials: true
 					},
+					success: function (data){						
+						if (data.errors != "") {//檢查是否timeout
+                        	alert(data.errors);
+							if (data.errors == "timeout!") {
+                            	location.href = "index.html";
+                        	}
+						}
+						else {
+							console.log("傳送成功");
+							//修改教室狀態
+							console.log("start!" + classroomID + " " + status);
+							var isDone = 0;//是否完成修改教室狀態
+							floorNumber=classroomID.substr(0, 1);
+							//console.log(floorNumber);
 
-					success: function (data){
-						console.log("傳送成功");
-						window.location.reload()  //重新整理頁面
+							for (var i = 0; i < floors.length; i++) {
+								var len = classrooms[i].length;//每層樓教室數量
+								//console.log(floors[i].substr(0, 1) + "," + i + "," + len);
+								if (floors[i].substr(0, 1) == floorNumber){
+									for (var j = 1; j <= len; j++){
+										//console.log(newClassroom.rows[i+1].cells[j].innerHTML);
+										if (classroomID == newClassroom.rows[i+1].cells[j].innerHTML) {
+											if (status == 0) newClassroom.rows[i+1].cells[j].style.background="Lime";
+											else if (status == 2) newClassroom.rows[i+1].cells[j].style.background="gray";
+											console.log(status+" 已修改 " + classroomID + " 教室狀態: " + newClassroom.rows[i+1].cells[j].style.background);
+											alert("修改成功!!")
+											isDone = 1;	
+											break;
+										}
+									}
+								}
+							}
+							if (isDone == 0){
+								//console.log("修改失敗!");
+								alert("修改失敗!!")
+							}
+							window.location.reload()  //重新整理頁面
+						}
 					},
 					error: function (xhr, type){
 						console.log("傳送失敗");
 						console.log(xhr+type);
 					}
 				})
-
-				//修改教室狀態
-				console.log("start!" + classroomID + " " + status);
-				var isDone = 0;//是否完成修改教室狀態
-				floorNumber=classroomID.substr(0, 1);
-				//console.log(floorNumber);
-
-				for (var i = 0; i < floors.length; i++) {
-					var len = classrooms[i].length;//每層樓教室數量
-					//console.log(floors[i].substr(0, 1) + "," + i + "," + len);
-					if (floors[i].substr(0, 1) == floorNumber){
-						for (var j = 1; j <= len; j++){
-							//console.log(newClassroom.rows[i+1].cells[j].innerHTML);
-							if (classroomID == newClassroom.rows[i+1].cells[j].innerHTML) {
-								if (status == 0) newClassroom.rows[i+1].cells[j].style.background="Lime";
-								else if (status == 2) newClassroom.rows[i+1].cells[j].style.background="gray";
-								console.log(status+" 已修改 " + classroomID + " 教室狀態: " + newClassroom.rows[i+1].cells[j].style.background);
-								alert("修改成功!!")
-								isDone = 1;	
-								break;
-							}
-						}
-					}
-				}
-				
-				if (isDone == 0){
-					console.log("修改失敗!");
-					alert("修改失敗!!")
-				}
 			}
 		);
 
@@ -279,4 +305,3 @@
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
 </body>
 </html>
-

@@ -113,7 +113,7 @@
                             <input id="searchWord" type="text" class="form-control" name="searchWord" placeholder="search..." value="" required>
                         </div>
                         <div class="col">
-							<input id="filter_searchBTN" type="submit" name="button" class="btn-sm btn-secondary" value="搜尋"></input>
+							<input id="filter_searchBTN" type="submit" class="btn-sm btn-secondary" value="搜尋"></input>
                         </div>
 					</div>
 
@@ -314,6 +314,7 @@
 		var newClassroom=document.getElementById("classrooms");
 		var newfloors, newCell, newIndex;
 		var countid=0;
+		var array1;
 		$(document).ready(function(){
 			var data={
 				"classroomID":classroomID
@@ -332,10 +333,10 @@
 					success: function (data){
 						console.log("傳送成功" + JSON.stringify(data));
 						//console.log(data);
-						console.log(JSON.stringify(data));
+						//console.log(JSON.stringify(data));
 						console.log(Object.values(data)[0]);
 
-						var array1=Object.values(data)[0];
+						array1=Object.values(data)[0];
 						//console.log(array1.toString());
 						var element1 = array1.toString();
 						console.log(element1);
@@ -354,13 +355,13 @@
 								ID = array1[k].toString();
 								var floorNumber = ID.substr(0, 1);
 								if (floorNumber == floors[i]){
-									console.log(ID);
+									//console.log(ID);
 									var classroomNumber = newClassroom.rows[i+1].cells.length;
 									newCell = newClassroom.rows[i+1].insertCell(classroomNumber);
-									newCell.innerHTML = " <input id = '"+ ID + "' type='button' class='btn-sm btn-secondary' value='" + ID + "'>";
+									newCell.innerHTML = " <input id = '"+ ID + "' type='button' class='btn-sm btn btn-outline-secondary' value='" + ID + "'>";
 
 									var test = document.getElementById("idBTN");
-									console.log(test);
+									//console.log(test);
 								}
 							}
 						}
@@ -381,7 +382,7 @@
 		var k=0,id1=0,id2=0;
 		$('#filter_searchBTN').click(
 			function(){
-				console.log("start post");
+				//console.log("start post");
 
 				if( $("#computer").prop("checked") ){
 					$("#computer").val("1");
@@ -413,13 +414,12 @@
 				//console.log(commonEquipment);
 				//console.log(searchWord);
 
-
 				//將equipmentFilter post到後端資料庫
 				var equipmentFilter = {
 					"commonEquipment":commonEquipment,
 					"classroomID":classroomID1
 				}
-				console.log("post equipmentFilter: " + JSON.stringify(equipmentFilter));
+				console.log("start post equipmentFilter: " + JSON.stringify(equipmentFilter));
 				$.ajax({
 					type: 'POST',
 					url: "http://localhost:13588/Classrooms/equipmentFilter",
@@ -435,6 +435,8 @@
 						console.log("傳送成功" + JSON.stringify(data));
 						classroomID1=Object.values(data)[0];
 						console.log(classroomID1);
+						selected=[];
+						console.log(selected);
 						for (var i = 0; i < classroomID1.length; i++) {
 							selected[k] = classroomID1[i];
 							k++;
@@ -454,7 +456,7 @@
 					"searchWord":searchWord,
 					"classroomID":classroomID2
 				}
-				console.log("post searchKeyword: " + JSON.stringify(searchKeyword));
+				console.log("start post searchKeyword: " + JSON.stringify(searchKeyword));
 				$.ajax({
 					type: 'POST',
 					url: "http://localhost:13588/Classrooms/searchKeyword",
@@ -472,8 +474,8 @@
 						console.log(classroomID2);
 
 						//selected = classroomID1;
-						for (var j = 0; j < classroomID2.length; j++) {
-							for (var i = 0; i < classroomID1.length; i++) {
+						for (var i = 0; i < k; i++) {
+							for (var j = 0; j < classroomID2.length; j++) {
 								if (classroomID1[i] != classroomID2[j]){
 									selected[k] = classroomID2[j];
 									k++;
@@ -498,22 +500,38 @@
 				console.log("start compare: " + selected);
 				//比較 (設備篩選or關鍵字搜尋) 的教室(classroomID)
 				//顯示結果(classroomID), color:yellow
+				var len=0;
 				if (newClassroom != null) {
 					for (var i = 1; i < newClassroom.rows.length; i++) {
 						for (var j = 1; j < newClassroom.rows[i].cells.length; j++){
+							var content = newClassroom.rows[i].cells[j].innerHTML;
+							//console.log(content);
+							var number = content.substr(12, 3);
+							//console.log(number); //classroomID
+							newClassroom.rows[i].cells[j].innerHTML=" <input id = '"+ number + "' class = 'invisible' type='button' class='btn-sm btn-outline-secondary' value='" + number + "'>";
 							newClassroom.rows[i].cells[j].style.background="gray";
 							newClassroom.rows[i].cells[j].style.cursor="context-menu";
 						}
 					}
-				}
-				if (newClassroom != null) {
-					while(k--){
-						for (var i = 1; i < newClassroom.rows.length; i++) {
-							for (var j = 1; j < newClassroom.rows[i].cells.length; j++){
-								if (selected[k] == newClassroom.rows[i].cells[j].innerHTML) {
-									newClassroom.rows[i].cells[j].style.background="yellow";
-									newClassroom.rows[i].cells[j].style.cursor="pointer";
-									console.log(newClassroom.rows[i].cells[j].innerHTML+" is same, color: "+ newClassroom.rows[i].cells[j].style.background);
+					while (len < selected.length){
+						if (selected[len] == '') {
+							len++;
+						}
+						else {
+							for (var i = 1; i < newClassroom.rows.length; i++) {
+								for (var j = 1; j < newClassroom.rows[i].cells.length; j++){
+									var content = newClassroom.rows[i].cells[j].innerHTML;
+									//console.log(content);
+									var number = content.substr(12, 3);
+									//console.log(number);
+									if (selected[len] == number) {
+										console.log(selected[len]);
+										newClassroom.rows[i].cells[j].innerHTML=" <input id = '"+ number + "' class = 'visible' type='button' class='btn-sm btn-warning' value='" + number + "'>";
+										newClassroom.rows[i].cells[j].style.background="yellow";
+										//newClassroom.rows[i].cells[j].style.cursor="pointer";
+										//console.log(newClassroom.rows[i].cells[j].innerHTML);
+										len++;
+									}
 								}
 							}
 						}
@@ -537,14 +555,14 @@
 		var dataReturnTime=[];
         var dataLength;
 		//點選要檢視的教室
-		document.onclick=function(){
-			var obj = event.srcElement; 
+		document.onclick = function(){
+			var obj = event.target; 
+			//console.log(obj);
 			if (obj.type == "button"){ 
 				console.log(obj.id);
-			} 
-			//post: classroomID ,get: 教室狀態(status) 課程名稱(courseName) 日期(weekDay) 星期:weekDay.getDay() lendTime returnTime
-			console.log("start post scheduler");
-					
+				//post: classroomID ,get: 教室狀態(status) 課程名稱(courseName) 日期(weekDay) 星期:weekDay.getDay() lendTime returnTime
+				console.log("start post scheduler");
+						
 					var data = {
 						"classroomID":obj.id,
 						"courseName":courseName,
@@ -570,7 +588,7 @@
 						},
 							
 						success: function (data){
-							console.log("傳送ID成功");
+							console.log("開始篩選教室");
 							console.log(JSON.stringify(data));
 							console.log(Object.values(data)[1]);
 							var arrayCourseName=Object.values(data)[1];
@@ -608,7 +626,7 @@
 							console.log(xhr+type);
 						}
 					});
-				
+			}
 		}
 
 
