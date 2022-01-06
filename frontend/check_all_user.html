@@ -19,12 +19,15 @@
             font-weight: bold;
         }
 
+        /*
         .main {
             background-color: #f4f5fe;
             position: absolute;
-            left: 20px;
-            width:75%;
+            left: 20%;
+            width:70%;
+            
         }
+        */
 
         button {
             background-color: #c3c8ec;
@@ -38,6 +41,13 @@
             text-align: center;
             border: 1px solid black;
             border-collapse: collapse;
+            
+        }
+
+        table   {   font-size : 20px;
+                    width : 70%;
+                    overflow : scroll;
+                    border-collapse: collapse;
         }
 
         .classroom:hover {
@@ -50,6 +60,71 @@
             font-size: 30px;
             font-weight: bold;
         }
+
+        .rwd-table {
+            　background: #fff;
+            　overflow: auto;
+            }
+
+            .rwd-table tr:nth-of-type(2n){
+            　background: #eee;
+            }
+            .rwd-table th,
+            .rwd-table td {
+            　margin: 0.5em 1em;
+            }
+            .rwd-table {
+            　min-width: 100%;
+            }
+
+            /*
+            .rwd-table th {
+            　display: none;
+            }*/
+
+            .rwd-table td {
+            　display: block;
+            }
+
+            .rwd-table td:before {
+            　content: attr(data-th) " : ";
+            　font-weight: bold;
+            　width: 6.5em;
+            　display: inline-block;
+            }
+
+            .rwd-table th, .rwd-table td {
+            　text-align: left;
+            }
+
+            .rwd-table th, .rwd-table td:before {
+            　color: #D20B2A;
+            　font-weight: bold;
+            }
+
+            @media (min-width: 480px) {
+            .rwd-table td:before {
+            　display: inline-block;
+            }
+            .rwd-table th, .rwd-table td {
+            　display: table-cell;
+            　padding: 0.25em 0.5em;
+            }
+            .rwd-table th:first-child,
+            .rwd-table td:first-child {
+            　padding-left: 0;
+            }
+            .rwd-table th:last-child,
+            .rwd-table td:last-child {
+            　padding-right: 0;
+            }
+            .rwd-table th,
+            .rwd-table td {
+            　padding: 1em !important;
+            }
+            }
+
+
     </style>
 </head>
 
@@ -100,9 +175,9 @@
         </p>
         <br>
         <div class="table-responsive">
-            <table class="table table-striped table-sm">
-                
-                <tbody id="data_table">
+            <table class="table table-striped table-sm rwd-table" >
+           
+                <tbody id="data_table" >
                 </tbody>
             </table>
         </div>
@@ -162,7 +237,7 @@
                         for (let i = 0; i < data.length; i++) {
                             str = data[i].split(",");
                             console.log(str);
-                            content += "<tr>" + "<td id='schoolName" + i + "'>" + str[0] + "</td> " + "<td>" + str[1] + "</td> " + "<td>" + str[3] + "</td>" + "<td>" + str[2] + "</td>" + "<td><button type='button' onclick='javascript: postFunc(" + i + ")'>修改</button></td>" + "</tr>";
+                            content += "<tr>" + "<td id='schoolName" + i + "' data-th='學號'>" + str[0] + "</td> " + "<td data-th='姓名'>" + str[1] + "</td> " + "<td data-th='信箱'>" + str[3] + "</td>" + "<td data-th='狀態'>" + str[2] + "</td>" + "<td data-th='修改'><button type='button' onclick='javascript: postFunc(" + i + ")'>修改</button></td>" + "</tr>";
                         }
                         document.getElementById("data_table").innerHTML = content;
                     }

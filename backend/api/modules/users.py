@@ -228,6 +228,7 @@ def setIdentityCode():
     info = dict()
     cursor = connection.cursor()
     schoolName = request.json['schoolName']
+    print(schoolName)
     cursor.execute("SELECT * from Users WHERE schoolName = %(schoolName)s",{'schoolName':schoolName})
     checkEmail=CheckEmail()
     checkEmail.schoolName(schoolName)
@@ -451,6 +452,10 @@ def info():
             if len(info['errors'])==0:
                 cursor.execute("UPDATE Users SET password=%(password)s  WHERE schoolName = %(schoolName)s",{'password':md5.hexdigest(),'schoolName':session.get('schoolName')})
                 connection.commit()
+
+        if len(info['userName'])==0 and len(info['phoneNumber'])==0 and len(info['password'])==0:
+            info['errors'] = 'please update your information!'
+
     except Exception:
             traceback.print_exc()
             connection.rollback()
