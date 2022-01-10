@@ -569,7 +569,7 @@ def getUserInfo():
     return jsonify(info)
 
 
-@users.route('/getAdmin',methods=['POST'])
+@users.route('/getAdmin',methods=['GET'])
 def getAdmin():
     connection = pymysql.connect(host=cfg['db']['host'],user=cfg['db']['user'],password=cfg['db']['password'],db=cfg['db']['database'])
     info = dict()
@@ -582,7 +582,8 @@ def getAdmin():
             cursor.execute("SELECT isAdmin from Users WHERE schoolName = %(schoolName)s",{'schoolName':session.get('schoolName')})
             row = cursor.fetchall()
             connection.commit()
-            info['schoolName'] = row
+            info['isAdmin'] = row
+            info['errors'] = []
         except Exception:
             traceback.print_exc()
             connection.rollback()
