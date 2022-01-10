@@ -132,6 +132,7 @@
                     withCredentials: true
                 },
                 success: function (data) {
+                    console.log(data);
                     if (data.errors != "") {
                         alert(data.errors);
                         if (data.errors == "timeout!") {
@@ -140,7 +141,7 @@
 
                     }
                     else {
-                        if (data.isAdmin != 2) {
+                        if (data.isAdmin[0] != 2) {
                             alert("此為最高權限管理員的功能，頁面將跳回管理員功能選單");
                             location.href = "new_manager-func.html";
                         }
@@ -203,7 +204,7 @@
 
             $.ajax({
                 type: 'POST',
-                url: "http://localhost:13588/users/passwordConfirm",
+                url: "http://localhost:13588/users/confirmPassword",
                 data: JSON.stringify(data),
                 contentType: 'application/json; charset=UTF-8',
                 dataType: 'json',
