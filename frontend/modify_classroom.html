@@ -27,7 +27,7 @@
 		}
 		table, th, tr, td {
 				text-align: center;
-				border:1px solid rgb(0, 0, 0);
+				border:1px solid black;
 				border-collapse: collapse;
 		}
 		.classroom:hover {
@@ -35,58 +35,104 @@
 				color: white;
 				font-weight: bold;
 		}
+		.rwd-table {
+            background: #fff;
+            overflow: auto;
+            min-width: 100%;
+        }
+
+        .rwd-table tr:nth-of-type(2n){
+            background: #eee;
+        }
+        .rwd-table th, .rwd-table td {
+            margin: 0.5em 1em;
+        }
+        .rwd-table td {
+            display: block;
+        }
+		.rwd-table td:before {
+            content: attr(data-th) " : ";
+            font-weight: bold;
+            width: 6.5em;
+            display: inline-block;
+        }
+		.rwd-table th, .rwd-table td {
+            text-align: left;
+        }
+        .rwd-table th, .rwd-table td:before {
+            color: #D20B2A;
+            font-weight: bold;
+        }
+
+        @media (min-width: 480px) {
+            .rwd-table td:before {
+            	display: inline-block;
+            }
+            .rwd-table th, .rwd-table td {
+				display: table-cell;
+				padding: 0.25em 0.5em;
+            }
+            .rwd-table th:first-child, .rwd-table td:first-child {
+            	padding-left: 0;
+            }
+            .rwd-table th:last-child, .rwd-table td:last-child {
+				padding-right: 0;
+            }
+            .rwd-table th, .rwd-table td {
+				padding: 1em !important;
+			}
+        }
 	</style>
 </head>
 <body>
 	<header class="py-3 mb-3 border-bottom">
-	<div class="container-fluid d-grid gap-3 align-items-center" style="grid-template-columns: 1fr 2fr;">
-		<div class="dropdown">
-			<a href="#" class="d-flex align-items-center col-lg-4 mb-2 mb-lg-0 link-dark text-decoration-none dropdown-toggle" id="dropdownNavLink" data-bs-toggle="dropdown" aria-expanded="false">
-				功能選單
-			</a>
-			<ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownNavLink">
-				<li><a class="dropdown-item" href="check_lend_classroom.html"><span>確認借出教室</span></a></li>
-				<li><a class="dropdown-item" href="check_return_classroom.html"><span>確認歸還教室</span></a></li>
-				<li><a class="dropdown-item" href="add_classroom.html"><span>新增教室</span></a></li>
-				<li><a class="dropdown-item" href="delete_classroom.html"><span>刪除教室</span></a></li>
-				<li><a class="dropdown-item" href="class_state.html"><span>檢視教室狀態</span></a></li>
-				<li><a class="dropdown-item" href="modify_classroom.html"><span>修改教室狀態</span></a></li>
-				<li><a class="dropdown-item" href="check_all_user.html"><span>檢視借用人資訊</span></a></li>
-				<li><a class="dropdown-item" href="history.html" ><span>檢視歷史</span></a></li>
-				<li><a class="dropdown-item" href="confirm_administrator_application.html"><span>確認管理員申請</span></a></li>
-				<li><a class="dropdown-item" href="lower_authority.html" >修改一般管理員權限</a></li>
-			</ul>
-		</div>
+		<div class="container-fluid d-grid gap-3 align-items-center" style="grid-template-columns: 1fr 2fr;">
+			<div class="dropdown">
+				<a href="#" class="d-flex align-items-center col-lg-4 mb-2 mb-lg-0 link-dark text-decoration-none dropdown-toggle" id="dropdownNavLink" data-bs-toggle="dropdown" aria-expanded="false">
+					功能選單
+				</a>
+				<ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownNavLink">
+                    <li><a class="dropdown-item" href="lend_classroom.html"><span>借用教室</span></a></li>
+					<li><a class="dropdown-item" href="check_lend_classroom.html"><span>確認借出教室</span></a></li>
+					<li><a class="dropdown-item" href="check_return_classroom.html"><span>確認歸還教室</span></a></li>
+					<li><a class="dropdown-item" href="add_classroom.html"><span>新增教室</span></a></li>
+					<li><a class="dropdown-item" href="delete_classroom.html"><span>刪除教室</span></a></li>
+					<li><a class="dropdown-item" href="class_state.html"><span>檢視教室狀態</span></a></li>
+					<li><a class="dropdown-item" href="modify_classroom.html"><span>修改教室狀態</span></a></li>
+					<li><a class="dropdown-item" href="check_all_user.html"><span>檢視借用人資訊</span></a></li>
+					<li><a class="dropdown-item" href="history.html" ><span>檢視歷史</span></a></li>
+					<li><a class="dropdown-item" href="confirm_administrator_application.html"><span>確認管理員申請</span></a></li>
+					<li><a class="dropdown-item" href="lower_authority.html" >修改一般管理員權限</a></li>
+				</ul>
+			</div>
 
-		<div style="width: 40%; position: relative; top: auto; left: 4%; text-align: center; display:inline-block; font-size: 30px;">
-			<div style="text-align: center;">NTOU教室借用平台</div>
-		</div>
+			<div style="width: 40%; position: relative; top: auto; left: 4%; text-align: center; display:inline-block; font-size: 30px;">
+				<div style="text-align: center;">NTOU教室借用平台</div>
+			</div>
 
-		<div class="flex-shrink-0 dropdown" style="position: absolute; right:15px; align-items: center;">
-			<a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">
-				<img src="ntou_logo.png" width="32" height="32" class="rounded-circle">
-			</a>
-			<ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
-				<!--<li><a class="dropdown-item" href="#" target = "ibody">查看個人資料</a></li>-->
-				<li><a class="dropdown-item" href="change-personal-info.html">更改個人資料</a></li>
-				<li><hr class="dropdown-divider"></li>
-				<li><a class="dropdown-item" href="index.html" >登出</a></li>
-			</ul>
+			<div class="flex-shrink-0 dropdown" style="position: absolute; right:15px; align-items: center;">
+				<a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">
+					<img src="ntou_logo.png" width="32" height="32" class="rounded-circle">
+				</a>
+				<ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
+					<li><a class="dropdown-item" href="change-personal-info.html">更改個人資料</a></li>
+					<li><hr class="dropdown-divider"></li>
+					<li><a class="dropdown-item" href="index.html" >登出</a></li>
+				</ul>
+			</div>
 		</div>
-
-	</div>
 	</header>
 	<main>
 		
-		<div class="row" style="position: auto; top: auto; left: auto; margin: auto; padding: auto;">
+		<div class="row justify-content-center" style="position: auto; top: auto; left: auto; margin: auto; padding: auto;">
 
 			<p style = "font-size: 30px; font-weight: bold; text-align: center;">修改教室狀態</p>
 
 			<!--左側-->
 			<!--選擇教室-->
-			<div class="col-6">
-					<div class="row d-flex align-items-center" style="position: relative; top: 40px; left: 40%;">
-						<h4>目前教室狀態</h4>
+			<div class="col-md">
+					<div class="row justify-content-center" style="position: relative; top: 40px;">
+						<h4 style="text-align: center;">目前教室狀態</h4>
 						<div class="col-8 d-flex align-items-center table-responsive" style="text-align: center;">
 							<table id="classrooms" class="table table-striped table-sm" style="border-collapse: collapse; cursor: context-menu;">
 								<tr class="rows">
@@ -100,10 +146,10 @@
 
 			<!--右邊-->
 			<!--填寫教室編號 & 申請借用教室-->
-			<div class="col-6">
+			<div class="col-md">
 				<!--輸入教室編號-->
-				<div class="row justify-content-start" style="position: relative; top: 40px; left: 10%;">							
-					<div class="col-6">
+				<div class="row" style="position: relative; top: 40px;">							
+					<div class="col-md-6">
 						<label for="classroomID" class="form-label">教室編號</label>
 						<input id="classroomID" type="text" class="form-control" name="classroomID" placeholder="請輸入欲修改教室編號..." value="" required>
 						<div class="invalid-feedback">請輸入教室編號!</div>
@@ -111,19 +157,27 @@
 				</div>
 				
 				<!--輸入教室狀態-->
-				<div class="row" style="position: relative; top: 60px; left: 10%;">
-					<div class="col-6">
-						<input id="status_0" type="radio" name="status_0">
+				<div class="row" style="position: relative; top: 60px;">
+					<!-- <div class="col-6">
+						<input  type="radio" name="status_0">
 						<label class="form-check-label">可借用</label>
 						<br>
-						<input id="status_2" type="radio" name="status_2">
+						<input  type="radio" name="status_2">
 						<label class="form-check-label">禁止借用</label>
+					</div> -->
+					<div class="col-md-6">
+						<label for="classroomStatus" class="form-label">教室狀態</label>
+						<select id="classroomStatus" class="form-select" name="classroomStatus"  required>
+							<option id="0" value="0">可借用</option>
+							<option id="2" value="2">禁止借用</option> 
+						</select> 
+						<div class="invalid-feedback">請選擇狀態!</div>
 					</div>
 				</div>	
 
 				<!--修改教室按鈕-->
-				<div class="row justify-content-start" style="position: relative; top: 80px; left: 10%;">
-					<div class="col-5">
+				<div class="row justify-content-start" style="position: relative; top: 80px;">
+					<div class="col-md-6">
 						<input id="modifyBTN" type="submit" name="button" class="btn-sm btn-secondary" value="確認修改">
 					</div>
 				</div>		
@@ -133,33 +187,6 @@
 	
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<script>
-//初始空白課表
-const weekDays = ["節次", "星期一","星期二","星期三","星期四","星期五","星期六","星期日"];
-        const classTimes = ["第0節<br>06:20~08:10", "第1節<br>08:20~09:10", "第2節<br>09:20~10:10", 
-                         	"第3節<br>10:20~11:10", "第4節<br>11:15~12:05", "第5節<br>12:10~13:00", 
-                        	"第6節<br>13:10~14:00", "第7節<br>14:10~15:00", "第8節<br>15:10~16:00", 
-                         	"第9節<br>16:05~16:55", "第10節<br>17:30~18:20", "第11節<br>18:30~19:20", 
-                         	"第12節<br>19:25~20:15", "第13節<br>20:20~21:10", "第14節<br>21:15~22:05"];
-		var scheduler = document.getElementById("scheduler");
-		var newclassTimes,newCell;
-		var ID;
-		for (var i = 0; i < weekDays.length; i++) {
-			scheduler.rows[0].cells[i].innerHTML = weekDays[i];
-		}
-		for (var j = 0; j < classTimes.length; j++) {
-			var newRow = scheduler.insertRow(j+1);
-			for (var i = 0; i < weekDays.length; i++) {
-				if (i == 0) {
-					newclassTimes = newRow.insertCell(i);
-					newclassTimes.innerHTML=classTimes[j];
-				}
-				else {
-					newCell = newRow.insertCell(i);
-					newCell.innerHTML = "";
-				}
-			}
-		}
-		
 		//讀入資料庫現有教室
 		const floors = ["6","5","4","3","2","1","B1"];
 		const classrooms = [];
@@ -181,20 +208,27 @@ const weekDays = ["節次", "星期一","星期二","星期三","星期四","星
 						withCredentials: true
 					},
 					success: function (data){
-						console.log("讀取成功: " + JSON.stringify(data));
-						var array1 = Object.values(data)[0];//2d array to 1d array
-						var element1 = array1.toString();//array to string
-						console.log(element1);
-
-						if (data.errors != "") {//檢查是否timeout
-                        	alert(data.errors);
-						}
+						if (data.errors != undefined) {
+                            if (data.errors=='timeout!') {
+                                alert("timeout! "+"請重新登入");
+                                window.location.href = "index.html";
+                            }
+							else {
+                                alert(data.errors);
+                                window.location.href = "modify_classroom.html";
+                            }
+                        }
 						else {
+							console.log("讀取成功: " + JSON.stringify(data));
+							var array1 = Object.values(data)[0];//2d array to 1d array
+							var element1 = array1.toString();//array to string
+							console.log(element1);
 							//floor
 							for (var j = 0; j < floors.length; j++) {
 								var newRow = newClassroom.insertRow(j+1);
 								newfloors = newRow.insertCell(0);
 								newfloors.innerHTML = floors[j];
+								classrooms[j] = 0;
 							}
 							//讀入教室ID
 							console.log(array1.length);
@@ -202,13 +236,16 @@ const weekDays = ["節次", "星期一","星期二","星期三","星期四","星
 								for (var i = 0; i < floors.length; i++) {
 									var ID = array1[k].toString();
 									var floorNumber = ID.substr(0, 1);
-									if (floorNumber == floors[i]){
+									console.log(floorNumber);
+									if (floorNumber == floors[i].substr(0, 1)){
 										var classroomNumber = newClassroom.rows[i+1].length;
 										newCell = newClassroom.rows[i+1].insertCell(classroomNumber);
 										newCell.innerHTML = ID;
+										classrooms[i]++;
 									}
 								}
 							}
+							console.log(classrooms);
 						}
 					},
 					error: function (xhr, type){
@@ -222,18 +259,26 @@ const weekDays = ["節次", "星期一","星期二","星期三","星期四","星
 			//修改教室狀態function
 			function (){
 				console.log("post start!");
+				var classroomID = $("#classroomID").val();
+				var status;
 
-				if( $("#status_0").prop("checked") ){
+				// if( $("#status_0").prop("checked") ){
+				// 	status = 0;
+				// }
+				// else if( $("#status_2").prop("checked") ){
+				// 	status = 2;
+				// }
+				// var status0 = $("#status_0").val();
+				// var status2 = $("#status_2").val();
+				// console.log(status0 + ", " + status2 + ", " + status);
+
+				var status_0 = document.getElementById('0').selected;
+  				var status_2 = document.getElementById('2').selected;
+				if (status_0 == true) {
 					status = 0;
-				}
-				else if( $("#status_2").prop("checked") ){
+				} else if (status_2 == true) {
 					status = 2;
 				}
-
-				var classroomID = $("#classroomID").val();
-				var status0 = $("#status_0").val();
-				var status2 = $("#status_2").val();
-				console.log(status0 + ", " + status2 + ", " + status);
 
 				var data = {
 					"classroomID":classroomID,
@@ -252,13 +297,17 @@ const weekDays = ["節次", "星期一","星期二","星期三","星期四","星
 					xhrFields: {
 						withCredentials: true
 					},
-					success: function (data){						
-						if (data.errors != "") {//檢查是否timeout
-                        	alert(data.errors);
-							if (data.errors == "timeout!") {
-                            	location.href = "index.html";
-                        	}
-						}
+					success: function (data){	
+						if (data.errors != undefined) {
+                            if (data.errors=='timeout!') {
+                                alert("timeout! "+"請重新登入");
+                                window.location.href = "index.html";
+                            }
+							else {
+                                alert(data.errors);
+                                window.location.href = "modify_classroom.html";
+                            }
+                        }
 						else {
 							console.log("傳送成功");
 							//修改教室狀態
@@ -268,7 +317,7 @@ const weekDays = ["節次", "星期一","星期二","星期三","星期四","星
 							//console.log(floorNumber);
 
 							for (var i = 0; i < floors.length; i++) {
-								var len = classrooms[i].length;//每層樓教室數量
+								var len = classrooms[i];//每層樓教室數量
 								//console.log(floors[i].substr(0, 1) + "," + i + "," + len);
 								if (floors[i].substr(0, 1) == floorNumber){
 									for (var j = 1; j <= len; j++){
@@ -277,7 +326,7 @@ const weekDays = ["節次", "星期一","星期二","星期三","星期四","星
 											if (status == 0) newClassroom.rows[i+1].cells[j].style.background="Lime";
 											else if (status == 2) newClassroom.rows[i+1].cells[j].style.background="gray";
 											console.log(status+" 已修改 " + classroomID + " 教室狀態: " + newClassroom.rows[i+1].cells[j].style.background);
-											alert("修改成功!!")
+											alert("修改" + classroomID +"成功!!")
 											isDone = 1;	
 											break;
 										}
@@ -288,7 +337,7 @@ const weekDays = ["節次", "星期一","星期二","星期三","星期四","星
 								//console.log("修改失敗!");
 								alert("修改失敗!!")
 							}
-							window.location.reload()  //重新整理頁面
+							//window.location.reload()  //重新整理頁面
 						}
 					},
 					error: function (xhr, type){
