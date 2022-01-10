@@ -616,6 +616,49 @@ def confirmPassword():
             info['errors'] = 'confirm Password fail'
     return jsonify(info)
 
+@users.route('/checkLendInfo',methods=['POST'])
+def checkLendInfo():
+    connection = pymysql.connect(host=cfg['db']['host'],user=cfg['db']['user'],password=cfg['db']['password'],db=cfg['db']['database'])
+    info = dict()
+    cursor=connection.cursor()
+    if session.get('schoolName')==None:
+        info['errors'] = 'timeout!'
+    else:
+        info['schoolName'] = session.get('schoolName')
+        try:
+            cursor.execute("SELECT status from Users WHERE schoolName = %(schoolName)s",{'schoolName':info['schoolName']})
+            row = cursor.fetchall()
+            connection.commit()
+            info['status'] = row
+            info['LendInfo'] = ''
+            if row[0] == 0:
+                info['LendInfo'] = 'User can borrow classroom now'
+            elif row[0] == 1:
+                info['LendInfo'] = 'User having a classroom now'
+                cursor.execute("SELECT * from history WHERE schoolName = %(schoolName)s and returnTime is NULL ",{'schoolName':info['schoolName']})
+                row = cursor.fetchall()
+                connection.commit()
+                info['history'] = row
+                cursor.execute("SELECT * from ApplicationForms WHERE schoolName = %(schoolName)s",{'schoolName':info['schoolName']})
+                row = cursor.fetchall()
+                connection.commit()
+                info['application'] = row
+            elif row[0] == 2:
+                info['LendInfo'] = 'User can not borrow classroom now (account has been banned)'
+            elif row[0] == 3:
+                info['LendInfo'] = 'User have applied for some classrooms'
+                cursor.execute("SELECT * from ApplicationForms WHERE schoolName = %(schoolName)s",{'schoolName':info['schoolName']})
+                row = cursor.fetchall()
+                connection.commit()
+                info['application'] = row
+            else:
+                info['errors'] = 'Fatal Error: can not find this account!'
+        except Exception:
+            traceback.print_exc()
+            connection.rollback()
+            info['errors'] = 'confirm Password fail'
+    return jsonify(info)
+
 #   email confirm undo
 #   if a user input an error email (but legal), his student's ID fucked up. 
 
