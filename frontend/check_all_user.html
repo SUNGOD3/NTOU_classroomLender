@@ -10,7 +10,7 @@
             background-color: #f4f5fe;
             font-family: 微軟正黑體, Arial, Helvetica, sans-serif;
             overflow: hidden;
-            overflow-y: scroll;
+            overflow-y:auto;
         }
 
         header {
@@ -18,17 +18,13 @@
             color: navy;
             font-weight: bold;
         }
+        
 
-        /*
-        .main {
-            background-color: #f4f5fe;
-            position: absolute;
-            left: 20%;
-            width:70%;
-            
+        .table{
+            position:relative;
+            left:10%;
+            width:80%;
         }
-        */
-
         button {
             background-color: #c3c8ec;
         }
@@ -44,11 +40,6 @@
             
         }
 
-        table   {   font-size : 20px;
-                    width : 70%;
-                    overflow : scroll;
-                    border-collapse: collapse;
-        }
 
         .classroom:hover {
             background-color: lightblue;
@@ -59,12 +50,19 @@
         .subtitle {
             font-size: 30px;
             font-weight: bold;
+            left: 20px;
+            position: relative;
+        }
+
+        .modify_form_div {
+            left: 20px;
+            position: relative;
         }
 
         .rwd-table {
             　background: #fff;
             　overflow: auto;
-            }
+        }
 
             .rwd-table tr:nth-of-type(2n){
             　background: #eee;
@@ -103,25 +101,29 @@
             }
 
             @media (min-width: 480px) {
-            .rwd-table td:before {
-            　display: inline-block;
-            }
-            .rwd-table th, .rwd-table td {
-            　display: table-cell;
-            　padding: 0.25em 0.5em;
-            }
-            .rwd-table th:first-child,
-            .rwd-table td:first-child {
-            　padding-left: 0;
-            }
-            .rwd-table th:last-child,
-            .rwd-table td:last-child {
-            　padding-right: 0;
-            }
-            .rwd-table th,
-            .rwd-table td {
-            　padding: 1em !important;
-            }
+                .table {
+                    position: relative;
+                    left: 3%;
+                }
+                .rwd-table td:before {
+            　    display: inline-block;
+                }
+                .rwd-table th, .rwd-table td {
+            　    display: table-cell;
+            　    padding: 0.25em 0.5em;
+                }
+                .rwd-table th:first-child,
+                .rwd-table td:first-child {
+            　    padding-left: 0;
+                }
+                .rwd-table th:last-child,
+                .rwd-table td:last-child {
+            　    padding-right: 0;
+                }
+                .rwd-table th,
+                .rwd-table td {
+            　    padding: 1em !important;
+                }
             }
 
 
@@ -175,12 +177,14 @@
         </p>
         <br>
         <div class="table-responsive">
-            <table class="table table-striped table-sm rwd-table" >
-           
-                <tbody id="data_table" >
+            <table class="table table-striped table-sm rwd-table">
+
+                <tbody id="data_table">
                 </tbody>
             </table>
         </div>
+    </div>
+    <div class="modify_form_div">
         <div class="content" id="userName_div">
 
         </div>
@@ -189,11 +193,7 @@
 
         </div>
 
-        <br>
-        <!--<div class="content" id="password_div">
-
-    </div>
-    <br>-->
+        <br>          
         <div class="content" id="Email_div">
 
         </div>
@@ -201,9 +201,7 @@
         <div class="content" id="status_div">
 
         </div>
-        <br>
     </div>
-    <br />
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
