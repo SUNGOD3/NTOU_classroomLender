@@ -616,7 +616,7 @@ def confirmPassword():
             info['errors'] = 'confirm Password fail'
     return jsonify(info)
 
-@users.route('/checkLendInfo',methods=['POST'])
+@users.route('/checkLendInfo',methods=['GET'])
 def checkLendInfo():
     connection = pymysql.connect(host=cfg['db']['host'],user=cfg['db']['user'],password=cfg['db']['password'],db=cfg['db']['database'])
     info = dict()
