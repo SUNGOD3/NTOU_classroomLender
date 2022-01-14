@@ -1,0 +1,5 @@
+db:
+    host : localhost
+    user : root
+    password : '1223'
+    database : NTOU_classroomLender

@@ -315,6 +315,7 @@ def applyForManager():
     connection = pymysql.connect(host=cfg['db']['host'],user=cfg['db']['user'],password=cfg['db']['password'],db=cfg['db']['database'])
     info = dict()
     errors=[]
+    info['errors'] = ''
     cursor=connection.cursor()
     if session.get('schoolName')==None:
         info['errors'] = 'timeout!'
@@ -344,6 +345,7 @@ def checkAllUser():
         for row in rows:
             info['users'].append(""+row[0]+","+row[1]+","+str(row[2])+","+row[3])
     info['errors'] = errors
+    print(info)
     return jsonify(info)
 
 @users.route('/confirmApply',methods=['GET'])
@@ -368,6 +370,7 @@ def confirmApply():
 def postConfirm():
     info = dict()
     info['schoolName'] = request.json['schoolName']
+    print(info['schoolName'])
     connection = pymysql.connect(host=cfg['db']['host'],user=cfg['db']['user'],password=cfg['db']['password'],db=cfg['db']['database'])
     cursor=connection.cursor()
     cursor.execute("UPDATE Users SET isAdmin =%(isAdmin)s , apply =%(apply)s WHERE schoolName=%(schoolName)s",{'isAdmin': 1,'apply': 0,'schoolName':info['schoolName']})
@@ -469,7 +472,7 @@ def checkAllManager():
     errors = []
     connection = pymysql.connect(host=cfg['db']['host'],user=cfg['db']['user'],password=cfg['db']['password'],db=cfg['db']['database'])
     cursor=connection.cursor()
-    cursor.execute("SELECT schoolName,userName from Users WHERE isAdmin>0")
+    cursor.execute("SELECT schoolName,userName from Users WHERE isAdmin=1")
     rows = cursor.fetchall()
     connection.commit()
     if len(rows) == 0:
@@ -524,6 +527,7 @@ def checkReturnClassroom():
 def modifyUserInfo():
     connection = pymysql.connect(host=cfg['db']['host'],user=cfg['db']['user'],password=cfg['db']['password'],db=cfg['db']['database'])
     info = dict()
+    info['errors'] = ''
     cursor = connection.cursor()
     #ApplicationForms's PK = classroomID lendTime weekDay
     info['schoolName'] = request.json['schoolName']
@@ -545,6 +549,7 @@ def modifyUserInfo():
 def getUserInfo():
     connection = pymysql.connect(host=cfg['db']['host'],user=cfg['db']['user'],password=cfg['db']['password'],db=cfg['db']['database'])
     info = dict()
+    info['errors'] = ''
     cursor = connection.cursor()
     info['schoolName'] = request.json['schoolName']
     try:
@@ -607,8 +612,9 @@ def confirmPassword():
             md5.update(info['password'].encode("utf8")) # for BIG5 and utf8 problem
             cursor.execute("SELECT schoolName from Users WHERE password = %(password)s and schoolName = %(schoolName)s",{'password':md5.hexdigest(),'schoolName':session.get('schoolName')})
             row = cursor.fetchall()
+            print(row)
             connection.commit() #submit the data to database 
-            if row[0] != session.get('schoolName'):
+            if row[0][0] != session.get('schoolName'):
                 info['errors'] = 'error password!'
         except Exception:
             traceback.print_exc()
@@ -621,6 +627,7 @@ def checkLendInfo():
     connection = pymysql.connect(host=cfg['db']['host'],user=cfg['db']['user'],password=cfg['db']['password'],db=cfg['db']['database'])
     info = dict()
     cursor=connection.cursor()
+    info['errors'] = ''
     if session.get('schoolName')==None:
         info['errors'] = 'timeout!'
     else:
@@ -631,9 +638,9 @@ def checkLendInfo():
             connection.commit()
             info['status'] = row
             info['LendInfo'] = ''
-            if row[0] == 0:
+            if row[0][0] == 0:
                 info['LendInfo'] = 'User can borrow classroom now'
-            elif row[0] == 1:
+            elif row[0][0] == 1:
                 info['LendInfo'] = 'User having a classroom now'
                 cursor.execute("SELECT * from history WHERE schoolName = %(schoolName)s and returnTime is NULL ",{'schoolName':info['schoolName']})
                 row = cursor.fetchall()
@@ -643,9 +650,9 @@ def checkLendInfo():
                 row = cursor.fetchall()
                 connection.commit()
                 info['application'] = row
-            elif row[0] == 2:
+            elif row[0][0] == 2:
                 info['LendInfo'] = 'User can not borrow classroom now (account has been banned)'
-            elif row[0] == 3:
+            elif row[0][0] == 3:
                 info['LendInfo'] = 'User have applied for some classrooms'
                 cursor.execute("SELECT * from ApplicationForms WHERE schoolName = %(schoolName)s",{'schoolName':info['schoolName']})
                 row = cursor.fetchall()

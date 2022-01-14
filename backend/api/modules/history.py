@@ -107,7 +107,8 @@ def returnClassroom():
                 info['lendTime'].append(i[3].strftime('%Y/%m/%d %H:%M:%S'))
                 info['returnTime'].append(i[4])
                 info['lendWeekDay'].append(i[5])
-                info['returnWeekDay'].append(i[6])      
+                info['returnWeekDay'].append(i[6])  
+            print(info)    
             
                 
     except Exception: #get exception if there's still occured something wrong
