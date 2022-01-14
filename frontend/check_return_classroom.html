@@ -156,7 +156,7 @@
                         
 
                         console.log(content);
-                        document.getElementById("return_classroom_table").innerHTML = (content);
+                        document.getElementById("return_classroom_table").innerHTML = content;
                     },
 
                     error: function (xhr, type){
@@ -315,7 +315,7 @@
         <p class = "head" align = "center">歸還申請</p>
         <p align = "center">
             <!--還教室申請放入table-->
-            <table class = "return_classroom_table" id = "history_table" style="border:3px #cccccc solid;" border="1" cellspacing="0" cellpadding="10" align = "center">
+            <table class = "return_classroom_table" id = "return_classroom_table" style="border:3px #cccccc solid;" border="1" cellspacing="0" cellpadding="10" align = "center">
 
             </table>
         </p>
