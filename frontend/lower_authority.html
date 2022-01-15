@@ -196,7 +196,7 @@
         $(document).ready(function () {
             $.ajax({
                 type: 'GET',
-                url: "http://localhost:13588/users/getAdmin",
+                url: "http://desolate-wildwood-64845.herokuapp.com/users/getAdmin",
                 contentType: 'application/json; charset=UTF-8',
                 dataType: 'json',
                 crossOrigin: null,
@@ -232,7 +232,7 @@
             //http://localhost:13588/users/checkAllManager http://localhost:5000/check_all_manager
             $.ajax({
                 type: 'GET',
-                url: "http://localhost:13588/users/checkAllManager",
+                url: "http://desolate-wildwood-64845.herokuapp.com/users/checkAllManager",
                 contentType: 'application/json; charset=UTF-8',
                 dataType: 'json',
                 crossOrigin: null,
@@ -276,7 +276,7 @@
 
             $.ajax({
                 type: 'POST',
-                url: "http://localhost:13588/users/confirmPassword",
+                url: "http://desolate-wildwood-64845.herokuapp.com/users/confirmPassword",
                 data: JSON.stringify(data),
                 contentType: 'application/json; charset=UTF-8',
                 dataType: 'json',
@@ -312,7 +312,7 @@
             //http://localhost:13588/users/downGrade http://localhost:5001/downgrade
             $.ajax({
                 type: 'POST',
-                url: "http://localhost:13588/users/downGrade",
+                url: "http://desolate-wildwood-64845.herokuapp.com/users/downGrade",
                 data: JSON.stringify(data),
                 contentType: 'application/json; charset=UTF-8',
                 dataType: 'json',
