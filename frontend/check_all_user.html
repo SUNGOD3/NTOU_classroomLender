@@ -59,73 +59,14 @@
             position: relative;
         }
 
-        .rwd-table {
-            　background: #fff;
-            　overflow: auto;
-        }
 
-            .rwd-table tr:nth-of-type(2n){
-            　background: #eee;
-            }
-            .rwd-table th,
-            .rwd-table td {
-            　margin: 0.5em 1em;
-            }
-            .rwd-table {
-            　min-width: 100%;
-            }
-
-            /*
-            .rwd-table th {
-            　display: none;
-            }*/
-
-            .rwd-table td {
-            　display: block;
-            }
-
-            .rwd-table td:before {
-            　content: attr(data-th) " : ";
-            　font-weight: bold;
-            　width: 6.5em;
-            　display: inline-block;
-            }
-
-            .rwd-table th, .rwd-table td {
-            　text-align: left;
-            }
-
-            .rwd-table th, .rwd-table td:before {
-            　color: #D20B2A;
-            　font-weight: bold;
-            }
 
             @media (min-width: 480px) {
                 .table {
                     position: relative;
                     left: 3%;
                 }
-                .rwd-table td:before {
-            　    display: inline-block;
-                }
-                .rwd-table th, .rwd-table td {
-            　    display: table-cell;
-            　    padding: 0.25em 0.5em;
-                }
-                .rwd-table th:first-child,
-                .rwd-table td:first-child {
-            　    padding-left: 0;
-                }
-                .rwd-table th:last-child,
-                .rwd-table td:last-child {
-            　    padding-right: 0;
-                }
-                .rwd-table th,
-                .rwd-table td {
-            　    padding: 1em !important;
-                }
             }
-
 
     </style>
 </head>
@@ -256,7 +197,7 @@
             var index = i;            
             data.schoolName = document.getElementById("schoolName" + index).innerHTML;
 
-
+            console.log(data);
             $.ajax({
                 type: 'POST',
                 url: "http://localhost:13588/users/getUserInfo",
@@ -278,7 +219,7 @@
 
                         userName_content = "姓名: " + data.userName + "  <button id = 'userName_button' type = 'button'> 修改</button>";
                         //password_content = "密碼: " + data.password + "  <button id = 'password_button' type = 'button'> 修改</button>";
-                        Email_content = "信箱: " + data.Email + "  <button id = 'Email_button' type = 'button'> 修改</button>";
+                        Email_content = "信箱: " + data.Email;
                         status_content = "狀態: " + data.status + "  <button id = 'status_button' type = 'button'> 修改</button>";
                         schoolName_content = "帳號(學號): " + data.schoolName;
 
@@ -296,12 +237,12 @@
 
                         var userNameButton = document.getElementById("userName_button");
                         //var passwordButton = document.getElementById("password_button");
-                        var EmailButton = document.getElementById("Email_button");
+                        //var EmailButton = document.getElementById("Email_button");
                         var statusButton = document.getElementById("status_button");
 
                         userNameButton.addEventListener("click", modify_userName, false);
                         //passwordButton.addEventListener("click", modify_password, false);
-                        EmailButton.addEventListener("click", modify_Email, false);
+                        //EmailButton.addEventListener("click", modify_Email, false);
                         statusButton.addEventListener("click", modify_status, false);
                     }
                 },
@@ -353,10 +294,6 @@
             document.getElementById("userName_div").innerHTML = content;
         }
 
-        function modify_Email() {
-            var content = "<input type='email' class='form-control' placeholder='信箱' id='Email' name='Email' size='20'>" + "<button type='button' onclick='javascript: get_Email()'>確認</button>";
-            document.getElementById("Email_div").innerHTML = content;
-        }
 
         function modify_status() {
             var content = "<input type='text' class='form-control' placeholder='狀態' id='status' name='status' size='20'>" + "<button type='button' onclick='javascript: get_status()'>確認</button>";
@@ -368,14 +305,15 @@
             post_modify_Func();
         }
 
-        function get_Email() {
-            Email = document.getElementById("Email").value;
-            post_modify_Func();
-        }
 
         function get_status() {
             status = document.getElementById("status").value;
-            post_modify_Func();
+            if(status<0||status>2){
+                alert("狀態需是0、1、2!!!");
+                location.reload();
+            }else{
+                post_modify_Func();
+            }
         }
     </script>
 </body>

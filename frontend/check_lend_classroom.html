@@ -123,7 +123,7 @@
 
                     $.ajax({
                             type: 'GET',
-                            url: "http://localhost:13588/ApplicationForms/getApplicationForms",
+                            url: "http://desolate-wildwood-64845.herokuapp.com/ApplicationForms/getApplicationForms",
                             contentType: 'application/json; charset=UTF-8',
                             dataType: 'json',
                             crossOrigin: null,
@@ -259,7 +259,7 @@
                 //http://localhost:5002/check_lend_classroom http://localhost:13588/history/checkLendClassroom
                 $.ajax({
                     type: 'POST',
-                    url: "http://localhost:13588/history/checkLendClassroom",
+                    url: "http://desolate-wildwood-64845.herokuapp.com/history/checkLendClassroom",
                     data: JSON.stringify(data),
                     contentType: 'application/json; charset=UTF-8',
                     dataType: 'json',
@@ -296,7 +296,7 @@
                 //將申請人學號(schoolName)和教室編號(classroomID)借用星期(lendTime)和借用星期(weekDay)post到後端資料庫
                 $.ajax({
                     type: 'POST',
-                    url: "http://localhost:13588/history/checkLendClassroom",
+                    url: "http://desolate-wildwood-64845.herokuapp.com/history/checkLendClassroom",
                     data: JSON.stringify(data),
                     contentType: 'application/json; charset=UTF-8',
                     dataType: 'json',

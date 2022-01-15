@@ -137,6 +137,7 @@
                     <li><a class="dropdown-item" href="lend_classroom_for_lender.html"><span>借用教室</span></a></li>
                     <li><a class="dropdown-item" href="history_for_lender.html"><span>檢視歷史</span></a></li>
                     <li><a class="dropdown-item" href="apply_for_maneger.html"><span>申請成為管理員</span></a></li>
+                    <li><a class="dropdown-item" href="check_lend_info.html"><span>檢視借用申請</span></a></li>
                 </ul>
             </div>
 
@@ -166,10 +167,18 @@
             <table class="table table-striped table-sm" id="data_table">
                 <tr>
                     <th>申請結果</th>
+                    <th>申請教室</th>
+                    <th>申請日期</th>
+                    <th>申請節次</th>
+                    <th>歸還節次</th>
                     <th>身分狀態</th>
                 </tr>
                 <tr>
                     <td id="lend_info"></td>
+                    <td id="apply_classroom"></td>
+                    <td id="apply_time"></td>
+                    <td id="start_section"></td>
+                    <td id="return_section"></td>
                     <td id="admin"></td>
                 </tr>
             </table>
@@ -194,13 +203,49 @@
                     withCredentials: true
                 },
                 success: function (data) {
+                    console.log(data);
                     if (data.errors != "") {
                         alert("未查詢到申請結果" + data.errors);
+                        if (data.errors == "timeout!") {
+                            location.href = "index.html";
+                        }
                     }
                     else {
                         console.log(data);
-
+                        var apply_classroom = "";
+                        var start_section = "";
+                        var apply_time = "";
+                        var return_section = "";
                         document.getElementById("lend_info").innerHTML = data.LendInfo;
+                        if (data.LendInfo == 'User can borrow classroom now' ||
+                            data.LendInfo == 'User can not borrow classroom now (account has been banned)') {
+                            apply_classroom = '尚未租借教室';
+                            apply_time = '尚未租借';
+                            start_section = '尚未租借';
+                            return_section = '尚未租借';
+                        }
+
+                        else if (data.LendInfo == 'User have applied for some classrooms' ||
+                            data.LendInfo == 'User having a classroom now') {
+                            apply_classroom = data.application[0][0];
+                            apply_time = data.application[0][7];
+                            start_section = data.application[0][5];
+                            return_section = data.application[0][6];
+                        }
+
+                        else {
+                            alert("未查詢到申請結果" + data.errors + data.LendInfo);
+                            apply_classroom = '錯誤';
+                            apply_time = '錯誤';
+                            start_section = '錯誤';
+                            return_section = '錯誤';
+                        }
+                        document.getElementById("apply_classroom").innerHTML = apply_classroom;
+                        document.getElementById("apply_time").innerHTML = apply_time;
+                        document.getElementById("start_section").innerHTML = start_section;                        
+                        document.getElementById("return_section").innerHTML = return_section;
+
+
                         get_admin();
                     }
                 },
@@ -223,6 +268,7 @@
                     withCredentials: true
                 },
                 success: function (data) {
+                    console.log(data);
                     if (data.errors != "") {
                         alert("未查詢到身分狀態" + data.errors);
                     }
@@ -241,6 +287,7 @@
                         }
                         else {
                             alert("身分狀態無法辨識");
+                            content = "身分狀態無法辨識";
                         }
 
                         document.getElementById("admin").innerHTML = content;
@@ -251,8 +298,6 @@
                     alert(xhr + type);
                 }
             });
-
-
         }
 
     </script>
