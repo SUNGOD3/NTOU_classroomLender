@@ -55,7 +55,7 @@
             註冊新帳號
         </p>
         <!--http://localhost:13588/users/register http://localhost:5000/register-->
-        <form method="POST" target="_self" action="http://localhost:13588/users/register">
+        <form method="POST" target="_self" action="http://desolate-wildwood-64845.herokuapp.com/users/register">
             <br>
             <div class="form-floating">
                 <input type="text" class="form-control" id="schoolName" placeholder="學號" name="schoolName" size="32">
@@ -109,7 +109,7 @@
 
             $.ajax({
                 type: 'POST',
-                url: "http://localhost:13588/users/register",
+                url: "http://desolate-wildwood-64845.herokuapp.com/users/register",
                 data: JSON.stringify(data),
                 contentType: 'application/json; charset=UTF-8',
                 dataType: 'json',
@@ -143,7 +143,7 @@
             
             $.ajax({
                 type: 'POST',
-                url: "http://localhost:13588/users/checkIdentityCode",
+                url: "http://desolate-wildwood-64845.herokuapp.com/users/checkIdentityCode",
                 data: JSON.stringify(data),
                 contentType: 'application/json; charset=UTF-8',
                 dataType: 'json',
@@ -175,7 +175,7 @@
             console.log(data);
             $.ajax({
                 type: 'POST',
-                url: "http://localhost:13588/Email/sendEmail",
+                url: "http://desolate-wildwood-64845.herokuapp.com/Email/sendEmail",
                 data: JSON.stringify(data),
                 contentType: 'application/json; charset=UTF-8',
                 dataType: 'json',
@@ -215,7 +215,7 @@
             console.log(data);
             $.ajax({
                 type: 'POST',
-                url: "http://localhost:13588/users/setIdentityCode",
+                url: "http://desolate-wildwood-64845.herokuapp.com/users/setIdentityCode",
                 data: JSON.stringify(data),
                 contentType: 'application/json; charset=UTF-8',
                 dataType: 'json',
