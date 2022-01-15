@@ -86,7 +86,7 @@
         </div>
 
         <div class="right">
-            <form method="POST" action="http://desolate-wildwood-64845.herokuapp.com/login" onsubmit="c">
+            <form method="POST" action="https://desolate-wildwood-64845.herokuapp.com/login" onsubmit="c">
                 <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
 
                 <div class="form-floating">
@@ -138,7 +138,7 @@
             console.log(data);
             $.ajax({
             type: 'POST' ,
-            url: "http://desolate-wildwood-64845.herokuapp.com/users/login" ,
+            url: "https://desolate-wildwood-64845.herokuapp.com/users/login/" ,
             data: JSON.stringify(data),
             contentType: 'application/json; charset=UTF-8' ,
             dataType: 'json' ,

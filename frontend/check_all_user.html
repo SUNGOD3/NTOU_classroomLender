@@ -157,7 +157,7 @@
 
             $.ajax({
                 type: 'GET',
-                url: "http://desolate-wildwood-64845.herokuapp.com/users/checkAllUser",
+                url: "https://desolate-wildwood-64845.herokuapp.com/users/checkAllUser/",
                 contentType: 'application/json; charset=UTF-8',
                 dataType: 'json',
                 crossOrigin: null,
@@ -200,7 +200,7 @@
             console.log(data);
             $.ajax({
                 type: 'POST',
-                url: "http://desolate-wildwood-64845.herokuapp.com/users/getUserInfo",
+                url: "https://desolate-wildwood-64845.herokuapp.com/users/getUserInfo/",
                 data: JSON.stringify(data),
                 contentType: 'application/json; charset=UTF-8',
                 dataType: 'json',
@@ -264,7 +264,7 @@
             console.log(data);
             $.ajax({
                 type: 'POST',
-                url: "http://desolate-wildwood-64845.herokuapp.com/users/modifyUserInfo",
+                url: "https://desolate-wildwood-64845.herokuapp.com/users/modifyUserInfo/",
                 data: JSON.stringify(data),                
                 contentType: 'application/json; charset=UTF-8',
                 dataType: 'json',
