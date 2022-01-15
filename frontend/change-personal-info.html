@@ -49,7 +49,7 @@
                 console.log(data);
                 $.ajax({
                     type: 'POST' ,
-                    url: "http://desolate-wildwood-64845.herokuapp.com/users/info" ,
+                    url: "https://desolate-wildwood-64845.herokuapp.com/users/info/" ,
                     data: JSON.stringify(data),
                     contentType: 'application/json; charset=UTF-8' ,
                     dataType: 'json' ,
@@ -131,7 +131,7 @@
         </header>
 
         <!--http://localhost:5002/info http://localhost:13588/users/info onsubmit="check(this); return false()--> 
-        <form method = "POST" action = "http://desolate-wildwood-64845.herokuapp.com/users/info">
+        <form method = "POST" action = "https://desolate-wildwood-64845.herokuapp.com/users/info/">
             <!--送到後端資料庫-->
             <center>
                 <div style = "text-align:left ; WIDTH:150px">

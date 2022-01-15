@@ -172,10 +172,8 @@ def register():
     #if there's no error occured in info -> insert the new data to database
     if len(info['errors'])==0:
         try:
-            insertString = 'INSERT INTO Users(userName,schoolName,password,phoneNumber,Email,isAdmin,status,apply)values(%(userName)s,%(schoolName)s,%(password)s,%(phoneNumber)s,%(Email)s,%(isAdmin)s,%(status)s,%(apply)s)'
-            md5 = hashlib.md5() #hash the password for security
-            md5.update(info['password'].encode("utf8")) # for BIG5 and utf8 problem
-            cursor.execute(insertString, {'userName':info['userName'], 'schoolName':info['schoolName'],'password': md5.hexdigest(),'phoneNumber':info['phoneNumber'],'Email':info['Email'],'isAdmin':False,'status':0,'apply':0})
+            insertString = 'UPDATE Users SET status = %(status)s WHERE schoolName = %(schoolName)s'
+            cursor.execute(insertString, {'status':0,'schoolName':info['schoolName']})
             connection.commit() #submit the data to database 
         except Exception: #get exception if there's still occured something wrong
             traceback.print_exc()
@@ -194,7 +192,7 @@ def login():
     schoolName = request.json['schoolName']
     password = request.json['password']
     cursor = connection.cursor()
-    cursor.execute("SELECT * from Users WHERE schoolName = %(schoolName)s",{'schoolName':schoolName})
+    cursor.execute("SELECT * from Users WHERE schoolName = %(schoolName)s and status < 4",{'schoolName':schoolName})
     rows = cursor.fetchall()
     connection.commit()
     Errors = []
@@ -256,6 +254,59 @@ def setIdentityCode():
             connection.rollback()
             info['errors'] = 'setIdentityCode fail'
     return jsonify(info)
+
+@users.route('/setIdentityCode2',methods=['POST'])
+def setIdentityCode2():
+    #connect to mysql
+    connection = pymysql.connect(host=cfg['db']['host'],user=cfg['db']['user'],password=cfg['db']['password'],db=cfg['db']['database'])
+    #build dictionary
+    info = dict()
+    cursor = connection.cursor()
+    info['userName'] = request.json['userName']
+    info['schoolName'] = request.json['schoolName']
+    info['phoneNumber'] = request.json['phoneNumber']
+    info['password'] = request.json['password']
+    info['passwdConfirm'] = request.json['passwdConfirm']
+    info['Email'] = request.json['Email']
+    #check info's correctness
+    errors = checkRegisterRequest(info)
+    #record errors in dictionary
+    info['errors'] = errors
+    #if there's no error occured in info -> insert the new data to database
+    if len(info['errors'])==0:
+        try:
+            schoolName = info['schoolName']
+            checkEmail=CheckEmail()
+            checkEmail.schoolName(schoolName)
+            info['errors'] = checkEmail.getErrors()
+            connection.commit()
+            identityCode = ""
+            for i in range(6):
+                tmp=random.randint(0,2)
+                if tmp==0:
+                    tmp=random.randint(0,9)
+                    identityCode += str(tmp)
+                elif tmp==1:
+                    tmp=random.randint(65,90)
+                    identityCode += chr(tmp)
+                else :
+                    tmp=random.randint(97,122)
+                    identityCode += chr(tmp)
+            insertString = 'INSERT INTO Users(userName,schoolName,password,phoneNumber,Email,isAdmin,identityCode,status,apply)values(%(userName)s,%(schoolName)s,%(password)s,%(phoneNumber)s,%(Email)s,%(isAdmin)s,%(identityCode)s,%(status)s,%(apply)s)'
+            md5 = hashlib.md5() #hash the password for security
+            md5.update(info['password'].encode("utf8")) # for BIG5 and utf8 problem
+            cursor.execute(insertString, {'userName':info['userName'], 'schoolName':info['schoolName'],'password': md5.hexdigest(),'phoneNumber':info['phoneNumber'],'Email':info['Email'],'isAdmin':False,'identityCode':identityCode,'status':4,'apply':0})
+            connection.commit() #submit the data to database 
+        except Exception: #get exception if there's still occured something wrong
+            traceback.print_exc()
+            connection.rollback()
+            info['errors'] = 'setIdentityCode2 fail'
+    #delete password and password Confirm for security
+    del info['password']
+    del info['passwdConfirm']
+    #return render_template('register.html')
+    return jsonify(info)
+
 
 @users.route('/checkIdentityCode',methods=['POST'])
 def checkIdentityCode():

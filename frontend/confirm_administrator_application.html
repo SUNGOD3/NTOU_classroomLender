@@ -113,7 +113,7 @@
 
                 $.ajax({
                     type: 'GET',
-                    url: "http://desolate-wildwood-64845.herokuapp.com/users/confirmApply",
+                    url: "https://desolate-wildwood-64845.herokuapp.com/users/confirmApply/",
                     contentType: 'application/json; charset=UTF-8',
                     dataType: 'json',
                     crossOrigin: null,
@@ -223,7 +223,7 @@
                 //http://localhost:5002/post_confirm http://localhost:13588/users/postConfirm
                 $.ajax({
                     type: 'POST',
-                    url: "http://desolate-wildwood-64845.herokuapp.com/users/postConfirm",
+                    url: "https://desolate-wildwood-64845.herokuapp.com/users/postConfirm/",
                     data: JSON.stringify(data),
                     contentType: 'application/json; charset=UTF-8',
                     dataType: 'json',
@@ -260,7 +260,7 @@
                 console.log(data)
                 $.ajax({
                     type: 'POST',
-                    url: "http://desolate-wildwood-64845.herokuapp.com/users/postReject",
+                    url: "https://desolate-wildwood-64845.herokuapp.com/users/postReject/",
                     data: JSON.stringify(data),
                     contentType: 'application/json; charset=UTF-8',
                     dataType: 'json',
