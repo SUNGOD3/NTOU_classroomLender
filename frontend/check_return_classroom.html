@@ -113,7 +113,7 @@
                 
                 $.ajax({
                     type: 'GET',
-                    url: "http://localhost:13588/history/returnClassroom",
+                    url: "http://desolate-wildwood-64845.herokuapp.com/history/returnClassroom",
                     contentType: 'application/json; charset=UTF-8',
                     dataType: 'json',
                     crossOrigin: null,
@@ -213,7 +213,7 @@
                 console.log(data);
                 $.ajax({
                     type: 'POST',
-                    url: "http://localhost:13588/history/checkReturnClassroom",
+                    url: "http://desolate-wildwood-64845.herokuapp.com/history/checkReturnClassroom",
                     data: JSON.stringify(data),
                     contentType: 'application/json; charset=UTF-8',
                     dataType: 'json',
@@ -248,7 +248,7 @@
                 //http://localhost:13588/history/checkReturnClassroom http://localhost:5002/check_return_classroom
                 $.ajax({
                     type: 'POST',
-                    url: "http://localhost:13588/history/checkReturnClassroom",
+                    url: "http://desolate-wildwood-64845.herokuapp.com/history/checkReturnClassroom",
                     data: JSON.stringify(data),
                     contentType: 'application/json; charset=UTF-8',
                     dataType: 'json',

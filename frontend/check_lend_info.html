@@ -227,10 +227,10 @@
 
                         else if (data.LendInfo == 'User have applied for some classrooms' ||
                             data.LendInfo == 'User having a classroom now') {
-                            apply_classroom = data.application[0];
-                            apply_time = data.application[7];
-                            start_section = data.application[5];
-                            return_section = data.application[6];
+                            apply_classroom = data.application[0][0];
+                            apply_time = data.application[0][7];
+                            start_section = data.application[0][5];
+                            return_section = data.application[0][6];
                         }
 
                         else {
