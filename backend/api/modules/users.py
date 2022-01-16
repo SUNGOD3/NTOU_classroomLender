@@ -276,10 +276,10 @@ def setIdentityCode2():
     if len(info['errors'])==0:
         try:
             schoolName = info['schoolName']
-            checkEmail=CheckEmail()
-            checkEmail.schoolName(schoolName)
-            info['errors'] = checkEmail.getErrors()
-            connection.commit()
+            #checkEmail=CheckEmail()
+            #checkEmail.schoolName(schoolName)
+            #info['errors'] = checkEmail.getErrors()
+            #connection.commit()
             identityCode = ""
             for i in range(6):
                 tmp=random.randint(0,2)

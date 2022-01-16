@@ -237,14 +237,16 @@
                         alert("已確認申請!!!");
                         console.log(data);
                         //location.reload();
+                        location.reload();
                     },
 
                     error: function (xhr, type){
                         alert(xhr+type);
+                        location.reload();
                     }
                 })
                 
-                location.reload();
+                
             }
 
             //不允許升級成為管理員
@@ -271,14 +273,15 @@
                     
                     success: function (data){
                         alert("已拒絕申請!!!");
-                        //location.reload();
+                        location.reload();
                     },
 
                     error: function (xhr, type){
                         alert(xhr+type);
+                        location.reload();
                     }
                 })
-                location.reload();
+                //location.reload();
             }
 
         </script>

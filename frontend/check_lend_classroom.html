@@ -175,68 +175,6 @@
                         }
                     })
                     
-                    /*
-                    $.getJSON("http://localhost:13588/ApplicationForms/getApplicationForms", function(data){
-
-                        let content = "";
-
-                        if(data.errors.length!=0){
-                            alert(data.errors);
-                        }else{
-
-                            console.log(data);
-
-                            content = "<tr><th>姓名</th><th>教室編號</th><th>使用時間</th><th>使用星期</th></tr>";
-
-                            data = data.data;
-                            console.log(data.length);
-                            for(let i=0;i<data.length;i++){
-                                    var str = data[i].split(",");
-                                    console.log(str);
-                                    content += "<tr>" + "<td>"+str[1]+"</td>"+"<td>"+str[2]+"</td>"+"<td>"+str[3]+"~"+str[4]+"</td>"+"<td>"+str[5]+"</td>"+"<td>"+"<input class='b' type='button' onclick= 'confirm("+ i +")' value='確認'>"+"</td>"+"<td>"+"<input class='b' type='button' onclick= 'reject("+ i +")' value='拒絕'>"+"</td>"+ "</tr>";
-                                
-                                    schoolName[i] = str[0];
-                                    classroomID[i] = str[2];
-                                    lendTime[i] = str[3];
-                                    returnTime[i] = str[4];
-                                    weekDay[i] = str[5];
-                            
-                            }
-
-                            
-
-                        }
-
-                       */ 
-
-                        /*
-                        for(let i=0;i<data.length;i++){
-                            content += "<tr>" + "<td>"+data[i].userName+"</td>"+"<td>"+data[i].classroomID+"</td>"+"<td>"+data[i].lendTime+"~"+data[i].returnTime+"</td>"+"<td>"+data[i].weekDay+"</td>"+"<td>"+"<input class='b' type='button' onclick= 'confirm("+ i +")' value='確認'>"+"</td>"+"<td>"+"<input class='b' type='button' onclick= 'reject("+ i +")' value='拒絕'>"+"</td>"+ "</tr>";
-                            schoolName[i] = data[i].schoolName;
-                            classroomID[i] = data[i].classroomID;
-                            lendTime[i] = data[i].lendTime;
-                            returnTime[i] = data[i].returnTime;
-                            weekDay[i] = data[i].weekDay;
-                        }
-                        */
-
-                        /*
-                            console.log(data);
-                            data = data.users;
-                            console.log(data);
-                            let content = "";
-
-                            for(let i=0;i<data.length;i++){
-                                var str = data[i].split(",");
-                                console.log(str);
-                                content += "<tr>"+"<td>"+str[1]+"</td>"+"<td>"+"<input class='b' type='button' onclick= 'confirm("+ i +")' value='確認'>"+"</td>"+"<td>"+"<input class='b' type='button' onclick= 'reject("+ i +")' value='拒絕'>"+"</td>"+ "</tr>";
-                            }
-                        */
-
-                       // console.log(content);
-                       // document.getElementById("lend_classroom_table").innerHTML = (content);
-                        
-               // });
                 });
 
                 //確認借出申請
@@ -277,6 +215,7 @@
 
                     error: function (xhr, type){
                         alert(xhr+type);
+                        location.reload();
                     }
                 })
             }
@@ -311,6 +250,7 @@
 
                     error: function (xhr, type){
                         alert(xhr+type);
+                        location.reload();
                     }
                 })
 
