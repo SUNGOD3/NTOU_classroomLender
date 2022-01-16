@@ -167,6 +167,7 @@
 					<!--選擇教室-->
 					<div class="row" style="position: relative; top: 40px; left: 10%; height: 380px;">
 						<h4>選擇教室</h4>
+						<p>(黃色為搜尋後的結果)</p>
 						<div class="col-6 d-flex align-items-center table-responsive" style="text-align: center;">
 							<table id="classrooms" class="table table-striped table-sm" style="border-collapse: collapse; cursor: context-menu;">
 								<tr class="rows">
@@ -249,7 +250,7 @@
 			}
 			$.ajax({
 					type: 'GET',
-					url: "http://localhost:13588/Classrooms/getClassrooms",
+					url: "https://desolate-wildwood-64845.herokuapp.com/Classrooms/getClassrooms/",
 					data: JSON.stringify(data),
 					contentType: 'application/json; charset=UTF-8',
 					dataType: 'json',
@@ -365,7 +366,7 @@
 				console.log("start post equipmentFilter: " + JSON.stringify(equipmentFilter));
 				$.ajax({
 					type: 'POST',
-					url: "http://localhost:13588/Classrooms/equipmentFilter",
+					url: "https://desolate-wildwood-64845.herokuapp.com/Classrooms/equipmentFilter/",
 					data: JSON.stringify(equipmentFilter),
 					contentType: 'application/json; charset=UTF-8',
 					dataType: 'json',
@@ -414,7 +415,7 @@
 				console.log("start post searchKeyword: " + JSON.stringify(searchKeyword));
 				$.ajax({
 					type: 'POST',
-					url: "http://localhost:13588/Classrooms/searchKeyword",
+					url: "https://desolate-wildwood-64845.herokuapp.com/Classrooms/searchKeyword/",
 					data: JSON.stringify(searchKeyword),
 					contentType: 'application/json; charset=UTF-8',
 					dataType: 'json',
@@ -534,7 +535,7 @@
 					//將要查詢的教室(classroomID)post到後端資料庫
 					$.ajax({
 						type: 'POST',
-						url: "http://localhost:13588/Classrooms/selectClassroom",
+						url: "https://desolate-wildwood-64845.herokuapp.com/Classrooms/selectClassroom/",
 						data: JSON.stringify(data),
 						contentType: 'application/json; charset=UTF-8',
 						dataType: 'json',

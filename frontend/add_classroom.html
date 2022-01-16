@@ -216,7 +216,7 @@
 			console.log("跳到 " + window.location.href);		
 			$.ajax({
 					type: 'GET',
-					url: "http://localhost:13588/Classrooms/getClassrooms",
+					url: "https://desolate-wildwood-64845.herokuapp.com/Classrooms/getClassrooms/",
 					data: JSON.stringify(data),
 					contentType: 'application/json; charset=UTF-8',
 					dataType: 'json',
@@ -322,7 +322,7 @@
 				//將新增的教室(classroomID)和設備post到資料庫
 				$.ajax({
 					type: 'POST',
-					url: "http://localhost:13588/Classrooms/addClassroom",
+					url: "https://desolate-wildwood-64845.herokuapp.com/Classrooms/addClassroom/",
 					data: JSON.stringify(data),
 					contentType: 'application/json; charset=UTF-8',
 					dataType: 'json',
