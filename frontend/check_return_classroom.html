@@ -164,40 +164,6 @@
                     }
                 })
                 
-                /*
-                $(document).ready(function(){
-                    $.getJSON("http://localhost:13588/history/returnClassroom", function(data){
-                        //get_history
-                    
-                        console.log(data);
-                        let content = "";
-
-                        if(data.errors!=undefined){
-                           alert(data.errors);
-                        }else{
-
-                            content = "<tr><th>姓名</th><th>教室編號</th><th>使用時間</th><th>使用星期</th></tr>";
-
-                            //+"<td>"+"<input class='b' type='button' onclick= 'reject("+ i +")' value='拒絕'>"+"</td>"
-                            console.log(content);
-                            for(let i=0;i<data.classroomID.length;i++){
-                                console.log(data.userName[i]);
-                                content += "<tr>" + "<td>"+data.userName[i]+"</td>"+"<td>"+data.classroomID[i]+"</td>"+"<td>"+data.lendTime[i]+"~???"+"</td>"+"<td>"+data.lendWeekDay[i]+"</td>"+"<td>"+"<input class='b' type='button' onclick= 'confirm("+ i +")' value='確認'>"+"</td>"+ "</tr>";
-                                schoolName[i] = data.schoolName[i];
-                                classroomID[i] = data.classroomID[i];
-                                lendTime[i] = data.lendTime[i];
-                                weekDay[i] = data.lendWeekDay[i];
-                            }
-
-                        }
-
-                        
-
-                        console.log(content);
-                        document.getElementById("return_classroom_table").innerHTML = (content);
-                        
-                });
-                });*/
 
                 function confirm(i){
 
@@ -230,6 +196,7 @@
 
                     error: function (xhr, type){
                         alert(xhr+type);
+                        location.reload();
                     }
                 })
             }
@@ -260,6 +227,7 @@
 
                     error: function (xhr, type){
                         alert(xhr+type);
+                        location.reload();
                     }
                 })
 
