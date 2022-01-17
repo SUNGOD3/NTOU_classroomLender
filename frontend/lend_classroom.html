@@ -229,7 +229,7 @@
 					
 								<div class="col-5">
 									<label for="phoneNumber" class="form-label">借用人手機號碼</label>
-									<input id="phoneNumber" type="text" class="form-control" name="phoneNumber" placeholder="請輸入手機號碼..." value="" pattern="09+[0-9]{8}" required>
+									<input id="phoneNumber" type="tel" class="form-control" name="phoneNumber" placeholder="請輸入手機號碼..." pattern="09[0-9]{8}" required>
 									<div class="invalid-feedback">請輸入手機號碼!</div>
 								</div>	
 
@@ -540,53 +540,56 @@
 					"classroomID":classroomID2
 				}
 				console.log("start post searchKeyword: " + JSON.stringify(searchKeyword));
-				$.ajax({
-					type: 'POST',
-					url: "https://desolate-wildwood-64845.herokuapp.com/Classrooms/searchKeyword/",
-					data: JSON.stringify(searchKeyword),
-					contentType: 'application/json; charset=UTF-8',
-					dataType: 'json',
-					crossOrigin: null,
-					xhrFields: {
-						withCredentials: true
-					},
-
-					success: function (data){
-						if (data.errors != undefined) {
-                            if (data.errors=='timeout!') {
-                                alert("timeout! "+"請重新登入");
-                                window.location.href = "index.html";
-                            }
-							// else {
-                            //     alert(data.errors);
-                            //     window.location.href = "lend_classroom.html";
-                            // }
-                        }
-						else {
-                            console.log("傳送成功" + JSON.stringify(searchKeyword));
-                            classroomID2=Object.values(data)[0];
-                            console.log(classroomID2);
-
-                            //selected = classroomID1;
-                            for (var i = 0; i < k; i++) {
-                                for (var j = 0; j < classroomID2.length; j++) {
-                                    if (classroomID1[i] != classroomID2[j]){
-                                        selected[k] = classroomID2[j];
-                                        k++;
-                                    }
-                                }
-                            }
-                            showClassroom();
-                            //window.location.reload()  //重新整理頁面
-                        }
-					},
-					error: function (xhr, type){
-						console.log("傳送失敗");
-						console.log(xhr+type);
-					}
-				})
-				
-				
+				console.log("searchWord: " + searchWord);
+				if (searchWord != "") {
+					$.ajax({
+						type: 'POST',
+						url: "https://desolate-wildwood-64845.herokuapp.com/Classrooms/searchKeyword/",
+						data: JSON.stringify(searchKeyword),
+						contentType: 'application/json; charset=UTF-8',
+						dataType: 'json',
+						crossOrigin: null,
+						xhrFields: {
+							withCredentials: true
+						},
+						success: function (data){
+							if (data.errors != undefined) {
+								if (data.errors=='timeout!') {
+									alert("timeout! "+"請重新登入");
+									window.location.href = "index.html";
+								}
+								// else {
+								//     alert(data.errors);
+								//     window.location.href = "lend_classroom.html";
+								// }
+							}
+							// else if (searchKeyword == ""){
+							// 	console.log("searchKeyword is null" + JSON.stringify(searchKeyword));
+							// }
+							else {
+								console.log("傳送成功" + JSON.stringify(searchKeyword));
+								classroomID2=Object.values(data)[0];
+								console.log(classroomID2);
+								//selected = classroomID1;
+								for (var i = 0; i < k; i++) {
+									for (var j = 0; j < classroomID2.length; j++) {
+										if (classroomID1[i] != classroomID2[j]){
+											selected[k] = classroomID2[j];
+											k++;
+										}
+									}
+								}
+								showClassroom();
+								//window.location.reload()  //重新整理頁面
+							}
+						},
+						error: function (xhr, type){
+							console.log("傳送失敗");
+							console.log(xhr+type);
+						}
+					})
+					
+				}
 			}
 		);
 		
@@ -786,54 +789,82 @@
 				var lendTime = $("#lendTime").val();
 				var returnTime = $("#returnTime").val();
 				var reason = $("#reason").val();
-
-				var data = {
-					"userName":userName,
-					"phoneNumber":phoneNumber,
-					"classroomID":classroomID,
-					"courseName":courseName,
-					"weekDay":weekDay,
-					"lendTime":lendTime,
-					"returnTime":returnTime,
-					"reason":reason
+				
+				//pattern判斷
+				const rulesPhoneNumber = /09[0-9]{8}/;
+                //console.log(rulesPhoneNumber.test(phoneNumber));
+				const rulesclassroomID = /[B1-6]{1}[0-9]{2}/;
+                //console.log(rulesclassroomID.test(classroomID));
+				
+				if (rulesPhoneNumber.test(phoneNumber) == false) {
+					console.log("phoneNumber 格式錯誤");
+					alert("手機號碼輸入格式錯誤!");
 				}
-				console.log("跳到 " + window.location.href);
-				console.log(JSON.stringify(data));
-
-				//將要借用人資訊post到後端資料庫
-				$.ajax({
-					type: 'POST',
-					url: "https://desolate-wildwood-64845.herokuapp.com/ApplicationForms/lendClassroom/",
-					data: JSON.stringify(data),
-					contentType: 'application/json; charset=UTF-8',
-					dataType: 'json',
-					crossOrigin: null,
-					xhrFields: {
-						withCredentials: true
-					},
-					
-					success: function (data){
-						if (data.errors != undefined) {
-                            if (data.errors=='timeout!') {
-                                alert("timeout! "+"請重新登入");
-                                window.location.href = "index.html";
-                            }
-							else {
-                                alert(data.errors);
-                                window.location.href = "lend_classroom.html";
-                            }
-                        }
-						else {
-							alert("申請成功!");
-							console.log("申請傳送成功");
-							window.location.reload()  //重新整理頁面
-						}
-					},
-					error: function (xhr, type){
-						console.log("傳送失敗");
-						console.log(xhr+type);
+				else if (rulesclassroomID.test(classroomID) == false) {
+					console.log("classroomID 格式錯誤");
+					alert("教室編號輸入格式錯誤!");
+				}
+				else if (lendTime > returnTime){
+					console.log("lendTime > returnTime 錯誤");
+					alert("借用時間不可晚於歸還時間!");
+				}
+				else if (returnTime - lendTime > 3){
+					console.log("returnTime - lendTime > 3 錯誤");
+					alert("一次最多只能借三節課!");
+				}
+				else if (returnTime - lendTime == 0){
+					console.log("returnTime - lendTime == 0 錯誤");
+					alert("一次至少要借一節課!");
+				}
+				else {
+					var data = {
+						"userName":userName,
+						"phoneNumber":phoneNumber,
+						"classroomID":classroomID,
+						"courseName":courseName,
+						"weekDay":weekDay,
+						"lendTime":lendTime,
+						"returnTime":returnTime,
+						"reason":reason
 					}
-				});
+					console.log("跳到 " + window.location.href);
+					console.log(JSON.stringify(data));
+
+					//將要借用人資訊post到後端資料庫
+					$.ajax({
+						type: 'POST',
+						url: "https://desolate-wildwood-64845.herokuapp.com/ApplicationForms/lendClassroom/",
+						data: JSON.stringify(data),
+						contentType: 'application/json; charset=UTF-8',
+						dataType: 'json',
+						crossOrigin: null,
+						xhrFields: {
+							withCredentials: true
+						},
+						
+						success: function (data){
+							if (data.errors != undefined) {
+								if (data.errors=='timeout!') {
+									alert("timeout! "+"請重新登入");
+									window.location.href = "index.html";
+								}
+								else {
+									alert(data.errors);
+									window.location.href = "lend_classroom.html";
+								}
+							}
+							else {
+								alert("申請成功!");
+								console.log("申請傳送成功");
+								window.location.reload()  //重新整理頁面
+							}
+						},
+						error: function (xhr, type){
+							console.log("傳送失敗");
+							console.log(xhr+type);
+						}
+					});
+				}
 			}
 		);
 

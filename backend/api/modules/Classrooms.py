@@ -199,12 +199,14 @@ def getClassrooms():
     info = dict()
     cursor = connection.cursor()
     try:
-        cursor.execute('SELECT classroomID from Classrooms')
+        cursor.execute('SELECT classroomID,status from Classrooms')
         rows = cursor.fetchall()
         connection.commit()  #update the data in database
         info['classroomID'] = []
+        info['status'] = []
         for row in rows: #string
-            info['classroomID'].append(row)
+            info['classroomID'].append(row[0])
+            info['status'].append(row[1])
     except Exception: #get exception if there's still occured something wrong
         traceback.print_exc()
         connection.rollback()

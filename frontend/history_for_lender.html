@@ -18,79 +18,30 @@
 				color:navy;
 				font-weight: bold;
 		    }
-            .head   {   font-size : 40px;
-
+            .head   {   
+                font-size : 40px;
             }
-            table   {   font-size : 20px;
-                        width : 70%;
-                        overflow : scroll;
+            table   {   
+                font-size : 20px;
+                width : 70%;
+                overflow : scroll;
+                position: relative;
+                text-align: center;
+                border:3px #cccccc solid;
+                border-collapse: collapse;  
+                left : 15%;
             }
-            caption {   font-size : 40px;
-
+            caption {   
+                font-size : 40px;
             }
-
-            .rwd-table {
-            　background: #fff;
-            　overflow: auto;
-            }
-
-            .rwd-table tr:nth-of-type(2n){
-            　background: #eee;
-            }
-            .rwd-table th,
-            .rwd-table td {
-            　margin: 0.5em 1em;
-            }
-            .rwd-table {
-            　min-width: 100%;
+            @media (max-width: 620px) {
+                table   {   
+                    position: relative;
+                    left : 1%;  
+                }
+                
             }
 
-            /*
-            .rwd-table th {
-            　display: none;
-            }*/
-
-            .rwd-table td {
-            　display: block;
-            }
-
-            .rwd-table td:before {
-            　content: attr(data-th) " : ";
-            　font-weight: bold;
-            　width: 6.5em;
-            　display: inline-block;
-            }
-
-            .rwd-table th, .rwd-table td {
-            　text-align: left;
-            }
-
-            .rwd-table th, .rwd-table td:before {
-            　color: #D20B2A;
-            　font-weight: bold;
-            }
-
-            @media (min-width: 480px) {
-            .rwd-table td:before {
-            　display: inline-block;
-            }
-            .rwd-table th, .rwd-table td {
-            　display: table-cell;
-            　padding: 0.25em 0.5em;
-            }
-            .rwd-table th:first-child,
-            .rwd-table td:first-child {
-            　padding-left: 0;
-            }
-            .rwd-table th:last-child,
-            .rwd-table td:last-child {
-            　padding-right: 0;
-            }
-            .rwd-table th,
-            .rwd-table td {
-            　padding: 1em !important;
-            }
-            }
 
         </style>
 
@@ -206,26 +157,8 @@
             <p class = "head" align = "center">借用紀錄</p>
             <p>
                 <!--將借用歷史顯示在table-->
-                <table class = "rwd-table" id = "history_table_lender" style="border:3px #cccccc solid;" border="1" cellspacing="0" cellpadding="10" align = "center">
-                    <!--<caption>借用紀錄</caption>-->
-                    <!--
-                    <tr>
-                        <th>教室</th>
-                        <th>借用人</th>
-                        <th>使用時間</th>
-                        <th>是否歸還</th>
-                    </tr>
-                    -->
-                    <!--從資料庫拿資料-->
-                    <!--
-                    <tr>
-                        <td> {{classroomID}}   </td>
-                        <td> {{userName}}   </td>
-                        <td> {{lendTime}}~{{returnTime}} </td>
-                        <td> {{status}}   </td>
-                    </tr>
-                    -->
-
+                <table class = "rwd-table" id = "history_table_lender"cellspacing="0" cellpadding="5">
+                
                 </table>
             </p>
        </form>
