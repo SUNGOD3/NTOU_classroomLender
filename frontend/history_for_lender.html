@@ -134,7 +134,7 @@
                             data = data.history;
                             console.log(data);
                             
-                            content =  "<tr><th>教室</th><th>借用人</th><th>使用時間</th><th>是否歸還</th></tr>";
+                            content =  "<tr><th>教室</th><th>借用人</th><th>使用時間</th><th>歸還時間</th></tr>";
                             //alert(data.length);
 
                             for(let i=0;i<data.length;i++){
@@ -144,11 +144,11 @@
                                 if(!str[5]){
                                     //content += "<tr>" + "<td>" + str[0] + "</td>" + "<td>" + str[2] + "</td>" + "<td>" + str[4] + "~尚未歸還"   + "</td>";
                                     content += "<tr>" + "<td  data-th='教室'>" + str[0] + "</td>" + "<td data-th='借用人'>" + str[2] + "</td>" + "<td data-th='借用時間'>" + str[4] + "</td>" + "<td data-th='歸還時間'>" + "尚未歸還"   + "</td>";
-                                    content += "<td data-th='是否歸還'>" + "No" + "</td>";
+                                    //content += "<td data-th='是否歸還'>" + "No" + "</td>";
                                 }else{
                                     //content += "<tr>" + "<td>" + str[0] + "</td>" + "<td>" + str[2] + "</td>" + "<td>" + str[4] + "~" + str[5] + "</td>";
                                     content += "<tr>" + "<td data-th='教室'>" + str[0] + "</td>" + "<td data-th='借用人'>" + str[2] + "</td>" + "<td data-th='借用時間'>" + str[4] + "</td>" + "<td data-th='歸還時間'>" + str[5] + "</td>";
-                                    content += "<td data-th='是否歸還'>" + "Yes" + "</td>";
+                                    //content += "<td data-th='是否歸還'>" + "Yes" + "</td>";
                                 }
                                 content += "</tr>"
                             }
@@ -160,46 +160,6 @@
                         alert(xhr+type);
                     }
                 })
-               
-                /*
-                $.getJSON("http://localhost:13588/history/seeClassroomHistory", function(data){
-
-                    
-                    let content = '';
-
-                    //console.log(!data.errors);
-                    if(data.errors.length!=0){
-                        alert(data.errors);
-                    }else{
-
-                        console.log(data);
-                        data = data.history;
-                        console.log(data);
-                        
-                        content =  "<tr><th>教室</th><th>借用人</th><th>使用時間</th><th>是否歸還</th></tr>";
-                        //alert(data.length);
-
-                        for(let i=0;i<data.length;i++){
-                        //  var str = data[i].split(",");
-                            var str = data[i]
-                            console.log(str);
-                            content += "<tr>" + "<td>" + str[0] + "</td>" + "<td>" + str[2] + "</td>" + "<td>" + str[4] + "~" + str[5] + "</td>";
-                            if(str[5]==""){
-                                content += "<td>" + "No" + "</td>";
-                            }else{
-                                content += "<td>" + "Yes" + "</td>";
-                            }
-                            content += "</tr>"
-                        }
-
-                    }
-                    
-                    
-
-                
-                    console.log(content);
-                    document.getElementById("history_table").innerHTML = content;
-                });*/
           
             });
 
@@ -215,7 +175,7 @@
                         功能選單
                     </a>
                     <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownNavLink">
-                        <li><a class="dropdown-item" href="class_state.html"><span>檢視教室狀態</span></a></li>
+                        <li><a class="dropdown-item" href="class_state_for_lender.html"><span>檢視教室狀態</span></a></li>
                         <li><a class="dropdown-item" href="lend_classroom_for_lender.html"><span>借用教室</span></a></li>
                         <li><a class="dropdown-item" href="history_for_lender.html"><span>檢視歷史</span></a></li>
                         <li><a class="dropdown-item" href="apply_for_maneger.html"><span>申請成為管理員</span></a></li>
@@ -223,7 +183,7 @@
                     </ul>
                 </div>
     
-                <div style="width: 40%; display:inline-block; font-size: 30px;">
+                <div style="width: 40%; position: relative; top: auto; left: 4%; text-align: center; display:inline-block; font-size: 30px;">
                     <div style="text-align: center;">NTOU教室借用平台</div>
                 </div>
     
@@ -232,7 +192,7 @@
                         <img src="ntou_logo.png" width="32" height="32" class="rounded-circle">
                     </a> <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
                         <!--<li><a class="dropdown-item" href="#" target = "ibody">查看個人資料</a></li>-->
-                        <li><a class="dropdown-item" href="change-personal-info.html">更改個人資料</a></li>
+                        <li><a class="dropdown-item" href="change_personal_info_for_lender.html">更改個人資料</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="index.html" >登出</a></li>
                     </ul>

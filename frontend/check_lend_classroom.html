@@ -30,8 +30,8 @@
 
             }
             .b  {       text-align: center;
-                        width : 80px;
-                        height : 40px;
+                        width : 65px;
+                        height : 35px;
             }
             /*
             @media  (max-width:600px){
@@ -84,25 +84,25 @@
             }
 
             @media (min-width: 480px) {
-            .rwd-table td:before {
-            　display: inline-block;
-            }
-            .rwd-table th, .rwd-table td {
-            　display: table-cell;
-            　padding: 0.25em 0.5em;
-            }
-            .rwd-table th:first-child,
-            .rwd-table td:first-child {
-            　padding-left: 0;
-            }
-            .rwd-table th:last-child,
-            .rwd-table td:last-child {
-            　padding-right: 0;
-            }
-            .rwd-table th,
-            .rwd-table td {
-            　padding: 1em !important;
-            }
+                .rwd-table td:before {
+                　display: inline-block;
+                }
+                .rwd-table th, .rwd-table td {
+                　display: table-cell;
+                　padding: 0.25em 0.5em;
+                }
+                .rwd-table th:first-child,
+                .rwd-table td:first-child {
+                　padding-left: 0;
+                }
+                .rwd-table th:last-child,
+                .rwd-table td:last-child {
+                　padding-right: 0;
+                }
+                .rwd-table th,
+                .rwd-table td {
+                　padding: 1em !important;
+                }
             }
 
         </style>
@@ -155,7 +155,8 @@
                                 for(let i=0;i<data.length;i++){
                                         var str = data[i].split(",");
                                         console.log(str);
-                                        content += "<tr>" + "<td data-th='姓名'>"+str[1]+"</td>"+"<td data-th='教室編號'>"+str[2]+"</td>"+"<td data-th='使用時間'>"+str[3]+"~"+str[4]+"</td>"+"<td data-th='使用日期'>"+str[5]+"</td>"+"<td>"+"<input class='b' type='button' onclick= 'confirm("+ i +")' value='確認'>"+"</td>"+"<td>"+"<input class='b' type='button' onclick= 'reject("+ i +")' value='拒絕'>"+"</td>"+ "</tr>";
+                                        //btn-sm btn-secondary
+                                        content += "<tr>" + "<td data-th='姓名'>"+str[1]+"</td>"+"<td data-th='教室編號'>"+str[2]+"</td>"+"<td data-th='使用時間'>"+str[3]+"~"+str[4]+"</td>"+"<td data-th='使用日期'>"+str[5]+"</td>"+"<td>"+"<input class='b' data-th= '確認' type='button' onclick= 'confirm("+ i +")' value='確認'>"+"</td>"+"<td>"+"<input class='b' type='button' onclick= 'reject("+ i +")' value='拒絕'>"+"</td>"+ "</tr>";
                                     
                                         schoolName[i] = str[0];
                                         classroomID[i] = str[2];
@@ -284,7 +285,7 @@
                     </ul>
                 </div>
     
-                <div style="width: 40%; display:inline-block; font-size: 30px;">
+                <div style="width: 40%; position: relative; top: auto; left: 4%; text-align: center; display:inline-block; font-size: 30px;">
                     <div style="text-align: center;">NTOU教室借用平台</div>
                 </div>
     

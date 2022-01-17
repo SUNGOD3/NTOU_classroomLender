@@ -30,8 +30,8 @@
 
             }
             .b  {       text-align: center;
-                        width : 80px;
-                        height : 40px;
+                        width : 65px;
+                        height : 35px;
             }
 
             .rwd-table {
@@ -144,7 +144,7 @@
                             for(let i=0;i<data.classroomID.length;i++){
                                 console.log(data.userName[i]);
                                 //content += "<tr>" + "<td>"+data.userName[i]+"</td>"+"<td>"+data.classroomID[i]+"</td>"+"<td>"+data.lendTime[i]+"~???"+"</td>"+"<td>"+data.lendWeekDay[i]+"</td>"+"<td>"+"<input class='b' type='button' onclick= 'confirm("+ i +")' value='確認'>"+"</td>"+ "</tr>";
-                                content += "<tr>" + "<td data-th='姓名'>"+data.userName[i]+"</td>"+"<td data-th='教室編號'>"+data.classroomID[i]+"</td>"+"<td data-th='借出時間'>"+data.lendTime[i]+"</td>"+"<td data-th='使用星期'>"+data.lendWeekDay[i]+"</td>"+"<td>"+"<input class='b' type='button' onclick= 'confirm("+ i +")' value='確認'>"+"</td>"+ "</tr>";
+                                content += "<tr>" + "<td data-th='姓名'>"+data.userName[i]+"</td>"+"<td data-th='教室編號'>"+data.classroomID[i]+"</td>"+"<td data-th='借出時間'>"+data.lendTime[i]+"</td>"+"<td data-th='使用星期'>"+data.lendWeekDay[i]+"</td>"+"<td '>"+"<input class='b' type='button' onclick= 'confirm("+ i +")' value='確認'>"+"</td>"+ "</tr>";
                                 schoolName[i] = data.schoolName[i];
                                 classroomID[i] = data.classroomID[i];
                                 lendTime[i] = data.lendTime[i];
@@ -261,7 +261,7 @@
                     </ul>
                 </div>
     
-                <div style="width: 40%; display:inline-block; font-size: 30px;">
+                <div style="width: 40%; position: relative; top: auto; left: 4%; text-align: center; display:inline-block; font-size: 30px;">
                     <div style="text-align: center;">NTOU教室借用平台</div>
                 </div>
     
