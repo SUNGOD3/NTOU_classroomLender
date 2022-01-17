@@ -485,6 +485,7 @@ def info():
     info['userName'] = request.json['userName']
     info['phoneNumber'] = request.json['phoneNumber']
     info['password'] = request.json['password']
+    info['errors'] = errors
     print(00)
     print(info)
     try:

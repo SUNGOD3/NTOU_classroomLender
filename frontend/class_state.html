@@ -615,6 +615,13 @@
 
 
 		function showScheduler(){
+					//init
+					for (var k = 1; k < weekDays.length; k++) {		
+						for (var j = 0; j < classTimes.length; j++) { 	
+							scheduler.rows[j+1].cells[k].innerHTML = "";
+							scheduler.rows[j+1].cells[k].style.background="lime";
+						}
+					}
 					//加入資料庫中的課表
 					for (var i = 0; i < dataLength; i++) {
 						console.log("courseName: " + dataCourseName[i]);
@@ -622,14 +629,6 @@
 						console.log("returnTime: " + dataReturnTime[i]);
 						console.log("status: " + dataStatus[i]);
 						console.log("weekDay: " + dataLendDate[i]);
-
-						//init
-						for (var k = 1; k < weekDays.length; k++) {		
-							for (var j = 0; j < classTimes.length; j++) { 	
-								scheduler.rows[j+1].cells[k].innerHTML = "";
-								scheduler.rows[j+1].cells[k].style.background="lime";
-							}
-						}
 
 						//add course
 						for (var k = 0; k < weekDays.length; k++) {				//找星期, weekDays.length=8
