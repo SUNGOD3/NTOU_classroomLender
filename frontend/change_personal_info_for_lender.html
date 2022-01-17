@@ -34,6 +34,79 @@
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script>
+            var password = "";
+            var passwordConfirm = "";
+            var userName = "";
+            var phoneNumber = "";
+
+            //檢查輸入格式
+            function confirm_again() {
+                
+                password = document.getElementById("password").value;
+                passwordConfirm = document.getElementById("password_again").value;
+                userName = document.getElementById("userName").value;
+                phoneNumber = document.getElementById("phoneNumber").value;
+                
+                //const patternPhone = /[0-9]{10}/;
+                const rulesPhoneNumber = /^09\d{8}$/;
+                console.log(rulesPhoneNumber.test(phoneNumber));
+                console.log(phoneNumber);
+                const rulesUserName = /^[\u4e00-\u9fa5_a-zA-Z0]+$/;
+                console.log(rulesUserName.test(userName));
+                const rulesPassword = /^[a-zA-Z\d]{5,20}$/;
+                console.log(rulesPassword.test(password));
+
+                if (password != passwordConfirm) {
+                    alert("兩次密碼輸入不同，請重新輸入!");
+                    document.getElementById("userName").value = "";
+                    document.getElementById("phoneNumber").value = "";
+                    document.getElementById("password").value = "";
+                    document.getElementById("password_again").value = "";
+                }
+                else if(rulesPhoneNumber.test(phoneNumber)==false && phoneNumber!=""){
+                    alert("手機號碼格式錯誤，請重新輸入!");
+                    document.getElementById("userName").value = "";
+                    document.getElementById("phoneNumber").value = "";
+                    document.getElementById("password").value = "";
+                    document.getElementById("password_again").value = "";
+                }
+                else if(rulesUserName.test(userName)==false && userName!=""){
+                    alert("使用者姓名格式錯誤，請重新輸入!");
+                    document.getElementById("userName").value = "";
+                    document.getElementById("phoneNumber").value = "";
+                    document.getElementById("password").value = "";
+                    document.getElementById("password_again").value = "";
+                }
+                else if(rulesPassword.test(password)==false && password!=""){
+                    alert("密碼格式錯誤，請重新輸入!");
+                    document.getElementById("userName").value = "";
+                    document.getElementById("phoneNumber").value = "";
+                    document.getElementById("password").value = "";
+                    document.getElementById("password_again").value = "";
+                }
+                else if(rulesPassword.test(passwordConfirm)==false && passwordConfirm!=""){
+                    alert("密碼格式錯誤，請重新輸入!");
+                    document.getElementById("userName").value = "";
+                    document.getElementById("phoneNumber").value = "";
+                    document.getElementById("password").value = "";
+                    document.getElementById("password_again").value = "";
+                }
+                else {
+                    postFunc();
+                }
+                /*
+                if (password == passwordConfirm) {
+                    postFunc();
+                }
+                else {
+                   // document.getElementById("error").innerHTML = " 兩次輸入不同，請重新輸入!";
+                    alert("兩次輸入不同，請重新輸入!");
+                    document.getElementById("password").value = "";
+                    document.getElementById("password_again").value = "";
+                }
+                */
+            }
+
             //將修改的資訊-使用者名稱(userName)、密碼(password)、手機(phoneNumber)post到後端
             function postFunc() {
                 var userName = document.getElementById("userName").value;
@@ -45,7 +118,7 @@
                     "password": password,
                     "phoneNumber":phoneNumber
                 }
-                //http://localhost:13588/users/login http://localhost:5001/login
+                //http://localhost:13588/users/login http://localhost:5001/login https://desolate-wildwood-64845.herokuapp.com/users/info/
                 console.log(data);
                 $.ajax({
                     type: 'POST' ,
@@ -151,7 +224,7 @@
             
         
                     <p>
-                        <input type = "button" value = "確認修改" onclick="javascript: postFunc()" style = "color:firebrick" >
+                        <input type = "button" value = "確認修改" onclick="javascript: confirm_again()" style = "color:firebrick" >
                     </p>
                 </div>
             </center>

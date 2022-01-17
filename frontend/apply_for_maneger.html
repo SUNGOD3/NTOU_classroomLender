@@ -101,7 +101,7 @@
         </div>
         <br>
         <div class="form-floating">
-            <input type="password" class="form-control" id="passwordConfirm" placeholder="密碼" name="passwdConfirm" size="32">
+            <input type="password" class="form-control" id="passwdConfirm" placeholder="密碼" name="passwdConfirm" size="32">
             <label for="floatingInput">確認密碼</label>
         </div>
         <br>
@@ -114,26 +114,28 @@
     <script>
         var schoolName = "";
         var password = "";
-        var passwordConfirm = "";
+        var passwdConfirm = "";
 
         function confirm_again() {
             schoolName = document.getElementById("schoolName").value;
             password = document.getElementById("password").value;
-            passwordConfirm = document.getElementById("passwordConfirm").value;
-            if (password == passwordConfirm) {
+            passwdConfirm = document.getElementById("passwdConfirm").value;
+            if (password == passwdConfirm) {
                 postFunc();
             }
             else {
                 document.getElementById("error").innerHTML = " 兩次輸入不同，請重新輸入!";
                 document.getElementById("password").value = "";
-                document.getElementById("passwordConfirm").value = "";
+                document.getElementById("passwdConfirm").value = "";
             }
         }
 
         function postFunc() {
 
             var data = {
-                "schoolName": schoolName,
+                
+                "password": password,
+                "passwdConfirm": passwdConfirm
             }
             console.log(data);
             //http://localhost:13588/users/applyForManager http://localhost:5001/apply_for_manager

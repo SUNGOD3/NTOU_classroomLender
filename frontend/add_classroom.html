@@ -146,6 +146,7 @@
 				</div>
 			</div>
 
+			<!-- <form method="POST" action="non-Ajax form handler" onsubmit="return checkForm(this);"> -->
 			<!--右邊-->
 			<!--輸入教室編號&設備名稱-->
 			<div class="col-md">
@@ -154,7 +155,7 @@
 						<div class="col-md-6">
 							<label for="classroomID" class="form-label">教室編號 (例: 101)</label>
 							<br>
-							<input id="classroomID"type="text" class="form-control" name="classroomID" placeholder="請輸入教室編號..." value="" required>
+							<input id="classroomID" type="text" class="form-control" name="classroomID" placeholder="請輸入教室編號..." pattern="[B1-6]{1}[0-9]{2}" onchange="this.value = this.value.replace('[B1-6]{1}[0-9]{2}', ''); valid_name.checked = this.value;" required>
 							<div class="invalid-feedback">請輸入教室編號!</div>
 						</div>
 					</div>
@@ -198,11 +199,27 @@
 						</div>
 					</div>
 			</div>
-
+			<!-- </form> -->
 		</div>
 	</main>
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+	<!-- <script type="text/javascript">
+
+		function checkForm(form)
+		{
+		  if (this.classroomID.value == "") {
+			alert("Please enter your classroomID in the form");
+			this.classroomID.focus();
+			return false;
+		  }
+		  alert("Success! The form has been completed, validated and is ready to be submitted...");
+		  return false;
+		}
+	  
+	</script> -->
+
 	<script>	
 		//讀入資料庫現有教室
 		const floors = ["6","5","4","3","2","1","B1"];
@@ -248,12 +265,12 @@
 								classrooms[j] = 0;
 							}
 							//讀入教室ID
-							console.log(array1.length);
+							//console.log(array1.length);
 							for (var k = 0; k < array1.length; k++) {
 								for (var i = 0; i < floors.length; i++) {
 									var ID = array1[k].toString();
 									var floorNumber = ID.substr(0, 1);
-									console.log(floorNumber);
+									//console.log(floorNumber);
 									if (floorNumber == floors[i].substr(0, 1)){
 										var classroomNumber = newClassroom.rows[i+1].length;
 										newCell = newClassroom.rows[i+1].insertCell(classroomNumber);
@@ -311,84 +328,97 @@
 				var commonEquipment = $("#commonEquipment").val();
 				var specialEquipment = $("#specialEquipment").val();
 
-				var data = {
-					"classroomID":classroomID,
-					"status":status,
-					"commonEquipment":commonEquipment,
-					"specialEquipment":specialEquipment
-				}
-				console.log("跳到 " + window.location.href);
-				console.log(JSON.stringify(data));
-				//將新增的教室(classroomID)和設備post到資料庫
-				$.ajax({
-					type: 'POST',
-					url: "https://desolate-wildwood-64845.herokuapp.com/Classrooms/addClassroom/",
-					data: JSON.stringify(data),
-					contentType: 'application/json; charset=UTF-8',
-					dataType: 'json',
-					crossOrigin: null,
-					xhrFields: {
-						withCredentials: true
-					},
-					success: function (data){
-						if (data.errors != undefined) {
-                            if (data.errors=='timeout!') {
-                                alert("timeout! "+"請重新登入");
-                                window.location.href = "index.html";
-                            }
-							else {
-                                alert(data.errors);
-                                window.location.href = "add_classroom.html";
-                            }
-                        }
-						else {
-							console.log("傳送成功");
+				//pattern判斷
+				const rulesclassroomID = /[B1-6]{1}[0-9]{2}/;
+                console.log(rulesclassroomID.test(classroomID));
+				const testClassroomID=rulesclassroomID.test(classroomID);
 
-							//新增教室到table
-							floorNumber = classroomID.substr(0, 1);
-							for (var i = 0; i < floors.length; i++) {
-								var len = classrooms[i];//每層樓教室數量
-								var isDone = 0;//是否完成新增教室
-								//console.log(floors[i].substr(0, 1) + "," + i + "," + len);
-								if (floors[i].substr(0, 1) == floorNumber){
-									//插入教室
-									for (var j = 1; j <= len; j++){
-										var number = newClassroom.rows[i+1].cells[j].innerHTML.substr(1, 2);
-										var insertNumber = classroomID.substr(1, 2);
-										if (number > insertNumber){//每間教室比ID大小
-											newCell = newClassroom.rows[i+1].insertCell(j);
+				if (testClassroomID == false) {
+					console.log("classroomID 格式錯誤");
+					alert("教室編號輸入格式錯誤!");
+				}
+				else{
+					var data = {
+						"classroomID":classroomID,
+						"status":status,
+						"commonEquipment":commonEquipment,
+						"specialEquipment":specialEquipment
+					}
+					console.log("跳到 " + window.location.href);
+					console.log(JSON.stringify(data));
+					
+
+					//將新增的教室(classroomID)和設備post到資料庫
+					$.ajax({
+						type: 'POST',
+						url: "https://desolate-wildwood-64845.herokuapp.com/Classrooms/addClassroom/",
+						data: JSON.stringify(data),
+						contentType: 'application/json; charset=UTF-8',
+						dataType: 'json',
+						crossOrigin: null,
+						xhrFields: {
+							withCredentials: true
+						},
+						success: function (data){
+							if (data.errors != undefined) {
+								if (data.errors=='timeout!') {
+									alert("timeout! "+"請重新登入");
+									window.location.href = "index.html";
+								}
+								else {
+									alert(data.errors);
+									window.location.href = "add_classroom.html";
+								}
+							}
+							else {
+								console.log("傳送成功");
+
+								//新增教室到table
+								floorNumber = classroomID.substr(0, 1);
+								for (var i = 0; i < floors.length; i++) {
+									var len = classrooms[i];//每層樓教室數量
+									var isDone = 0;//是否完成新增教室
+									//console.log(floors[i].substr(0, 1) + "," + i + "," + len);
+									if (floors[i].substr(0, 1) == floorNumber){
+										//插入教室
+										for (var j = 1; j <= len; j++){
+											var number = newClassroom.rows[i+1].cells[j].innerHTML.substr(1, 2);
+											var insertNumber = classroomID.substr(1, 2);
+											if (number > insertNumber){//每間教室比ID大小
+												newCell = newClassroom.rows[i+1].insertCell(j);
+												newCell.innerHTML = classroomID;
+												console.log(newClassroom.rows[i+1].cells[j].innerHTML);//新增的教室ID
+												alert("新增" + classroomID + "教室成功!!");
+												newIndex = j;
+												//console.log(newIndex);
+												console.log("新增" + classroomID + "成功!!");
+												isDone = 1;
+												break;
+											}
+										}
+										//新增在最後
+										if (isDone != 1) {
+											newCell = newClassroom.rows[i+1].insertCell(len+1);
 											newCell.innerHTML = classroomID;
-											console.log(newClassroom.rows[i+1].cells[j].innerHTML);//新增的教室ID
+											console.log(newClassroom.rows[i+1].cells[len+1].innerHTML);//新增的教室ID
 											alert("新增" + classroomID + "教室成功!!");
-											newIndex = j;
+											newIndex = len + 1;
 											//console.log(newIndex);
 											console.log("新增" + classroomID + "成功!!");
 											isDone = 1;
 											break;
 										}
 									}
-									//新增在最後
-									if (isDone != 1) {
-										newCell = newClassroom.rows[i+1].insertCell(len+1);
-										newCell.innerHTML = classroomID;
-										console.log(newClassroom.rows[i+1].cells[len+1].innerHTML);//新增的教室ID
-										alert("新增" + classroomID + "教室成功!!");
-										newIndex = len + 1;
-										//console.log(newIndex);
-										console.log("新增" + classroomID + "成功!!");
-										isDone = 1;
-										break;
-									}
 								}
+								//location.reload();
+								//window.location.reload()  //重新整理頁面
 							}
-							location.reload();
-							//window.location.reload()  //重新整理頁面
+						},
+						error: function (xhr, type){
+							console.log(xhr+type);
 						}
-					},
-					error: function (xhr, type){
-						console.log(xhr+type);
-					}
-				})
+					})
+				}
 			}
 		);
     </script>
