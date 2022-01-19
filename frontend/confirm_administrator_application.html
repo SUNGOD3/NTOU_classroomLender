@@ -144,7 +144,7 @@
                             for(let i=0;i<data.length;i++){
                                 var str = data[i].split(",");
                                 console.log(str);
-                                content += "<tr>"+"<td>"+str[1]+"</td>"+"<td>"+"<input class='b' type='button' onclick= 'confirm("+ i +")' value='確認'>"+"</td>"+"<td>"+"<input class='b' type='button' onclick= 'reject("+ i +")' value='拒絕'>"+"</td>"+ "</tr>";
+                                content += "<tr>"+"<td>"+str[1]+"</td>"+"<td>"+str[0]+"</td>"+"<td>"+"<input class='b' type='button' onclick= 'confirm("+ i +")' value='確認'>"+"</td>"+"<td>"+"<input class='b' type='button' onclick= 'reject("+ i +")' value='拒絕'>"+"</td>"+ "</tr>";
                            
                                 schoolName[i] = str[0];
                            

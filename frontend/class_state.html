@@ -391,7 +391,7 @@
                             }
 							// else {
                             //     alert(data.errors);
-                            //     window.location.href = "class_state_for_lender.html";
+                            //     window.location.href = "lend_classroom.html";
                             // }
                         }
 						else {
@@ -416,17 +416,17 @@
 
 
 				//將searchWord post到後端資料庫
-				var searchKeyword = {
+				var data = {
 					"searchWord":searchWord,
 					"classroomID":classroomID2
 				}
-				console.log("start post searchKeyword: " + JSON.stringify(searchKeyword));
+				console.log("start post searchKeyword: " + JSON.stringify(data));
 				console.log("searchWord: " + searchWord);
 				if (searchWord != "") {
 					$.ajax({
 						type: 'POST',
 						url: "https://desolate-wildwood-64845.herokuapp.com/Classrooms/searchKeyword/",
-						data: JSON.stringify(searchKeyword),
+						data: JSON.stringify(data),
 						contentType: 'application/json; charset=UTF-8',
 						dataType: 'json',
 						crossOrigin: null,
@@ -439,25 +439,21 @@
 									alert("timeout! "+"請重新登入");
 									window.location.href = "index.html";
 								}
-								// else {
-								//     alert(data.errors);
-								//     window.location.href = "class_state_for_lender.html";
-								// }
 							}
 							else {
-								console.log("傳送成功" + JSON.stringify(searchKeyword));
+								console.log("傳送成功" + JSON.stringify(data));
 								classroomID2=Object.values(data)[0];
 								console.log(classroomID2);
 								//selected = classroomID1;
-								var k2 = 0;
-								for (var i = 0; i < k; i++) {
+								//var k2 = k;
+								//for (var i = 0; i < k2; i++) {
 									for (var j = 0; j < classroomID2.length; j++) {
-										if (classroomID1[i] != classroomID2[j]){
-											selected[k+k2] = classroomID2[j];
-											k2++;
-										}
+										//if (classroomID1[i] != classroomID2[j]){
+											selected[k] += classroomID2[j];
+											k++;
+										//}
 									}
-								}
+								//}
 								showClassroom();
 								//window.location.reload()  //重新整理頁面
 							}
@@ -467,9 +463,7 @@
 							console.log(xhr+type);
 						}
 					})
-				}		
-				else {
-					console.log("seachword null")
+					
 				}
 			}
 		);

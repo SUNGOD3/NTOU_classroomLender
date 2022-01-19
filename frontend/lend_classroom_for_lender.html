@@ -100,7 +100,7 @@
                 </ul>
             </div>
 
-            <div style="width: 40%; position: relative; top: auto; left: 4%; text-align: center; display:inline-block; font-size: 30px;">
+            <div style="width: 40%; display:inline-block; font-size: 30px;">
                 <div style="text-align: center;">NTOU教室借用平台</div>
             </div>
 
@@ -432,7 +432,7 @@
 									}
 								}
 							}
-							console.log(classrooms);
+							//console.log(classrooms);
 							//window.location.reload()  //重新整理頁面
 						}
 					},
@@ -534,17 +534,17 @@
 
 
 				//將searchWord post到後端資料庫
-				var searchKeyword = {
+				var data = {
 					"searchWord":searchWord,
 					"classroomID":classroomID2
 				}
-				console.log("start post searchKeyword: " + JSON.stringify(searchKeyword));
+				console.log("start post searchKeyword: " + JSON.stringify(data));
 				console.log("searchWord: " + searchWord);
 				if (searchWord != "") {
 					$.ajax({
 						type: 'POST',
 						url: "https://desolate-wildwood-64845.herokuapp.com/Classrooms/searchKeyword/",
-						data: JSON.stringify(searchKeyword),
+						data: JSON.stringify(data),
 						contentType: 'application/json; charset=UTF-8',
 						dataType: 'json',
 						crossOrigin: null,
@@ -559,19 +559,19 @@
 								}
 							}
 							else {
-								console.log("傳送成功" + JSON.stringify(searchKeyword));
+								console.log("傳送成功" + JSON.stringify(data));
 								classroomID2=Object.values(data)[0];
 								console.log(classroomID2);
 								//selected = classroomID1;
-								var k2 = 0;
-								for (var i = 0; i < k; i++) {
+								//var k2 = k;
+								//for (var i = 0; i < k2; i++) {
 									for (var j = 0; j < classroomID2.length; j++) {
-										if (classroomID1[i] != classroomID2[j]){
-											selected[k+k2] = classroomID2[j];
-											k2++;
-										}
+										//if (classroomID1[i] != classroomID2[j]){
+											selected[k] += classroomID2[j];
+											k++;
+										//}
 									}
-								}
+								//}
 								showClassroom();
 								//window.location.reload()  //重新整理頁面
 							}
@@ -609,8 +609,10 @@
 							len++;
 						}
 						else {
-							for (var i = 1; i < newClassroom.rows.length; i++) {
-								for (var j = 1; j < newClassroom.rows[i].cells.length; j++){
+							var newClassroom_rows_length = newClassroom.rows.length;
+							for (var i = 1; i < newClassroom_rows_length; i++) {
+								var newClassroom_rows_cells_length = newClassroom.rows[i].cells.length;
+								for (var j = 1; j < newClassroom_rows_cells_length; j++){
 									var content = newClassroom.rows[i].cells[j].innerHTML;
 									//console.log(content);
 									var number = content.substr(12, 3);
@@ -621,10 +623,10 @@
 										newClassroom.rows[i].cells[j].style.background="yellow";
 										//newClassroom.rows[i].cells[j].style.cursor="pointer";
 										//console.log(newClassroom.rows[i].cells[j].innerHTML);
-										len++;
 									}
 								}
 							}
+							len++;
 						}
 					}
 				}
@@ -641,7 +643,7 @@
 			if (obj.type == "button"){ 
 				console.log(obj.id);
 				//post: classroomID ,get: 教室狀態(status) 課程名稱(courseName) 日期(weekDay) 星期:weekDay.getDay() lendTime returnTime
-				console.log("start post scheduler");
+				//console.log("start post scheduler");
 						
 					var data = {
 						"classroomID":obj.id,
@@ -679,8 +681,8 @@
                             //}
                             else {
                                 console.log("開始篩選教室");
-                                console.log(JSON.stringify(data));
-                                console.log(Object.values(data)[1]);
+                                //console.log(JSON.stringify(data));
+                                //console.log(Object.values(data)[1]);
                                 var arrayCourseName=Object.values(data)[1];
                                 dataLength=arrayCourseName.length;
                                 console.log(dataLength);
@@ -739,11 +741,11 @@
 					}
 					//加入資料庫中的課表
 					for (var i = 0; i < dataLength; i++) {
-						console.log("courseName: " + dataCourseName[i]);
-						console.log("lendTime: " + dataLendTime[i]);
-						console.log("returnTime: " + dataReturnTime[i]);
-						console.log("status: " + dataStatus[i]);
-						console.log("weekDay: " + dataLendDate[i]);
+						//console.log("courseName: " + dataCourseName[i]);
+						//console.log("lendTime: " + dataLendTime[i]);
+						//console.log("returnTime: " + dataReturnTime[i]);
+						//console.log("status: " + dataStatus[i]);
+						//console.log("weekDay: " + dataLendDate[i]);
 
 						//add course
 						for (var k = 0; k < weekDays.length; k++) {				//找星期, weekDays.length=8
@@ -770,7 +772,7 @@
 		//申請借用教室function
 		$('#lendBTN').click(
 			function (){
-				console.log("開始post到資料庫...");
+				//console.log("開始post到資料庫...");
 				
 				var classroomID = $("#classroomID").val();
 				var courseName = $("#courseName").val();
@@ -835,9 +837,9 @@
 					console.log("returnTime - lendTime > 3 錯誤");
 					alert("一次最多只能借三節課!");
 				}
-				else if (returnTime - lendTime == 0){
+				else if (returnTime - lendTime < 0){
 					check = 0;
-					console.log("returnTime - lendTime == 0 錯誤");
+					console.log("returnTime - lendTime < 0 錯誤");
 					alert("一次至少要借一節課!");
 				}
 				else {
@@ -845,7 +847,7 @@
 				}
 
 				//輸入格式皆正確, 判斷是否已借用
-				if (check = 1){
+				if (check == 1){
 					var data = {
 						"classroomID":classroomID,
 						"weekDay":weekDay,
@@ -961,7 +963,7 @@
 											else {
 												alert("申請成功!");
 												console.log("申請傳送成功");
-												//window.location.reload()  //重新整理頁面
+												window.location.reload()  //重新整理頁面
 											}
 										},
 										error: function (xhr, type){
