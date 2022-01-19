@@ -252,12 +252,11 @@
 									ID = array1[k].toString();
 									classroomStatus = array2[k].toString();
 									var floorNumber = ID.substr(0, 1);
+									//console.log(floorNumber);
 									if (floorNumber == floors[i].substr(0, 1)){
-										console.log(ID);
-										console.log(classroomStatus);
-										var classroomNumber = newClassroom.rows[i+1].cells.length;
+										var classroomNumber = newClassroom.rows[i+1].length;
 										newCell = newClassroom.rows[i+1].insertCell(classroomNumber);
-										newCell.innerHTML = " <input id = '"+ ID + "' type='button' class='btn-sm btn btn-outline-secondary' value='" + ID + "'>";
+										newCell.innerHTML = ID;
 										if (classroomStatus == 0) {
 											newCell.style.background="lime";
 										}
@@ -268,9 +267,6 @@
 											newCell.style.background="gray";
 										}
 										classrooms[i]++;
-
-										var test = document.getElementById("idBTN");
-										//console.log(test);
 									}
 								}
 							}
@@ -369,7 +365,7 @@
 									//console.log("修改失敗!");
 									alert("修改失敗!!")
 								}
-								//window.location.reload()  //重新整理頁面
+								window.location.reload()  //重新整理頁面
 							}
 						},
 						error: function (xhr, type){

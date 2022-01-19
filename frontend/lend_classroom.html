@@ -454,7 +454,7 @@
 		//傳送 設選篩選(commonEquipment) + 關鍵字搜尋(searchWord) 到資料庫
 		//讀取 搜尋結果(classroomID)
 		var classroomID,classroomID1=[],classroomID2=[];
-		var selected=[];
+		var selected1=[],selected2=[];
 		var k=0,id1=0,id2=0;
 		$('#filter_searchBTN').click(
 			function(){
@@ -495,7 +495,7 @@
 					"commonEquipment":commonEquipment,
 					"classroomID":classroomID1
 				}
-				console.log("start post equipmentFilter: " + JSON.stringify(equipmentFilter));
+				//console.log("start post equipmentFilter: " + JSON.stringify(equipmentFilter));
 				$.ajax({
 					type: 'POST',
 					url: "https://desolate-wildwood-64845.herokuapp.com/Classrooms/equipmentFilter/",
@@ -506,28 +506,19 @@
 					xhrFields: {
 						withCredentials: true
 					},
-
 					success: function (data){
 						if (data.errors != undefined) {
                             if (data.errors=='timeout!') {
                                 alert("timeout! "+"請重新登入");
                                 window.location.href = "index.html";
                             }
-							// else {
-                            //     alert(data.errors);
-                            //     window.location.href = "lend_classroom.html";
-                            // }
                         }
 						else {
                             console.log("傳送成功" + JSON.stringify(data));
                             classroomID1=Object.values(data)[0];
-                            console.log("equippment: "+classroomID1);
-                            selected=[];
-                            //console.log(selected);
-                            for (var i = 0; i < classroomID1.length; i++) {
-                                selected[k] = classroomID1[i];
-                                k++;
-                            }
+                            //console.log("equippment: "+classroomID1);
+                            selected1 = classroomID1;
+                            //console.log(selected1);
                             showClassroom();
                             //window.location.reload()  //重新整理頁面
                         }
@@ -544,8 +535,8 @@
 					"searchWord":searchWord,
 					"classroomID":classroomID2
 				}
-				console.log("start post searchKeyword: " + JSON.stringify(data));
-				console.log("searchWord: " + searchWord);
+				//console.log("start post searchKeyword: " + JSON.stringify(data));
+				//console.log("searchWord: " + searchWord);
 				if (searchWord != "") {
 					$.ajax({
 						type: 'POST',
@@ -567,17 +558,8 @@
 							else {
 								console.log("傳送成功" + JSON.stringify(data));
 								classroomID2=Object.values(data)[0];
-								console.log("search: "+classroomID2);
-								//selected = classroomID1;
-								//var k2 = k;
-								//for (var i = 0; i < k2; i++) {
-									for (var j = 0; j < classroomID2.length; j++) {
-										//if (classroomID1[i] != classroomID2[j]){
-											selected[k] += classroomID2[j];
-											k++;
-										//}
-									}
-								//}
+								//console.log("search: " + classroomID2);
+								selected2 = classroomID2;
 								showClassroom();
 								//window.location.reload()  //重新整理頁面
 							}
@@ -594,11 +576,11 @@
 		
 		//顯示commonEquipment和searchKeyword篩選過後的教室(classroomID)
 		function showClassroom(){
-				console.log("start compare: " + selected);
+				console.log("設備: " + selected1 + " ,關鍵字: " + selected2);
 				//比較 (設備篩選or關鍵字搜尋) 的教室(classroomID)
 				//顯示結果(classroomID), color:yellow
-				var len=0;
 				if (newClassroom != null) {
+					//init
 					for (var i = 1; i < newClassroom.rows.length; i++) {
 						for (var j = 1; j < newClassroom.rows[i].cells.length; j++){
 							var content = newClassroom.rows[i].cells[j].innerHTML;
@@ -610,8 +592,10 @@
 							newClassroom.rows[i].cells[j].style.cursor="context-menu";
 						}
 					}
-					while (len < selected.length){
-						if (selected[len] == '') {
+					//篩選selected1
+					var len=0;
+					while (len <= selected1.length){
+						if (selected1[len] == '') {
 							len++;
 						}
 						else {
@@ -623,8 +607,35 @@
 									//console.log(content);
 									var number = content.substr(12, 3);
 									//console.log(number);
-									if (selected[len] == number) {
-										console.log(selected[len]);
+									if (selected1[len] == number) {
+										console.log(selected1[len]);
+										newClassroom.rows[i].cells[j].innerHTML=" <input id = '"+ number + "' class = 'visible' type='button' class='btn-sm btn-warning' value='" + number + "'>";
+										newClassroom.rows[i].cells[j].style.background="yellow";
+										//newClassroom.rows[i].cells[j].style.cursor="pointer";
+										//console.log(newClassroom.rows[i].cells[j].innerHTML);
+									}
+								}
+							}
+							len++;
+						}
+					}
+					//篩選selected2
+					len=0;
+					while (len <= selected2.length){
+						if (selected2[len] == '') {
+							len++;
+						}
+						else {
+							var newClassroom_rows_length = newClassroom.rows.length;
+							for (var i = 1; i < newClassroom_rows_length; i++) {
+								var newClassroom_rows_cells_length = newClassroom.rows[i].cells.length;
+								for (var j = 1; j < newClassroom_rows_cells_length; j++){
+									var content = newClassroom.rows[i].cells[j].innerHTML;
+									//console.log(content);
+									var number = content.substr(12, 3);
+									//console.log(number);
+									if (selected2[len] == number) {
+										console.log(selected2[len]);
 										newClassroom.rows[i].cells[j].innerHTML=" <input id = '"+ number + "' class = 'visible' type='button' class='btn-sm btn-warning' value='" + number + "'>";
 										newClassroom.rows[i].cells[j].style.background="yellow";
 										//newClassroom.rows[i].cells[j].style.cursor="pointer";
