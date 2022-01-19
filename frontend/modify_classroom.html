@@ -193,11 +193,13 @@
 		const classrooms = [];
 		var newClassroom = document.getElementById("classrooms");
 		var newfloors, newCell, newIndex;
+		var classroomID, status;
+		var array1, array2;
 		$(document).ready(function(){
 			var data = {
-				"classroomID":classroomID
-			}	
-			console.log("跳到 " + window.location.href);		
+				"classroomID":classroomID,
+				"status":status
+			}
 			$.ajax({
 					type: 'GET',
 					url: "https://desolate-wildwood-64845.herokuapp.com/Classrooms/getClassrooms/",
@@ -214,46 +216,75 @@
                                 alert("timeout! "+"請重新登入");
                                 window.location.href = "index.html";
                             }
-							else {
-                                alert(data.errors);
-                                window.location.href = "modify_classroom.html";
-                            }
+							// else {
+                            //     alert(data.errors);
+                            //     window.location.href = "lend_classroom.html";
+                            // }
                         }
 						else {
-							console.log("讀取成功: " + JSON.stringify(data));
-							var array1 = Object.values(data)[0];//2d array to 1d array
-							var element1 = array1.toString();//array to string
+							console.log("傳送成功" + JSON.stringify(data));
+							//console.log(data);
+							//console.log(JSON.stringify(data));
+							//console.log(Object.values(data)[0]);
+
+							//classroomID
+							array1=Object.values(data)[0];
+							var element1 = array1.toString();
 							console.log(element1);
+							//status
+							array2=Object.values(data)[1];
+							var element2 = array2.toString();
+							console.log(element2);
+
 							//floor
 							for (var j = 0; j < floors.length; j++) {
 								var newRow = newClassroom.insertRow(j+1);
 								newfloors = newRow.insertCell(0);
-								newfloors.innerHTML = floors[j];
+								newfloors.innerHTML=floors[j];
 								classrooms[j] = 0;
 							}
+							
 							//讀入教室ID
 							//console.log(array1.length);
+							var ID, classroomStatus;
 							for (var k = 0; k < array1.length; k++) {
 								for (var i = 0; i < floors.length; i++) {
-									var ID = array1[k].toString();
+									ID = array1[k].toString();
+									classroomStatus = array2[k].toString();
 									var floorNumber = ID.substr(0, 1);
-									//console.log(floorNumber);
 									if (floorNumber == floors[i].substr(0, 1)){
-										var classroomNumber = newClassroom.rows[i+1].length;
+										console.log(ID);
+										console.log(classroomStatus);
+										var classroomNumber = newClassroom.rows[i+1].cells.length;
 										newCell = newClassroom.rows[i+1].insertCell(classroomNumber);
-										newCell.innerHTML = ID;
+										newCell.innerHTML = " <input id = '"+ ID + "' type='button' class='btn-sm btn btn-outline-secondary' value='" + ID + "'>";
+										if (classroomStatus == 0) {
+											newCell.style.background="lime";
+										}
+										else if (classroomStatus == 1) {
+											newCell.style.background="pink";
+										}
+										else if (classroomStatus == 2) {
+											newCell.style.background="gray";
+										}
 										classrooms[i]++;
+
+										var test = document.getElementById("idBTN");
+										//console.log(test);
 									}
 								}
 							}
 							console.log(classrooms);
+							//window.location.reload()  //重新整理頁面
 						}
 					},
 					error: function (xhr, type){
+						console.log("傳送失敗");
 						console.log(xhr+type);
 					}
 				}) 
         });
+		
 
 		
 		$('#modifyBTN').click(
@@ -264,7 +295,7 @@
 				var status;
 
 				//pattern判斷
-				const rulesclassroomID = /[B1-6]{1}[0-9]{2}/;
+				const rulesclassroomID = /[B1-6]{1}[0-9]{2}$/;
                 console.log(rulesclassroomID.test(classroomID));
 				const testClassroomID=rulesclassroomID.test(classroomID);
 

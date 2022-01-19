@@ -100,7 +100,7 @@
                 </ul>
             </div>
 
-            <div style="width: 40%; display:inline-block; font-size: 30px;">
+            <div style="width: 40%; position: relative; top: auto; left: 4%; text-align: center; display:inline-block; font-size: 30px;">
                 <div style="text-align: center;">NTOU教室借用平台</div>
             </div>
 
@@ -108,7 +108,7 @@
                 <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">
                     <img src="ntou_logo.png" width="32" height="32" class="rounded-circle">
                 </a> <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
-                    <li><a class="dropdown-item" href="change_personal_info_for_lender.html">更改個人資料</a></li>
+					<li><a class="dropdown-item" href="change_personal_info_for_lender.html">更改個人資料</a></li>
 					<li><hr class="dropdown-divider"></li>
 					<li><a class="dropdown-item" href="index.html" >登出</a></li>
 				</ul>
@@ -116,6 +116,7 @@
 
         </div>
     </header>
+
 	<main>
 		<div class="row align-items-md-start">
 
@@ -208,12 +209,12 @@
 				</div>
 
 				<!--最右邊-->
-				<!--填寫借用人資訊 & 申請借用教室-->
+				<!--填寫借用資訊 & 申請借用教室-->
 				<div class="col-md-4">
-					<h4 style = "position: relative; top: 25px; left: 10px;">填寫借用人資訊</h4>
+					<h4 style = "position: relative; top: 25px; left: 10px;">填寫借用資訊</h4>
 
 							<!--借用人姓名 & 手機號碼-->
-							<div class="row justify-content-start" style="position: relative; top: 25px; left: 10px;">							
+							<!-- <div class="row justify-content-start" style="position: relative; top: 25px; left: 10px;">							
 								<div class="col-5">
 									<label for="userName" class="form-label">借用人姓名</label>
 									<input id="userName" type="text" class="form-control" name="userName" placeholder="請輸入借用人姓名..." value="" required>
@@ -222,11 +223,11 @@
 					
 								<div class="col-5">
 									<label for="phoneNumber" class="form-label">借用人手機號碼</label>
-									<input id="phoneNumber" type="text" class="form-control" name="phoneNumber" placeholder="請輸入手機號碼..." value="" pattern="09+[0-9]{8}" required>
+									<input id="phoneNumber" type="tel" class="form-control" name="phoneNumber" placeholder="請輸入手機號碼..." pattern="09[0-9]{8}" required>
 									<div class="invalid-feedback">請輸入手機號碼!</div>
 								</div>	
 
-							</div>
+							</div> -->
 							
 							<!--輸入教室編號-->
 							<div class="row justify-content-start" style="position: relative; top: 25px; left: 10px;">							
@@ -361,11 +362,12 @@
 		const classrooms = [];//教室間數
 		var newClassroom=document.getElementById("classrooms");
 		var newfloors, newCell, newIndex;
-		var countid=0;
-		var array1;
+		var classroomID, status;
+		var array1, array2;
 		$(document).ready(function(){
-			var data={
-				"classroomID":classroomID
+			var data = {
+				"classroomID":classroomID,
+				"status":status
 			}
 			$.ajax({
 					type: 'GET',
@@ -378,16 +380,6 @@
 						withCredentials: true
 					},
 					success: function (data){
-						console.log("傳送成功" + JSON.stringify(data));
-						//console.log(data);
-						//console.log(JSON.stringify(data));
-						console.log(Object.values(data)[0]);
-
-						array1=Object.values(data)[0];
-						//console.log(array1.toString());
-						var element1 = array1.toString();
-						console.log(element1);
-
 						if (data.errors != undefined) {
                             if (data.errors=='timeout!') {
                                 alert("timeout! "+"請重新登入");
@@ -395,23 +387,38 @@
                             }
 							// else {
                             //     alert(data.errors);
-                            //     window.location.href = "lend_classroom_for_lender.html";
+                            //     window.location.href = "lend_classroom.html";
                             // }
                         }
 						else {
-                            //floor
-                            for (var j = 0; j < floors.length; j++) {
-                                var newRow = newClassroom.insertRow(j+1);
-                                newfloors = newRow.insertCell(0);
-                                newfloors.innerHTML=floors[j];
+							console.log("傳送成功" + JSON.stringify(data));
+							//console.log(data);
+							//console.log(JSON.stringify(data));
+							//console.log(Object.values(data)[0]);
+
+							//classroomID
+							array1=Object.values(data)[0];
+							var element1 = array1.toString();
+							console.log(element1);
+							//status
+							array2=Object.values(data)[1];
+							var element2 = array2.toString();
+							console.log(element2);
+
+							//floor
+							for (var j = 0; j < floors.length; j++) {
+								var newRow = newClassroom.insertRow(j+1);
+								newfloors = newRow.insertCell(0);
+								newfloors.innerHTML=floors[j];
 								classrooms[j] = 0;
-                            }
-                            
+							}
+							
 							//讀入教室ID
-							console.log(array1.length);
+							//console.log(array1.length);
 							for (var k = 0; k < array1.length; k++) {
 								for (var i = 0; i < floors.length; i++) {
 									ID = array1[k].toString();
+									classroomStatus = array2[k].toString();
 									var floorNumber = ID.substr(0, 1);
 									if (floorNumber == floors[i].substr(0, 1)){
 										//console.log(ID);
@@ -426,8 +433,8 @@
 								}
 							}
 							console.log(classrooms);
-                            //window.location.reload()  //重新整理頁面
-                        }
+							//window.location.reload()  //重新整理頁面
+						}
 					},
 					error: function (xhr, type){
 						console.log("傳送失敗");
@@ -502,7 +509,7 @@
                             }
 							// else {
                             //     alert(data.errors);
-                            //     window.location.href = "lend_classroom_for_lender.html";
+                            //     window.location.href = "lend_classroom.html";
                             // }
                         }
 						else {
@@ -531,7 +538,7 @@
 					"searchWord":searchWord,
 					"classroomID":classroomID2
 				}
-				//console.log("start post searchKeyword: " + JSON.stringify(searchKeyword));
+				console.log("start post searchKeyword: " + JSON.stringify(searchKeyword));
 				console.log("searchWord: " + searchWord);
 				if (searchWord != "") {
 					$.ajax({
@@ -544,29 +551,24 @@
 						xhrFields: {
 							withCredentials: true
 						},
-
 						success: function (data){
 							if (data.errors != undefined) {
 								if (data.errors=='timeout!') {
 									alert("timeout! "+"請重新登入");
 									window.location.href = "index.html";
 								}
-								// else {
-								//     alert(data.errors);
-								//     window.location.href = "lend_classroom_for_lender.html";
-								// }
 							}
 							else {
 								console.log("傳送成功" + JSON.stringify(searchKeyword));
 								classroomID2=Object.values(data)[0];
 								console.log(classroomID2);
-
 								//selected = classroomID1;
+								var k2 = 0;
 								for (var i = 0; i < k; i++) {
 									for (var j = 0; j < classroomID2.length; j++) {
 										if (classroomID1[i] != classroomID2[j]){
-											selected[k] = classroomID2[j];
-											k++;
+											selected[k+k2] = classroomID2[j];
+											k2++;
 										}
 									}
 								}
@@ -579,6 +581,7 @@
 							console.log(xhr+type);
 						}
 					})
+					
 				}
 			}
 		);
@@ -671,7 +674,7 @@
                                 }
                                 // else {
                                 //     alert(data.errors);
-                                //     window.location.href = "lend_classroom_for_lender.html";
+                                //     window.location.href = "lend_classroom.html";
                                 // }
                             //}
                             else {
@@ -763,67 +766,99 @@
 						}
 					}
 		}
-       
-
 
 		//申請借用教室function
 		$('#lendBTN').click(
 			function (){
 				console.log("開始post到資料庫...");
 				
-				var userName = $("#userName").val();
-				var phoneNumber = $("#phoneNumber").val();
 				var classroomID = $("#classroomID").val();
 				var courseName = $("#courseName").val();
 				var weekDay = $("#weekDay").val();
 				var lendTime = $("#lendTime").val();
 				var returnTime = $("#returnTime").val();
 				var reason = $("#reason").val();
-
-				//pattern判斷
-				const rulesPhoneNumber = /09[0-9]{8}/;
-                //console.log(rulesPhoneNumber.test(phoneNumber));
-				const rulesclassroomID = /[B1-6]{1}[0-9]{2}/;
-                //console.log(rulesclassroomID.test(classroomID));
 				
-				if (rulesPhoneNumber.test(phoneNumber) == false) {
-					console.log("phoneNumber 格式錯誤");
-					alert("手機號碼輸入格式錯誤!");
+				var check = 1;//0:輸入格式錯誤, 1:教室已被借用, 2:可申請借用
+
+                console.log("借用日期: " + weekDay);
+				var lendYear = weekDay.substr(0, 4);
+                //console.log("lendYear is " + lendYear);
+				var lendMonth = weekDay.substr(5, 2);
+                //console.log("lendMonth is " + lendMonth);
+				var lendDate = weekDay.substr(8, 2);
+                //console.log("lendDate is " + lendDate);
+
+				var today = new Date();
+                console.log("今天日期: " + today);
+				var year = today.getFullYear();
+                //console.log("year is " + year);
+				var month = today.getMonth()+1;
+                //console.log("month is " + month);
+				var date = today.getDate();
+                //console.log("date is " + date);
+				var hour = today.getHours();
+                //console.log("hour is " + hour);
+				var minute = today.getMinutes();
+                //console.log("minute is " + minute);
+
+				//輸入格式判斷
+				const rulesclassroomID = /[B1-6]{1}[0-9]{2}$/;
+                //console.log(rulesclassroomID.test(classroomID));
+				if (rulesclassroomID.test(classroomID) == false) {
+					check = 0;
+				 	console.log("classroomID 格式錯誤");
+				 	alert("教室編號輸入格式錯誤!");
 				}
-				else if (rulesclassroomID.test(classroomID) == false) {
-					console.log("classroomID 格式錯誤");
-					alert("教室編號輸入格式錯誤!");
+				else if (lendYear < year){
+					check = 0;
+					console.log("lendYear 錯誤");
+				 	alert("不能借過去的時間!");
+				}
+				else if (lendYear >= year && lendMonth < month){
+					check = 0;
+					console.log("lendMonth 錯誤");
+				 	alert("不能借過去的時間!");
+				}
+				else if (lendYear >= year && lendMonth >= month && lendDate < date){
+					check = 0;
+					console.log("lendDate 錯誤");
+				 	alert("不能借過去的時間!");
 				}
 				else if (lendTime > returnTime){
-					console.log("lendTime > returnTime 錯誤");
+					check = 0;
+					console.log("lendTime(" + lendTime + ") > returnTime(" + returnTime +  ") 錯誤");
 					alert("借用時間不可晚於歸還時間!");
 				}
 				else if (returnTime - lendTime > 3){
+					check = 0;
 					console.log("returnTime - lendTime > 3 錯誤");
 					alert("一次最多只能借三節課!");
 				}
 				else if (returnTime - lendTime == 0){
+					check = 0;
 					console.log("returnTime - lendTime == 0 錯誤");
 					alert("一次至少要借一節課!");
 				}
 				else {
+					check = 1;
+				}
+
+				//輸入格式皆正確, 判斷是否已借用
+				if (check = 1){
 					var data = {
-						"userName":userName,
-						"phoneNumber":phoneNumber,
 						"classroomID":classroomID,
-						"courseName":courseName,
 						"weekDay":weekDay,
 						"lendTime":lendTime,
-						"returnTime":returnTime,
-						"reason":reason
+						"returnTime":returnTime
 					}
+
 					console.log("跳到 " + window.location.href);
 					console.log(JSON.stringify(data));
 
-					//將要借用人資訊post到後端資料庫
 					$.ajax({
 						type: 'POST',
-						url: "https://desolate-wildwood-64845.herokuapp.com/ApplicationForms/lendClassroom/",
+						url: "https://desolate-wildwood-64845.herokuapp.com/ApplicationForms/selectApplicationForms/",
 						data: JSON.stringify(data),
 						contentType: 'application/json; charset=UTF-8',
 						dataType: 'json',
@@ -831,22 +866,110 @@
 						xhrFields: {
 							withCredentials: true
 						},
-						
 						success: function (data){
 							if (data.errors != undefined) {
 								if (data.errors=='timeout!') {
-									alert("timeout! "+"請重新登入");
+									alert("timeout! " + "請重新登入");
 									window.location.href = "index.html";
 								}
-								else {
-									alert(data.errors);
-									window.location.href = "lend_classroom.html";
-								}
+								// else {
+								// 	alert(data.errors);
+								// 	window.location.href = "lend_classroom.html";
+								// }
 							}
 							else {
-								alert("申請成功!");
-								console.log("申請傳送成功");
-								window.location.reload()  //重新整理頁面
+								console.log("判斷是否已借用");
+								//console.log(JSON.stringify(data));
+								var formLendTime = Object.values(data)[1];
+								var formReturnTime = Object.values(data)[2];	
+                            	var formLendDate = Object.values(data)[3];
+								var formWeekDay=[];
+								var dataLength = formLendDate.length;	
+								var isLend = 0;//是否被借用(0:尚未借用 ,1:已被借用)
+
+                                for (var i = 0; i < dataLength; i++) {
+									var newFormLendDate = new Date(formLendDate[i]);
+									//console.log(newFormWeekDay);
+									var year = newFormLendDate.getFullYear();
+									var month = newFormLendDate.getMonth()+1;//js從0開始取
+									var date = newFormLendDate.getDate();
+									if (month < 10) month = "0" + month;
+        							if (date < 10) date = "0" + date;
+									formWeekDay[i] = year + "-" + month + "-" + date;
+								}
+
+								console.log("lendDate is " + weekDay + ",lendTime is " + lendTime + " ,returnTime is " + returnTime);
+								console.log("formWeekDay is " + formWeekDay + " ,formLendTime is " + formLendTime + " ,formReturnTime is " + formReturnTime);
+
+								console.log(dataLength);
+								//檢查是否借用
+                                for (var i = 0; i < dataLength; i++) {
+									if (weekDay == formWeekDay[i]){
+										//console.log(formWeekDay[i]);
+										for (var thetime = lendTime; thetime <= returnTime; thetime++){
+											for (var formTime = formLendTime[i]; formTime <= formReturnTime[i]; formTime++) {
+												//console.log(thetime + ", " + formTime);
+												if (thetime == formTime){
+													isLend = 1;
+													console.log("第" + thetime + "節已被借用");
+													alert("第" + thetime + "節已被借用!");
+													i = dataLength;
+													//window.location.reload()  //重新整理頁面
+												}
+											}
+										}
+									}
+								}
+								//尚未借用
+								if (isLend == 0){
+									console.log("借用日期: " + weekDay + ",借用時間: 第" + lendTime + "節 到 第" + returnTime + "節 可借用");
+									check = 2;//可借用
+									console.log("check=2, 可申請借用");
+									var data = {
+										"classroomID":classroomID,
+										"courseName":courseName,
+										"weekDay":weekDay,
+										"lendTime":lendTime,
+										"returnTime":returnTime,
+										"reason":reason
+									}
+									console.log("跳到 " + window.location.href);
+									console.log(JSON.stringify(data));
+
+									//將要借用人資訊post到後端資料庫
+									$.ajax({
+										type: 'POST',
+										url: "https://desolate-wildwood-64845.herokuapp.com/ApplicationForms/lendClassroom/",
+										data: JSON.stringify(data),
+										contentType: 'application/json; charset=UTF-8',
+										dataType: 'json',
+										crossOrigin: null,
+										xhrFields: {
+											withCredentials: true
+										},
+										success: function (data){
+											if (data.errors != undefined) {
+												if (data.errors=='timeout!') {
+													alert("timeout! "+"請重新登入");
+													window.location.href = "index.html";
+												}
+												else {
+													alert(data.errors);
+													window.location.href = "lend_classroom.html";
+												}
+											}
+											else {
+												alert("申請成功!");
+												console.log("申請傳送成功");
+												//window.location.reload()  //重新整理頁面
+											}
+										},
+										error: function (xhr, type){
+											console.log("傳送失敗");
+											console.log(xhr+type);
+										}
+									});
+								}
 							}
 						},
 						error: function (xhr, type){

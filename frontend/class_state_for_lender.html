@@ -442,15 +442,16 @@
                             console.log(classroomID2);
 
                             //selected = classroomID1;
-                            for (var i = 0; i < k; i++) {
-                                for (var j = 0; j < classroomID2.length; j++) {
-                                    if (classroomID1[i] != classroomID2[j]){
-                                        selected[k] = classroomID2[j];
-                                        k++;
-                                    }
-                                }
-                            }
-                            showClassroom();
+							var k2 = 0;
+							for (var i = 0; i < k; i++) {
+								for (var j = 0; j < classroomID2.length; j++) {
+									if (classroomID1[i] != classroomID2[j]){
+										selected[k+k2] = classroomID2[j];
+										k2++;
+									}
+								}
+							}
+							showClassroom();
                             //window.location.reload()  //重新整理頁面
                         }
 					},

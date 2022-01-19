@@ -297,7 +297,7 @@ def checkIdentityCode():
     info['errors']=errors
     return jsonify(info)
 
-@users.route('/checkIdentityCode2',methods=['POST']) #for register
+@users.route('/checkIdentityCode2/',methods=['POST']) #for register
 def checkIdentityCode2():
     connection = pymysql.connect(host=cfg['db']['host'],user=cfg['db']['user'],password=cfg['db']['password'],db=cfg['db']['database'])
     info = dict()
@@ -313,12 +313,12 @@ def checkIdentityCode2():
     else:
         try:
             insertString = 'UPDATE Users SET status = %(status)s WHERE schoolName = %(schoolName)s'
-            cursor.execute(insertString, {'status':0,'schoolName':info['schoolName']})
+            cursor.execute(insertString, {'status':0,'schoolName':schoolName})
             connection.commit() #submit the data to database 
         except Exception: #get exception if there's still occured something wrong
             traceback.print_exc()
             connection.rollback()
-            info['errors'] = 'register fail'
+            errors.append('register fail')
     info['errors']=errors
     return jsonify(info)
 
