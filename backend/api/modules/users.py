@@ -152,38 +152,7 @@ CORS(users,resources={r"/*": {"origins": "*"}},supports_credentials=True)
 def index():
     return "Users route"
 
-@users.route('/register',methods=['POST'])
-def register():
-    #connect to mysql
-    connection = pymysql.connect(host=cfg['db']['host'],user=cfg['db']['user'],password=cfg['db']['password'],db=cfg['db']['database'])
-    #build dictionary
-    info = dict()
-    cursor = connection.cursor()
-    info['userName'] = request.json['userName']
-    info['schoolName'] = request.json['schoolName']
-    info['phoneNumber'] = request.json['phoneNumber']
-    info['password'] = request.json['password']
-    info['passwdConfirm'] = request.json['passwdConfirm']
-    info['Email'] = request.json['Email']
-    #check info's correctness
-    errors = checkRegisterRequest(info)
-    #record errors in dictionary
-    info['errors'] = errors
-    #if there's no error occured in info -> insert the new data to database
-    if len(info['errors'])==0:
-        try:
-            insertString = 'UPDATE Users SET status = %(status)s WHERE schoolName = %(schoolName)s'
-            cursor.execute(insertString, {'status':0,'schoolName':info['schoolName']})
-            connection.commit() #submit the data to database 
-        except Exception: #get exception if there's still occured something wrong
-            traceback.print_exc()
-            connection.rollback()
-            info['errors'] = 'register fail'
-    #delete password and password Confirm for security
-    del info['password']
-    del info['passwdConfirm']
-    #return render_template('register.html')
-    return jsonify(info)
+
 
 @users.route('/login',methods=['POST'])
 def login():
@@ -325,6 +294,31 @@ def checkIdentityCode():
         session.permanent = True
         #add a schoolName into session use session to timeout
         session['schoolName']=request.json['schoolName']
+    info['errors']=errors
+    return jsonify(info)
+
+@users.route('/checkIdentityCode2',methods=['POST']) #for register
+def checkIdentityCode2():
+    connection = pymysql.connect(host=cfg['db']['host'],user=cfg['db']['user'],password=cfg['db']['password'],db=cfg['db']['database'])
+    info = dict()
+    errors=[]
+    cursor = connection.cursor()
+    schoolName = request.json['schoolName']
+    identityCode=request.json['identityCode']
+    cursor.execute("SELECT identityCode from Users WHERE schoolName = %(schoolName)s",{'schoolName':schoolName})
+    rows = cursor.fetchall()
+    connection.commit()
+    if rows[0][0]!=identityCode:
+        errors.append('identityCode error')
+    else:
+        try:
+            insertString = 'UPDATE Users SET status = %(status)s WHERE schoolName = %(schoolName)s'
+            cursor.execute(insertString, {'status':0,'schoolName':info['schoolName']})
+            connection.commit() #submit the data to database 
+        except Exception: #get exception if there's still occured something wrong
+            traceback.print_exc()
+            connection.rollback()
+            info['errors'] = 'register fail'
     info['errors']=errors
     return jsonify(info)
 
