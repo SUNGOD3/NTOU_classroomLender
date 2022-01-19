@@ -41,41 +41,58 @@ def checkLendClassroom():
     info['weekDay'] = request.json['weekDay']
     info['confirmType'] = request.json['confirmType']
     print(info)
-    try:
-        #update user state first
-        if info['confirmType'] == '1':
-            insertString = 'UPDATE Users SET status = 2 WHERE schoolName=(%(schoolName)s);'
-        else:
-            insertString = 'UPDATE Users SET status = 0 WHERE schoolName=(%(schoolName)s);'
-        cursor.execute(insertString, {'schoolName':info['schoolName']})
-        connection.commit() #submit the data to database 
-        #search the reason from ApplicationForms
-        insertString = 'SELECT courseName,userName,reason from ApplicationForms WHERE classroomID=(%(classroomID)s) AND lendTime=(%(lendTime)s) AND weekDay=(%(weekDay)s);'
-        cursor.execute(insertString,{'classroomID':info['classroomID'],'lendTime':info['lendTime'],'weekDay':info['weekDay']})
+    if info['confirmType']=='1':
+        cursor.execute("SELECT status from Classrooms WHERE classroomID=(%(classroomID)s)",{'classroomID':info['classroomID']})
         rows = cursor.fetchall()
         connection.commit()
         if len(rows)==0:
-            info['errors'] = 'invalid select from ApplicationForms'
-        else :
-            #print(rows)
-            insertString = 'DELETE from ApplicationForms WHERE classroomID=(%(classroomID)s) AND lendTime=(%(lendTime)s) AND weekDay=(%(weekDay)s);'
-            cursor.execute(insertString,{'classroomID':info['classroomID'],'lendTime':info['lendTime'],'weekDay':info['weekDay']})
-            #rows = cursor.fetchall()
-            connection.commit()
-            info['lendTime'] = datetime.datetime.now()
-            info['courseName'] = rows[0][0]
-            info['userName'] = rows[0][1]
-            info['reason'] = rows[0][2]
-            #insert new data to history
-            if info['confirmType'] == '1':
-                info['lendWeekDay'] = pd.Timestamp(datetime.datetime.strptime(info['weekDay'],"%Y-%m-%d")).dayofweek
-                insertString = 'INSERT INTO History(classroomID,courseName,userName,schoolName,lendTime,returnTime,lendWeekDay,returnWeekDay,reason)values(%(classroomID)s,%(courseName)s,%(userName)s,%(schoolName)s,%(lendTime)s,NULL,%(lendWeekDay)s,NULL,%(reason)s);'
-                cursor.execute(insertString,{'classroomID':info['classroomID'],'courseName':info['courseName'],'userName':info['userName'],'schoolName':info['schoolName'],'lendTime':info['lendTime'],'reason':info['reason'],'lendWeekDay':info['lendWeekDay']})
+            info['errors'] = 'Classroom has been deleted!'
+        elif rows[0][0]==1:
+            info['errors'] = 'Classroom has been lent!'
+        elif rows[0][0]==2:
+            info['errors'] = 'Classroom has been banned!'
+        else:
+            try:
+                cursor.execute("SELECT status from Users WHERE schoolName=(%(schoolName)s)",{'schoolName':info['schoolName']})
+                rows = cursor.fetchall()
                 connection.commit()
-    except Exception: #get exception if there's still occured something wrong
-            traceback.print_exc()
-            connection.rollback()
-            info['errors'] = 'checkLendClassroom fail'
+                if rows[0][0]==1:
+                    info['errors'] = 'User has not return key!'
+                elif rows[0][0]==2:
+                    info['errors'] = 'User can not borrow key!(user has been banned!)'
+                else:
+                    #update user state first
+                    if info['confirmType'] == '1':
+                        insertString = 'UPDATE Users SET status = 1 WHERE schoolName=(%(schoolName)s);'
+                    cursor.execute(insertString, {'schoolName':info['schoolName']})
+                    connection.commit() #submit the data to database 
+                    #search the reason from ApplicationForms
+                    insertString = 'SELECT courseName,userName,reason from ApplicationForms WHERE classroomID=(%(classroomID)s) AND lendTime=(%(lendTime)s) AND weekDay=(%(weekDay)s);'
+                    cursor.execute(insertString,{'classroomID':info['classroomID'],'lendTime':info['lendTime'],'weekDay':info['weekDay']})
+                    rows = cursor.fetchall()
+                    connection.commit()
+                    if len(rows)==0:
+                        info['errors'] = 'invalid select from ApplicationForms'
+                    else :
+                        #print(rows)
+                        insertString = 'DELETE from ApplicationForms WHERE classroomID=(%(classroomID)s) AND lendTime=(%(lendTime)s) AND weekDay=(%(weekDay)s);'
+                        cursor.execute(insertString,{'classroomID':info['classroomID'],'lendTime':info['lendTime'],'weekDay':info['weekDay']})
+                        #rows = cursor.fetchall()
+                        connection.commit()
+                        info['lendTime'] = datetime.datetime.now()
+                        info['courseName'] = rows[0][0]
+                        info['userName'] = rows[0][1]
+                        info['reason'] = rows[0][2]
+                        #insert new data to history
+                        if info['confirmType'] == '1':
+                            info['lendWeekDay'] = pd.Timestamp(datetime.datetime.strptime(info['weekDay'],"%Y-%m-%d")).dayofweek
+                            insertString = 'INSERT INTO History(classroomID,courseName,userName,schoolName,lendTime,returnTime,lendWeekDay,returnWeekDay,reason)values(%(classroomID)s,%(courseName)s,%(userName)s,%(schoolName)s,%(lendTime)s,NULL,%(lendWeekDay)s,NULL,%(reason)s);'
+                            cursor.execute(insertString,{'classroomID':info['classroomID'],'courseName':info['courseName'],'userName':info['userName'],'schoolName':info['schoolName'],'lendTime':info['lendTime'],'reason':info['reason'],'lendWeekDay':info['lendWeekDay']})
+                            connection.commit()
+            except Exception: #get exception if there's still occured something wrong
+                    traceback.print_exc()
+                    connection.rollback()
+                    info['errors'] = 'checkLendClassroom fail'
     return jsonify(info)
 
 
@@ -163,8 +180,19 @@ def checkReturnClassroom():
     info['lendWeekDay'] = request.json['weekDay']
     try:
         #update user's status=0
-        insertString = 'UPDATE Users SET status=0 WHERE schoolName=(%(schoolName)s);'
-        cursor.execute(insertString, {'schoolName':info['schoolName']})
+        cursor.execute("SELECT * from ApplicationForms WHERE schoolname=%(schoolname)s ", {'schoolname':info['schoolName']})
+        rows = cursor.fetchall()
+        connection.commit()
+        if len(rows) == 0:
+            insertString = 'UPDATE Users SET status=0 WHERE schoolName=(%(schoolName)s);'
+            cursor.execute(insertString, {'schoolName':info['schoolName']})
+            connection.commit()
+        else:
+            insertString = 'UPDATE Users SET status=3 WHERE schoolName=(%(schoolName)s);'
+            cursor.execute(insertString, {'schoolName':info['schoolName']})
+            connection.commit()
+        insertString = 'UPDATE Classrooms SET status=0 WHERE classroomID=(%(classroomID)s);'
+        cursor.execute(insertString, {'classroomID':info['classroomID']})
         connection.commit()
         #update history: returnTime,returnWeekDay
         info['returnTime'] = datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S")

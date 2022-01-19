@@ -152,15 +152,8 @@ def searchKeyword():
         connection.commit() #update the data in database
         info['class'] = []
         for row in rows:
-            if info['searchWord'] in row[0] :
+            if (info['searchWord'] in row[0]) or (info['searchWord'] in row[1]):
                 info['class'].append(row[1])
-        cursor.execute('SELECT classroomID from Scheduler')
-        rows = cursor.fetchall()
-        connection.commit() #update the data in database
-        for row in rows:
-            if info['searchWord'] in row[0] :
-                if row[0] not in info['class'] :
-                    info['class'].append(row[0])
     except Exception: #get exception if there's still occured something wrong
         traceback.print_exc()
         connection.rollback()
