@@ -10,7 +10,7 @@
             body 	{
 				background-color:#f4f5fe;
 				font-family: 微軟正黑體, Arial, Helvetica, sans-serif;
-				overflow: hidden;
+				overflow: auto;
 				overflow-y: scroll;
 		    }
 		    header	{
@@ -18,29 +18,50 @@
 				color:navy;
 				font-weight: bold;
 		    }
-            .head   {   font-size : 40px;
-
+            .head   {   
+                font-size : 40px;
             }
-            table   {   
-                font-size : 20px;
-                width : 70%;
-                overflow : scroll;
-                position: relative;
-                text-align: center;
+            table   {
+                text-align: center;               
                 border:3px #cccccc solid;
                 border-collapse: collapse;  
-                left : 15%;
+                border-spacing : 50px;
+                
+            }
+            td {
+                height: 40px;
+                padding: 12px;
+                vertical-align: bottom;
+            }
+            .rwd-table   {   
+                font-size : 20px;
+                width : 70%;
+                overflow : auto;
+                position: relative;
+                left : 12%;
             }
             caption {   
                 font-size : 40px;
             }
-            
-            @media (max-width: 620px) {
+            /*
+            th td   {
+                padding: 20px;
+            }
+            */
+            @media (min-width: 620px) {
                 table   {   
                     position: relative;
-                    left : 1%;  
+                    left : 8%;  
                 }
-                
+            }
+
+            @media (max-width: 620px) {
+                .rwd-table   {   
+                    position: relative;
+                    width : 100%;
+                    left : 0%;
+                    overflow :  auto;
+                }
             }
         </style>
 
@@ -85,7 +106,7 @@
                             console.log(data);
                             
                             //content =  "<tr><th>教室</th><th>借用人</th><th>使用時間</th><th>是否歸還</th></tr>";
-                            content =  "<tr><th>教室</th><th>借用人</th><th>借用時間</th><th>歸還時間</th></tr>";
+                            content =  "<tr><th>教室</th><th>借用人</th><th>學號</th><th>借用時間</th><th>歸還時間</th></tr>";
                             //alert(data.length);
 
                             for(let i=0;i<data.length;i++){
@@ -96,11 +117,11 @@
                                
                                 if(!str[5]){
                                     //content += "<tr>" + "<td>" + str[0] + "</td>" + "<td>" + str[2] + "</td>" + "<td>" + str[4] + "~尚未歸還"   + "</td>";
-                                    content += "<tr>" + "<td  data-th='教室'>" + str[0] + "</td>" + "<td data-th='借用人'>" + str[2] + "</td>" + "<td data-th='借用時間'>" + str[4] + "</td>" + "<td data-th='歸還時間'>" + "尚未歸還"   + "</td>";
+                                    content += "<tr>" + "<td  data-th='教室'>" + str[0] + "</td>" + "<td data-th='借用人'>" + str[2] + "</td>" + "<td data-th='學號'>" + str[3] + "</td>" + "<td data-th='借用時間'>" + str[4] + "</td>" + "<td data-th='歸還時間'>" + "尚未歸還"   + "</td>";
                                     //content += "<td data-th='是否歸還'>" + "No" + "</td>";
                                 }else{
                                     //content += "<tr>" + "<td>" + str[0] + "</td>" + "<td>" + str[2] + "</td>" + "<td>" + str[4] + "~" + str[5] + "</td>";
-                                    content += "<tr>" + "<td data-th='教室'>" + str[0] + "</td>" + "<td data-th='借用人'>" + str[2] + "</td>" + "<td data-th='借用時間'>" + str[4] + "</td>" + "<td data-th='歸還時間'>" + str[5] + "</td>";
+                                    content += "<tr>" + "<td data-th='教室'>" + str[0] + "</td>" + "<td data-th='借用人'>" + str[2] + "</td>" + "<td data-th='學號'>" + str[3] + "</td>" + "<td data-th='借用時間'>" + str[4] + "</td>" + "<td data-th='歸還時間'>" + str[5] + "</td>";
                                    // content += "<td data-th='是否歸還'>" + "Yes" + "</td>";
                                 }
                                 content += "</tr>"
@@ -205,9 +226,10 @@
         <form method="GET" action="http://localhost:5000/info">
             <!--cellspacing属性:设置各个单元格之间的间距;cellpadding属性:设置单元格的内边距-->
             <p class = "head" align = "center">借用紀錄</p>
-            <p>
+            <div class = "rwd-table" >
+
                 <!--將借用歷史顯示在 table style="border:3px #cccccc solid;" border="1" cellspacing="0" cellpadding="25" align = "center"-->
-                <table class = "rwd-table" id = "history_table" cellspacing="0" cellpadding="5">
+                <table id = "history_table" cellspacing="0" cellpadding="5">
                     <!--<caption>借用紀錄</caption>-->
                     <!--
                     <tr>
@@ -228,7 +250,7 @@
                     -->
 
                 </table>
-            </p>
+            </div>
        </form>
         
        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>

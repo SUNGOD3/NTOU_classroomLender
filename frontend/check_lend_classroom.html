@@ -71,7 +71,7 @@
             @media (max-width: 620px) {
                 table   {   
                     position: relative;
-                    left : 2%;  
+                    left : 0%;  
                 }
                 
             }
@@ -86,6 +86,7 @@
                 var lendTime = [];
                 var returnTime = [];
                 var weekDay = [];
+                var reason = [];
 
                 //去後端get借教室申請人的學號(schoolName)和姓名(userName)和教室編號(classroomID)借用時間(lendTime)~(returnTime)和借用星期(weekDay)
                 $(document).ready(function(){
@@ -119,7 +120,7 @@
 
                                 console.log(data);
 
-                                content = "<tr><th>姓名</th><th>教室編號</th><th>使用時間</th><th>使用日期</th></tr>";
+                                content = "<tr><th>姓名</th><th>學號</th><th>教室編號</th><th>使用時間</th><th>使用日期</th><th>使用事由</th></tr>";
 
                                 data = data.data;
                                 console.log(data.length);
@@ -127,13 +128,14 @@
                                         var str = data[i].split(",");
                                         console.log(str);
                                         //btn-sm btn-secondary
-                                        content += "<tr>" + "<td data-th='姓名'>"+str[1]+"</td>"+"<td data-th='教室編號'>"+str[2]+"</td>"+"<td data-th='使用時間'>"+str[3]+"~"+str[4]+"</td>"+"<td data-th='使用日期'>"+str[5]+"</td>"+"<td>"+"<button type='button' onclick= 'confirm("+ i +")'>確認</button>"+"</td>"+"<td>"+"<button  type='button' onclick= 'reject("+ i +")'>拒絕</button>"+"</td>"+ "</tr>";
+                                        content += "<tr>" + "<td data-th='姓名'>"+str[1]+"</td>"+"<td data-th='學號'>"+str[0]+"</td>"+"<td data-th='教室編號'>"+str[2]+"</td>"+"<td data-th='使用時間'>"+str[3]+"~"+str[4]+"</td>"+"<td data-th='使用日期'>"+str[5]+"</td>"+"<td data-th='使用事由'>"+str[6]+"</td>"+"<td>"+"<button type='button' onclick= 'confirm("+ i +")'>確認</button>"+"</td>"+"<td>"+"<button  type='button' onclick= 'reject("+ i +")'>拒絕</button>"+"</td>"+ "</tr>";
                                     
                                         schoolName[i] = str[0];
                                         classroomID[i] = str[2];
                                         lendTime[i] = str[3];
                                         returnTime[i] = str[4];
                                         weekDay[i] = str[5];
+                                        reason[i] = str[6];
                                 
                                 }
 
@@ -181,7 +183,11 @@
                     success: function (data){
                         //alert(data+"已確認歸還!!!");
                         console.log(data);
-                        alert("已確認借出申請!!!");
+                        if(data.errors.length!=0){
+                            alert(data.errors);
+                        }else{
+                            alert("已確認借出申請!!!");
+                        }
                         location.reload();
                     },
 

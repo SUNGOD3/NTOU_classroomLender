@@ -117,7 +117,7 @@
             @media (max-width: 620px) {
                 table   {   
                     position: relative;
-                    left : 15%;  
+                    left : 6%;  
                 }
                 
             }
@@ -161,14 +161,14 @@
                            //alert(data.errors);
                         }else{
 
-                            content = "<tr><th>姓名</th><th>教室編號</th><th>借出時間</th><th>使用星期</th></tr>";
+                            content = "<tr><th>姓名</th><th>學號</th><th>教室編號</th><th>借出時間</th><th>使用星期</th></tr>";
 
                             //+"<td>"+"<input class='b' type='button' onclick= 'reject("+ i +")' value='拒絕'>"+"</td>"
                             console.log(content);
                             for(let i=0;i<data.classroomID.length;i++){
                                 console.log(data.userName[i]);
                                 //content += "<tr>" + "<td>"+data.userName[i]+"</td>"+"<td>"+data.classroomID[i]+"</td>"+"<td>"+data.lendTime[i]+"~???"+"</td>"+"<td>"+data.lendWeekDay[i]+"</td>"+"<td>"+"<input class='b' type='button' onclick= 'confirm("+ i +")' value='確認'>"+"</td>"+ "</tr>";
-                                content += "<tr>" + "<td data-th='姓名'>"+data.userName[i]+"</td>"+"<td data-th='教室編號'>"+data.classroomID[i]+"</td>"+"<td data-th='借出時間'>"+data.lendTime[i]+"</td>"+"<td data-th='使用星期'>"+data.lendWeekDay[i]+"</td>"+"<td '>"+"<button  onclick= 'confirm("+ i +")'>確認</button>"+"</td>"+ "</tr>";
+                                content += "<tr>" + "<td data-th='姓名'>"+data.userName[i]+"</td>"+ "<td data-th='學號'>"+data.schoolName[i]+"</td>"+"<td data-th='教室編號'>"+data.classroomID[i]+"</td>"+"<td data-th='借出時間'>"+data.lendTime[i]+"</td>"+"<td data-th='使用星期'>"+data.lendWeekDay[i]+"</td>"+"<td '>"+"<button  onclick= 'confirm("+ i +")'>確認</button>"+"</td>"+ "</tr>";
                                 schoolName[i] = data.schoolName[i];
                                 classroomID[i] = data.classroomID[i];
                                 lendTime[i] = data.lendTime[i];
