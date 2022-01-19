@@ -18,12 +18,13 @@
             color: navy;
             font-weight: bold;
         }
-        
 
-        .table{
-            position:relative;
-            left:10%;
-            width:80%;
+
+        .table {
+            font-size: 20px;
+            position: relative;
+            left: 10%;
+            width: 80%;
         }
         button {
             background-color: #c3c8ec;
@@ -55,6 +56,7 @@
         }
 
         .modify_form_div {
+            font-size: 20px;
             left: 20px;
             position: relative;
         }
@@ -63,6 +65,7 @@
 
             @media (min-width: 480px) {
                 .table {
+                    font-size: 18px;
                     position: relative;
                     left: 3%;
                 }
@@ -171,11 +174,25 @@
                     else {
                         console.log(data);
                         data = data.users;
-                        console.log(data);
+                        
                         let content = "<thead><tr><th scope ='col'>學號</th><th scope='col'>姓名</th><th scope='col'>信箱</th><th scope='col'>狀態</th><th scope='col'>修改</th> </tr ></thead >";
                         for (let i = 0; i < data.length; i++) {
                             str = data[i].split(",");
-                            console.log(str);
+                            if(str[2] == 0) {
+                                str[2] = "未借用";
+                            }
+                            else if (str[2] == 1) {
+                                str[2] = "借用中";
+                            }
+                            else if (str[2] == 2) {
+                                str[2] = "禁止借用";
+                            }
+                            else if (str[2] == 3) {
+                                str[2] = "審核中";
+                            }
+                            else {
+                                str[2] = "註冊中";
+                            }
                             content += "<tr>" + "<td id='schoolName" + i + "' data-th='學號'>" + str[0] + "</td> " + "<td data-th='姓名'>" + str[1] + "</td> " + "<td data-th='信箱'>" + str[3] + "</td>" + "<td data-th='狀態'>" + str[2] + "</td>" + "<td data-th='修改'><button type='button' onclick='javascript: postFunc(" + i + ")'>修改</button></td>" + "</tr>";
                         }
                         document.getElementById("data_table").innerHTML = content;
@@ -218,31 +235,24 @@
                         document.getElementById("subtitle").innerHTML = "修改借用人";
 
                         userName_content = "姓名: " + data.userName + "  <button id = 'userName_button' type = 'button'> 修改</button>";
-                        //password_content = "密碼: " + data.password + "  <button id = 'password_button' type = 'button'> 修改</button>";
                         Email_content = "信箱: " + data.Email;
                         status_content = "狀態: " + data.status + "  <button id = 'status_button' type = 'button'> 修改</button>";
                         schoolName_content = "帳號(學號): " + data.schoolName;
 
                         schoolName = data.schoolName;
                         userName = data.userName;
-                        //password = data.password;
                         Email = data.Email;
                         status = data.status;
 
                         document.getElementById("userName_div").innerHTML = userName_content;
                         document.getElementById("schoolName_div").innerHTML = schoolName_content;
-                        //document.getElementById("password_div").innerHTML = password_content;
                         document.getElementById("Email_div").innerHTML = Email_content;
                         document.getElementById("status_div").innerHTML = status_content;
 
-                        var userNameButton = document.getElementById("userName_button");
-                        //var passwordButton = document.getElementById("password_button");
-                        //var EmailButton = document.getElementById("Email_button");
+                        var userNameButton = document.getElementById("userName_button");                        
                         var statusButton = document.getElementById("status_button");
 
                         userNameButton.addEventListener("click", modify_userName, false);
-                        //passwordButton.addEventListener("click", modify_password, false);
-                        //EmailButton.addEventListener("click", modify_Email, false);
                         statusButton.addEventListener("click", modify_status, false);
                     }
                 },
@@ -290,28 +300,45 @@
         };
 
         function modify_userName() {
-            var content = "<input type='text' class='form-control' placeholder='姓名' id='userName' name='userName' size='20'>" + "<button type='button' onclick='javascript: get_userName()'>確認</button>";
+            var content = "<input type='text' class='form-control' placeholder='請輸入姓名' id='userName' name='userName' size='20'>" + "<button type='button' onclick='javascript: get_userName()'>確認</button>";
+
             document.getElementById("userName_div").innerHTML = content;
         }
 
 
         function modify_status() {
-            var content = "<input type='text' class='form-control' placeholder='狀態' id='status' name='status' size='20'>" + "<button type='button' onclick='javascript: get_status()'>確認</button>";
+            var content = "<input type='text' class='form-control' placeholder='請輸入數字' id='status' name='status' size='20'>" + "<button type='button' onclick='javascript: get_status()'>確認</button>";
+            content += "<p>0:未借用  1: 借用中  2: 禁止借用  3: 審核中  4: 註冊中</p>";
             document.getElementById("status_div").innerHTML = content;
         }
 
         function get_userName() {
             userName = document.getElementById("userName").value;
-            post_modify_Func();
+            userName_test = /\d/.test(userName);
+            userName_test |= /[~!@#$%^&;:"',._?^${}()|]/.test(userName);
+            userName_test |= /[+-=*\]\\\/]/.test(userName);
+            console.log(userName_test);
+            if (userName_test == 1) {
+                alert("名字不可帶有數字或符號!!!");
+                document.getElementById("userName").value = "";
+            }
+            else if (userName == "") {
+                alert("名字不可為空!!!");
+            }
+            else {
+                post_modify_Func();
+            }
         }
 
 
         function get_status() {
             status = document.getElementById("status").value;
-            if(status<0||status>2){
-                alert("狀態需是0、1、2!!!");
-                location.reload();
-            }else{
+            status_test = /^[0-4]$/.test(status);
+            console.log(status_test);
+            if (status_test == 0) {
+                alert("狀態需是0、1、2、3、4!!!");
+                document.getElementById("status").value = "";
+            } else {
                 post_modify_Func();
             }
         }
