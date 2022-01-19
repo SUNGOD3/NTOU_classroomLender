@@ -211,6 +211,7 @@
                 }
 
                 //將申請人學號(schoolName)和教室編號(classroomID)借用星期(lendTime)和借用星期(weekDay)post到後端資料庫
+                console.log(data);
                 $.ajax({
                     type: 'POST',
                     url: "https://desolate-wildwood-64845.herokuapp.com/history/checkLendClassroom/",
@@ -222,6 +223,7 @@
                     },
                     
                     success: function (data){
+                        console.log(data);
                         alert("已取消借出申請!!!");
                         location.reload();
                     },

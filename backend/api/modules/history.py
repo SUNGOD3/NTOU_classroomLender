@@ -51,6 +51,10 @@ def checkLendClassroom():
             info['errors'] = 'Classroom has been lent!'
         elif rows[0][0]==2:
             info['errors'] = 'Classroom has been banned!'
+        if len(info['errors'])!=0:
+            insertString = 'DELETE from ApplicationForms WHERE classroomID=(%(classroomID)s) AND lendTime=(%(lendTime)s) AND weekDay=(%(weekDay)s);'
+            cursor.execute(insertString,{'classroomID':info['classroomID'],'lendTime':info['lendTime'],'weekDay':info['weekDay']})
+            connection.commit() #submit the data to database 
         else:
             try:
                 cursor.execute("SELECT status from Users WHERE schoolName=(%(schoolName)s)",{'schoolName':info['schoolName']})
@@ -93,6 +97,10 @@ def checkLendClassroom():
                     traceback.print_exc()
                     connection.rollback()
                     info['errors'] = 'checkLendClassroom fail'
+    else:
+        insertString = 'DELETE from ApplicationForms WHERE classroomID=(%(classroomID)s) AND lendTime=(%(lendTime)s) AND weekDay=(%(weekDay)s);'
+        cursor.execute(insertString,{'classroomID':info['classroomID'],'lendTime':info['lendTime'],'weekDay':info['weekDay']})
+        connection.commit() #submit the data to database 
     return jsonify(info)
 
 

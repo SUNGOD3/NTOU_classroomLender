@@ -97,62 +97,34 @@
     <script>
         var schoolName = "", password, passwdConfirm, userName, phoneNumber, Email;
 
-        function postFunc() {
-
-            var data = {
-                "schoolName": schoolName,
-                "password": password,
-                "userName": userName,
-                "passwdConfirm": passwdConfirm,
-                "phoneNumber": phoneNumber,
-                "Email": Email
-            }
-            console.log(data);
-
-            $.ajax({
-                type: 'POST',
-                url: "https://desolate-wildwood-64845.herokuapp.com/users/register/",
-                data: JSON.stringify(data),
-                contentType: 'application/json; charset=UTF-8',
-                dataType: 'json',
-                crossOrigin: null,
-                xhrFields: {
-                    withCredentials: true
-                },
-                success: function (data) {
-                    console.log(data);
-                    alert("註冊成功 ");
-                    location.href = "index.html";
-                },
-                error: function (xhr, type) {
-                    alert(xhr + type);
-                }
-            });
-        };
+        
 
         function confirm_identityCode() {
             identityCode = document.getElementById("identityCode").value;
             //schoolName test
             schoolName = document.getElementById("schoolName").value;
-            schoolName_test = /^[0-9]{8}$/.test(schoolName);
+            schoolName_test = /^[0-9A-Z]{8}$/.test(schoolName);
             if (schoolName_test == 0) {
                 alert("學號格式錯誤!!!");
                 document.getElementById("schoolName").value = "";
                 return;
             }
-            else if (schoolName_test == "") {
+            else if (schoolName == "") {
                 alert("學號不可為空!!!");
                 return;
             }
-
+            if(identityCode==""){
+                alert("驗證碼不可為空!!!");
+                return;
+            }
             var data = {
                 "schoolName": schoolName,
                 "identityCode": identityCode
             }
-
+            console.log(data);
             $.ajax({
                 type: 'POST',
-                url: "https://desolate-wildwood-64845.herokuapp.com/users/checkIdentityCode/",
+                url: "https://desolate-wildwood-64845.herokuapp.com/users/checkIdentityCode2/",
                 data: JSON.stringify(data),
                 contentType: 'application/json; charset=UTF-8',
                 dataType: 'json',
@@ -166,7 +138,7 @@
                         alert("未順利註冊" + data.errors);
                     }
                     else {
-                        postFunc();
+                        alert("註冊成功");
                     }
                 },
                 error: function (xhr, type) {
@@ -234,13 +206,15 @@
             passwdConfirm = document.getElementById("passwdConfirm").value;
             //schoolName test
             schoolName = document.getElementById("schoolName").value;
-            schoolName_test = /^[0-9]{8}$/.test(schoolName);
+            schoolName_test = /^[0-9A-Z]{8}$/.test(schoolName);
+            console.log(schoolName);
+            console.log(schoolName_test);
             if (schoolName_test == 0) {
                 alert("學號格式錯誤!!!");
                 document.getElementById("schoolName").value = "";
                 return;
             }
-            else if (schoolName_test == "") {
+            else if (schoolName == "") {
                 alert("學號不可為空!!!");
                 return;
             }
@@ -248,12 +222,14 @@
             //phoneNumber test
             phoneNumber = document.getElementById("phoneNumber").value;
             phoneNumber_test = /^09\d{8}$/.test(phoneNumber);
+            console.log(phoneNumber);
+            console.log(phoneNumber_test);
             if (phoneNumber_test == 0) {
                 alert("手機號碼格式錯誤!!!");
                 document.getElementById("phoneNumber").value = "";
                 return;
             }
-            else if (phoneNumber_test == "") {
+            else if (phoneNumber == "") {
                 alert("手機號碼不可為空!!!");
                 return;
             }
