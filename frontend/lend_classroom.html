@@ -193,7 +193,7 @@
 					<!--1.教室資訊-->
 					<div class="row justify-content-md-start" style="position: relative; top: 20px; left: 10px;  margin: auto;">
 						<h4>教室使用現況</h4>
-						<p>(綠色為可借用, 紅色為借用中, 灰色為暫停使用)</p>
+						<p>(綠色為可借用, 紅色為已被預約, 灰色為暫停使用)</p>
 					</div>
 
 					<!--2.一週教室狀態(表格)-->
@@ -391,21 +391,15 @@
                                 alert("timeout! "+"請重新登入");
                                 window.location.href = "index.html";
                             }
-							// else {
-                            //     alert(data.errors);
-                            //     window.location.href = "lend_classroom.html";
-                            // }
                         }
 						else {
 							console.log("傳送成功" + JSON.stringify(data));
-							//console.log(data);
-							//console.log(JSON.stringify(data));
-							//console.log(Object.values(data)[0]);
 
 							//classroomID
 							array1=Object.values(data)[0];
 							var element1 = array1.toString();
 							console.log(element1);
+							
 							//status
 							array2=Object.values(data)[1];
 							var element2 = array2.toString();
@@ -656,11 +650,9 @@
 		//點選要檢視的教室(很多button)
 		document.onclick = function(){
 			var obj = event.target; 
-			//console.log(obj);
 			if (obj.type == "button"){ 
-				console.log(obj.id);
+				//console.log(obj.id);
 				//post: classroomID ,get: 教室狀態(status) 課程名稱(courseName) 日期(weekDay) 星期:weekDay.getDay() lendTime returnTime
-				//console.log("start post scheduler");
 						
 					var data = {
 						"classroomID":obj.id,
@@ -672,7 +664,7 @@
 					}	
 
 					console.log("跳到 " + window.location.href);
-					console.log(JSON.stringify(data));
+					//console.log(JSON.stringify(data));
 
 					//將要查詢的教室(classroomID)post到後端資料庫
 					$.ajax({
@@ -691,17 +683,13 @@
                                     alert("timeout! "+"請重新登入");
                                     window.location.href = "index.html";
                                 }
-                                // else {
-                                //     alert(data.errors);
-                                //     window.location.href = "lend_classroom.html";
-                                // }
                             //}
                             else {
                                 console.log("開始篩選教室");
                                 //console.log(JSON.stringify(data));
                                 //console.log(Object.values(data)[1]);
-                                var arrayCourseName=Object.values(data)[1];
-                                dataLength=arrayCourseName.length;
+                                var arrayCourseName = Object.values(data)[1];
+                                dataLength = arrayCourseName.length;
                                 //console.log(dataLength);
 
                                 for (var i = 0; i < dataLength; i++) {
@@ -749,40 +737,39 @@
 
 
 		function showScheduler(){
-					//init
-					for (var k = 1; k < weekDays.length; k++) {		
-						for (var j = 0; j < classTimes.length; j++) { 	
-							scheduler.rows[j+1].cells[k].innerHTML = "";
-							scheduler.rows[j+1].cells[k].style.background="lime";
-						}
+			//init(green)
+			for (var k = 1; k < weekDays.length; k++) {		
+				for (var j = 0; j < classTimes.length; j++) { 	
+					scheduler.rows[j+1].cells[k].innerHTML = "";
+					scheduler.rows[j+1].cells[k].style.background="lime";
+				}
+			}
+			//init(gray)
+			if (dataStatus[0] == 2){
+				for (var k = 1; k < weekDays.length; k++) {		
+					for (var j = 0; j < classTimes.length; j++) { 	
+						scheduler.rows[j+1].cells[k].innerHTML = "";
+						scheduler.rows[j+1].cells[k].style.background="gray";
 					}
-					//加入資料庫中的課表
-					for (var i = 0; i < dataLength; i++) {
-						//console.log("courseName: " + dataCourseName[i]);
-						//console.log("lendTime: " + dataLendTime[i]);
-						//console.log("returnTime: " + dataReturnTime[i]);
-						//console.log("status: " + dataStatus[i]);
-						//console.log("weekDay: " + dataLendDate[i]);
-
-						//add course
-						for (var k = 0; k < weekDays.length; k++) {				//找星期, weekDays.length=8
-							if (dataLendDate[i] == k) {
-								for (var j = 0; j < classTimes.length; j++) { 	//找節次, classTimes.length=16
-									if (dataLendTime[i] <= j && j <= dataReturnTime[i]) {
-										//console.log(dataStatus[i]);
-										scheduler.rows[j+1].cells[k].innerHTML = dataCourseName[i];
-										if (dataStatus[i] == 0) scheduler.rows[j+1].cells[k].style.background="pink";
-										else if (dataStatus[i] == 2) scheduler.rows[j+1].cells[k].style.background="gray";
-										//該教室的狀態
-										//0:未使用
-										//1:使用中
-										//2:無法使用
-									}
+				}
+			}
+			//add course(加入資料庫中的課表)
+			for (var i = 0; i < dataLength; i++) {
+				for (var k = 0; k < weekDays.length; k++) {				//找星期, weekDays.length=8
+					if (dataLendDate[i] == k) {
+						for (var j = 0; j < classTimes.length; j++) { 	//找節次, classTimes.length=16
+							if (dataLendTime[i] <= j && j <= dataReturnTime[i]) {
+								if (dataStatus[i] == 0) { 				//可借用所以可被預約
+									scheduler.rows[j+1].cells[k].innerHTML = dataCourseName[i];
+									scheduler.rows[j+1].cells[k].style.background="pink";
 								}
 							}
 						}
 					}
+				}
+			}
 		}
+       
 
 		//申請借用教室function
 		$('#lendBTN').click(
