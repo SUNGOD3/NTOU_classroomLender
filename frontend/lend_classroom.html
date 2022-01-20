@@ -702,7 +702,7 @@
                                 //console.log(Object.values(data)[1]);
                                 var arrayCourseName=Object.values(data)[1];
                                 dataLength=arrayCourseName.length;
-                                console.log(dataLength);
+                                //console.log(dataLength);
 
                                 for (var i = 0; i < dataLength; i++) {
                                     dataCourseName[i] = Object.values(data)[1][i];
@@ -724,7 +724,7 @@
                                     //from application form
                                     else {	
                                         a = dataWeekDay[i].substr(0, 3);
-                                        console.log("from application form: " + a);
+                                        //console.log("from application form: " + a);
                                         if (a=='Mon') dataLendDate[i]=1;
                                         else if(a=='Tue') dataLendDate[i]=2;
                                         else if(a=='Wed') dataLendDate[i]=3;
@@ -769,11 +769,9 @@
 							if (dataLendDate[i] == k) {
 								for (var j = 0; j < classTimes.length; j++) { 	//找節次, classTimes.length=16
 									if (dataLendTime[i] <= j && j <= dataReturnTime[i]) {
-										// console.log(dataLendTime[i]);
-										// console.log(dataReturnTime[i]);
-										// console.log(j);
+										//console.log(dataStatus[i]);
 										scheduler.rows[j+1].cells[k].innerHTML = dataCourseName[i];
-										if (dataStatus[i] == 1) scheduler.rows[j+1].cells[k].style.background="pink";
+										if (dataStatus[i] == 0) scheduler.rows[j+1].cells[k].style.background="pink";
 										else if (dataStatus[i] == 2) scheduler.rows[j+1].cells[k].style.background="gray";
 										//該教室的狀態
 										//0:未使用
@@ -839,7 +837,7 @@
 					console.log("lendMonth 錯誤");
 				 	alert("不能借過去的時間!");
 				}
-				else if (lendYear >= year && lendMonth >= month && lendDate < date){
+				else if (lendYear == year && lendMonth == month && lendDate < date){
 					check = 0;
 					console.log("lendDate 錯誤");
 				 	alert("不能借過去的時間!");
