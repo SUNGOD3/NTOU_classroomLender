@@ -651,7 +651,7 @@
 		}
 
 
-		var courseName, status, weekDay, lenddate, lendTime, returnTime;
+		var courseName, status, weekDay, lenddate, lendTime, returnTime, commonEquipment, specialEquipment;
 		var dataCourseName = [], dataStatus = [], dataWeekDay = [], dataLendDate = [], dataLendTime = [], dataReturnTime = [], dataLength;
 
 		//點選要檢視的教室(很多button)
@@ -694,23 +694,14 @@
                             else {
                                 console.log("開始篩選教室");
                                 console.log(JSON.stringify(data));
-                                //console.log(Object.values(data)[1]);
-                                var arrayCourseName = Object.values(data)[1];
-                                dataLength = arrayCourseName.length;
-                                //console.log(dataLength);
+                                dataStatus = data.status;
+								dataCourseName = data.courseName;
+                                dataWeekDay = data.weekDay;
+                                dataLendTime = data.lendTime;
+                                dataReturnTime = data.returnTime;
 
+                                dataLength = dataCourseName.length;
                                 for (var i = 0; i < dataLength; i++) {
-                                    dataCourseName[i] = Object.values(data)[1][i];
-                                    dataLendTime[i] = Object.values(data)[3][i];
-                                    dataReturnTime[i] = Object.values(data)[4][i];
-                                    dataStatus[i] = Object.values(data)[5];
-                                    dataWeekDay[i] = Object.values(data)[6][i];
-
-                                    // console.log(dataCourseName[i]);
-                                    // console.log(dataLendTime[i]);
-                                    // console.log(dataReturnTime[i]);
-                                    // console.log(dataStatus[i]);
-
                                     //from scheduler
                                     if (dataWeekDay[i] > 0 && dataWeekDay[i] < 8){
                                         console.log("from scheduler: " + dataWeekDay[i]);
@@ -752,7 +743,7 @@
 				}
 			}
 			//init(gray)
-			if (dataStatus[0] == 2){
+			if (dataStatus == 2){
 				for (var k = 1; k < weekDays.length; k++) {		
 					for (var j = 0; j < classTimes.length; j++) { 	
 						scheduler.rows[j+1].cells[k].innerHTML = "";
@@ -766,7 +757,7 @@
 					if (dataLendDate[i] == k) {
 						for (var j = 0; j < classTimes.length; j++) { 	//找節次, classTimes.length=16
 							if (dataLendTime[i] <= j && j <= dataReturnTime[i]) {
-								if (dataStatus[i] == 0) { 				//可借用所以可被預約
+								if (dataStatus == 0) { 				//可借用所以可被預約
 									scheduler.rows[j+1].cells[k].innerHTML = dataCourseName[i];
 									scheduler.rows[j+1].cells[k].style.background="pink";
 								}
