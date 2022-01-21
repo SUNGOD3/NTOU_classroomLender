@@ -30,6 +30,13 @@
 				border:1px solid black;
 				border-collapse: collapse;
 		}
+		caption {
+			padding: 10px;
+			color: black;
+			font-size: 20px;
+			text-align: center;
+			caption-side: top;
+		}
 		.classroom:hover {
 				background-color:lightblue;
 				color: white;
@@ -125,13 +132,13 @@
 
 	<main>
 		
-		<div class="row" style="position: auto; top: auto; left: auto; margin: auto; padding: auto;">
+		<div class="row justify-content-center" style="position: auto; top: auto; left: auto; margin: auto; padding: auto;">
 
 			<p style = "font-size: 30px; font-weight: bold; text-align: center;">檢視教室狀態</p>
 
 			<!--左側-->
 			<!--設備篩選 & 關鍵字搜尋 & 選擇教室-->
-			<div class="col-md-4">
+			<div class="col-md-3">
 				
 					<!-- 設備篩選 -->
 					<div class="row justify-content-start" style="position: relative; top: 20px; left: 10%;">
@@ -173,10 +180,10 @@
                     
 
 					<!--選擇教室-->
-					<div class="row" style="position: relative; top: 40px; left: 10px;">
+					<div class="row justify-content-start" style="position: relative; top: 40px; left: 10%;">
 						<h4>選擇教室</h4>
 						<p>(黃色為搜尋後的結果)</p>
-						<div class="col-8 d-flex align-items-center table-responsive" style="text-align: center;">
+						<div class="col-10 d-flex align-items-center table-responsive" style="text-align: center;">
 							<table id="classrooms" class="table table-striped table-sm" style=" height: 320px; border-collapse: collapse; cursor: context-menu;">
 								<tr class="rows">
 									<th scope="col" class="floor">樓層</th>
@@ -187,9 +194,8 @@
 					</div>
 			</div>
 			
-			<!--右側-->
-			<!--教室資訊 & 一週教室狀態(表格)-->
-			<div class="col-md-6">
+			<!--教室一週教室狀態(表格)-->
+			<div class="col-md-5">
 
 					<!--1.教室資訊-->
 					<div class="row justify-content-start" style="position: relative; top: 20px; left: 20px;  margin: auto;">
@@ -212,6 +218,21 @@
 							</tr>
 						</table>
 					</div>
+			</div>
+
+			<!--教室設備(表格)-->
+			<div class="col-md-3">
+
+				<div class="row justify-content-start" style="position: relative; top: 20px; left: 20px;  margin: auto;">
+					<h4>教室設備</h4>
+				</div>
+
+				<div class="row-10 d-flex align-items-center table-responsive" style="position: relative; top: 40px; left: 20px; margin: auto; text-align: center;">
+					<table id="equippment" class= "table table-striped table-sm" style="width: 95%">
+						<tr>
+						</tr>
+					</table>
+				</div>
 			</div>
 
 		</div>
@@ -271,22 +292,18 @@
 						console.log("傳送成功" + JSON.stringify(data));
 						//console.log(data);
 						//console.log(JSON.stringify(data));
-						console.log(Object.values(data)[0]);
+						//console.log(Object.values(data)[0]);
 
 						array1=Object.values(data)[0];
 						//console.log(array1.toString());
 						var element1 = array1.toString();
-						console.log(element1);
+						//console.log(element1);
 
 						if (data.errors != undefined) {
                             if (data.errors=='timeout!') {
                                 alert("timeout! "+"請重新登入");
                                 window.location.href = "index.html";
                             }
-							// else {
-                            //     alert(data.errors);
-                            //     window.location.href = "class_state_for_lender.html";
-                            // }
                         }
 						else {
                             //floor
@@ -298,7 +315,7 @@
                             }
                             
 							//讀入教室ID
-							console.log(array1.length);
+							//console.log(array1.length);
 							for (var k = 0; k < array1.length; k++) {
 								for (var i = 0; i < floors.length; i++) {
 									ID = array1[k].toString();
@@ -315,7 +332,7 @@
 									}
 								}
 							}
-							console.log(classrooms);
+							//console.log(classrooms);
                             //window.location.reload()  //重新整理頁面
                         }
 					},
@@ -360,19 +377,15 @@
 				} else {
 					$("#whiteboard").val("0");
 				}
-				//console.log($("#computer").val() + $("#projector").val() + $("#blackboard").val() + $("#whiteboard").val());
 				$("#commonEquipment").val($("#computer").val() + $("#projector").val() + $("#blackboard").val() + $("#whiteboard").val());
 				var commonEquipment = $("#commonEquipment").val();
 				var searchWord = $("#searchWord").val();
-				//console.log(commonEquipment);
-				//console.log(searchWord);
 
 				//將equipmentFilter post到後端資料庫
 				var equipmentFilter = {
 					"commonEquipment":commonEquipment,
 					"classroomID":classroomID1
 				}
-				//console.log("start post equipmentFilter: " + JSON.stringify(equipmentFilter));
 				$.ajax({
 					type: 'POST',
 					url: "https://desolate-wildwood-64845.herokuapp.com/Classrooms/equipmentFilter/",
@@ -412,8 +425,6 @@
 					"searchWord":searchWord,
 					"classroomID":classroomID2
 				}
-				//console.log("start post searchKeyword: " + JSON.stringify(data));
-				//console.log("searchWord: " + searchWord);
 				if (searchWord != "") {
 					$.ajax({
 						type: 'POST',
@@ -438,7 +449,6 @@
 								//console.log("search: " + classroomID2);
 								selected2 = classroomID2;
 								showClassroom();
-								//window.location.reload()  //重新整理頁面
 							}
 						},
 						error: function (xhr, type){
@@ -528,7 +538,7 @@
 
 
 		var courseName, status, weekDay, lenddate, lendTime, returnTime;
-		var dataCourseName = [], dataStatus = [], dataWeekDay = [], dataLendDate = [], dataLendTime = [], dataReturnTime = [], dataLength;
+		var dataCourseName = [], dataStatus = [], dataWeekDay = [], dataLendDate = [], dataLendTime = [], dataReturnTime = [], dataCommonEquipment = [], dataSpecialEqiupment = [], dataEqiuppments = [], dataLength;
 
 		//點選要檢視的教室(很多button)
 		document.onclick = function(){
@@ -537,7 +547,7 @@
 			if (obj.type == "button"){ 
 				console.log(obj.id);
 				//post: classroomID ,get: 教室狀態(status) 課程名稱(courseName) 日期(weekDay) 星期:weekDay.getDay() lendTime returnTime
-				console.log("start post scheduler");
+				//console.log("start post scheduler");
 						
 					var data = {
 						"classroomID":obj.id,
@@ -545,7 +555,9 @@
 						"status":status,
 						"weekDay":weekDay,
 						"lendTime":lendTime,
-						"returnTime":returnTime
+						"returnTime":returnTime,
+						"commonEquipment":commonEquipment,
+						"specialEquipment":specialEquipment
 					}	
 
 					console.log("跳到 " + window.location.href);
@@ -568,30 +580,48 @@
                                     alert("timeout! "+"請重新登入");
                                     window.location.href = "index.html";
                                 }
-                                // else {
-                                //     alert(data.errors);
-                                //     window.location.href = "class_state_for_lender.html";
-                                // }
                             //}
                             else {
                                 console.log("開始篩選教室");
-                                console.log(JSON.stringify(data));
+                                //console.log(JSON.stringify(data));
                                 console.log(Object.values(data)[1]);
                                 var arrayCourseName=Object.values(data)[1];
                                 dataLength=arrayCourseName.length;
-                                console.log(dataLength);
 
+                                console.log(dataLength);
+								var eqiuppmentNumber = 0;
                                 for (var i = 0; i < dataLength; i++) {
                                     dataCourseName[i] = Object.values(data)[1][i];
                                     dataLendTime[i] = Object.values(data)[3][i];
                                     dataReturnTime[i] = Object.values(data)[4][i];
                                     dataStatus[i] = Object.values(data)[5];
                                     dataWeekDay[i] = Object.values(data)[6][i];
+									dataCommonEqiupment[i] = Object.values(data)[7];
+									dataSpecialEqiupment[i] = Object.values(data)[8];
 
-                                    // console.log(dataCourseName[i]);
-                                    // console.log(dataLendTime[i]);
-                                    // console.log(dataReturnTime[i]);
-                                    // console.log(dataStatus[i]);
+									//commonEqiuppment
+									if (dataCommonEqiupment[i].substr(0, 1) == 1){
+										dataEqiuppments[eqiuppmentNumber]="電腦";
+										eqiuppmentNumber++;
+									}
+									else if (dataCommonEqiupment[i].substr(1, 1) == 1){
+										dataEqiuppments[eqiuppmentNumber]="投影幕";
+										eqiuppmentNumber++;
+									}
+									else if (dataCommonEqiupment[i].substr(1, 1) == 1){
+										dataEqiuppments[eqiuppmentNumber]="黑板";
+										eqiuppmentNumber++;
+									}
+									else if (dataCommonEqiupment[i].substr(1, 1) == 1){
+										dataEqiuppments[eqiuppmentNumber]="白板";
+										eqiuppmentNumber++;
+									}
+									console.log(dataEqiuppments[i]);
+									
+									//specialEquippment
+									if (dataSpecialEqiupment != ""){
+										
+									}
 
                                     //from scheduler
                                     if (dataWeekDay[i] > 0 && dataWeekDay[i] < 8){
@@ -609,13 +639,11 @@
                                         else if(a=='Fri') dataLendDate[i]=5;
                                         else if(a=='Sat') dataLendDate[i]=6;
                                         else if(a=='Sun') dataLendDate[i]=7;
-                                        //console.log(dataLendDate[i]);
                                     }
                                 }
                                 showScheduler();
-                                //window.location.reload()  //重新整理頁面
                             }
-                            },
+                        },
 						error: function (xhr, type){
 							console.log("傳送失敗");
 							console.log(xhr+type);

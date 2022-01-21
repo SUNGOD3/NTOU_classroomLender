@@ -30,6 +30,13 @@
 				border:1px solid black;
 				border-collapse: collapse;
 		}
+		caption {
+			padding: 10px;
+			color: black;
+			font-size: 20px;
+			text-align: center;
+			caption-side: top;
+		}
 		.classroom:hover {
 				background-color:lightblue;
 				color: white;
@@ -686,7 +693,7 @@
                             //}
                             else {
                                 console.log("開始篩選教室");
-                                //console.log(JSON.stringify(data));
+                                console.log(JSON.stringify(data));
                                 //console.log(Object.values(data)[1]);
                                 var arrayCourseName = Object.values(data)[1];
                                 dataLength = arrayCourseName.length;
@@ -785,6 +792,9 @@
 				
 				var check = 1;//0:輸入格式錯誤, 1:教室已被借用, 2:可申請借用
 
+				var mylendTime = parseInt(lendTime); 	 //string to number
+				var myreturnTime = parseInt(returnTime); //string to number
+
                 console.log("借用日期: " + weekDay);
 				var lendYear = weekDay.substr(0, 4);
                 //console.log("lendYear is " + lendYear);
@@ -819,7 +829,7 @@
 					console.log("lendYear 錯誤");
 				 	alert("不能借過去的時間!");
 				}
-				else if (lendYear >= year && lendMonth < month){
+				else if (lendYear == year && lendMonth < month){
 					check = 0;
 					console.log("lendMonth 錯誤");
 				 	alert("不能借過去的時間!");
@@ -829,19 +839,19 @@
 					console.log("lendDate 錯誤");
 				 	alert("不能借過去的時間!");
 				}
-				else if (lendTime > returnTime){
+				else if (mylendTime > myreturnTime){
 					check = 0;
-					console.log("lendTime(" + lendTime + ") > returnTime(" + returnTime +  ") 錯誤");
+					console.log("mylendTime(" + mylendTime + ") > myreturnTime(" + myreturnTime +  ") 錯誤");
 					alert("借用時間不可晚於歸還時間!");
 				}
-				else if (returnTime - lendTime > 3){
+				else if (myreturnTime - mylendTime > 3){
 					check = 0;
-					console.log("returnTime - lendTime > 3 錯誤");
+					console.log("myreturnTime - mylendTime > 3 錯誤");
 					alert("一次最多只能借三節課!");
 				}
-				else if (returnTime - lendTime < 0){
+				else if (myreturnTime - mylendTime < 0){
 					check = 0;
-					console.log("returnTime - lendTime < 0 錯誤");
+					console.log("myreturnTime - mylendTime < 0 錯誤");
 					alert("一次至少要借一節課!");
 				}
 				else {
