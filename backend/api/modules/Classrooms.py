@@ -99,7 +99,7 @@ def selectClassroom():
             errors.append("Unexpect error:two or more classroom have same ID!")
         else:
             info['status'] = rows[0][0]
-            insertString = ('SELECT courseName,weekDay,lendTime,returnTime from ApplicationForms where classroomID=%(classroomID)s' )
+            insertString = ('SELECT courseName,weekDay,lendTime,returnTime,commonEquipment,specialEquipment from ApplicationForms where classroomID=%(classroomID)s' )
             cursor.execute(insertString,{'classroomID':info['classroomID']})
             rows = cursor.fetchall()
             connection.commit()
@@ -107,12 +107,16 @@ def selectClassroom():
             info['weekDay']=[]
             info['lendTime']=[]
             info['returnTime']=[]
+            info['commonEquipment']=[]
+            info['specialEquipment']=[]
             print(rows)
             for row in rows:
                 info['courseName'].append(row[0])
                 info['weekDay'].append(row[1])
                 info['lendTime'].append(row[2])
                 info['returnTime'].append(row[3])
+                info['commonEquipment'].append(row[4])
+                info['specialEquipment'].append(row[5])
     except Exception:
         traceback.print_exc()
         connection.rollback()

@@ -40,6 +40,7 @@ def checkLendClassroom():
     info['lendTime'] = request.json['lendTime']
     info['weekDay'] = request.json['weekDay']
     info['confirmType'] = request.json['confirmType']
+    info['errors'] = []
     print(info)
     if info['confirmType']=='1':
         cursor.execute("SELECT status from Classrooms WHERE classroomID=(%(classroomID)s)",{'classroomID':info['classroomID']})
