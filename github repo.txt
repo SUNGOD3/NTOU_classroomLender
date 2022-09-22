@@ -1,0 +1,8 @@
+github:
+https://github.com/tolinlaws/NTOU_classroomLender
+
+trello:
+https://trello.com/b/HLH2FZ4K/ntou
+
+供DEMO網址:
+https://sungod3.github.io/NTOU_classroomLender/frontend/index.html
