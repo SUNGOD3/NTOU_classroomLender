@@ -15,7 +15,7 @@ Demo URL : https://sungod3.github.io/NTOU_classroomLender/frontend/index.html
 
 ## System Architecture
 
-<img src="README_IMG/System_Architecture.png" width="50%">
+<img src="README_IMG/System_Architecture.png" width="30%">
 Internal Architecture:
 <img src="README_IMG/System_Internal_Architecture.png" width="50%">
 
