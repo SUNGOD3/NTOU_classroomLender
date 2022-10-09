@@ -10,7 +10,8 @@ Demo video: https://www.youtube.com/watch?v=n2gb6Lq_vJQ
 Demo URL : https://sungod3.github.io/NTOU_classroomLender/frontend/index.html
 
 ## Flow Chart
-
+<img src="README_IMG/Flow_Chart.png" width="50%">
 ## System Architecture
-
+<img src="README_IMG/System_Architecture.png" width="50%">
 Internal Architecture:
+<img src="README_IMG/System_Internal_Architecture.png" width="50%">
