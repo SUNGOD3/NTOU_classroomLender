@@ -29,3 +29,4 @@ Internal Architecture:
 <img src="README_IMG/EX11.png" width="50%"><img src="README_IMG/EX12.png" width="50%">
 <img src="README_IMG/EX13.png" width="50%"><img src="README_IMG/EX14.png" width="50%">
 <img src="README_IMG/EX15.png" width="50%"><img src="README_IMG/EX16.png" width="50%">
+<img src="README_IMG/EX17.png" width="50%"><img src="README_IMG/EX18.png" width="50%">
