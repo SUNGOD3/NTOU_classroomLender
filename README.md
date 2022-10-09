@@ -8,3 +8,9 @@ A platform that allow the people check the classroom's status and lend classroom
 Demo video: https://www.youtube.com/watch?v=n2gb6Lq_vJQ
 
 Demo URL : https://sungod3.github.io/NTOU_classroomLender/frontend/index.html
+
+## Flow Chart
+
+## System Architecture
+
+Internal Architecture:
